@@ -10,7 +10,6 @@ interface ErrorType {
   password?: string
 }
 
-/* ─── Animated Background Canvas ─── */
 function AnimatedBg() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const mouseRef = useRef({ x: -1, y: -1 })
@@ -58,7 +57,6 @@ function AnimatedBg() {
       time += 0.01
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Moving gradient blobs
       const gradient1X = canvas.width * 0.3 + Math.sin(time * 0.7) * 200
       const gradient1Y = canvas.height * 0.4 + Math.cos(time * 0.5) * 150
       const g1 = ctx.createRadialGradient(gradient1X, gradient1Y, 0, gradient1X, gradient1Y, 350)
@@ -83,12 +81,10 @@ function AnimatedBg() {
       ctx.fillStyle = g3
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Orbs
       const mx = mouseRef.current.x
       const my = mouseRef.current.y
 
       for (const orb of orbs) {
-        // Mouse interaction
         if (mx > 0) {
           const dx = orb.x - mx
           const dy = orb.y - my
@@ -105,7 +101,6 @@ function AnimatedBg() {
         orb.x += orb.vx
         orb.y += orb.vy
 
-        // Bounce
         if (orb.x < 0 || orb.x > canvas.width) orb.vx *= -1
         if (orb.y < 0 || orb.y > canvas.height) orb.vy *= -1
 
@@ -117,7 +112,6 @@ function AnimatedBg() {
         ctx.fill()
         ctx.shadowBlur = 0
 
-        // Draw connection lines between close orbs
         for (const other of orbs) {
           if (other === orb) continue
           const d = Math.sqrt((orb.x - other.x) ** 2 + (orb.y - other.y) ** 2)
@@ -149,7 +143,6 @@ function AnimatedBg() {
   return <canvas ref={canvasRef} className="fixed inset-0 z-0" />
 }
 
-/* ─── Login Page ─── */
 function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -207,14 +200,11 @@ function Login() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#060618] relative overflow-hidden">
-      {/* Animated Canvas Background */}
       <AnimatedBg />
 
-      {/* Form Card */}
       <div
-        className={`relative z-10 w-full max-w-[420px] mx-4 transition-all duration-1000 ${
-          mounted ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
-        }`}
+        className={`relative z-10 w-full max-w-[420px] mx-4 transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
+          }`}
       >
         <div
           className="relative rounded-[2rem] p-8 sm:p-10 overflow-hidden"
@@ -225,11 +215,9 @@ function Login() {
             boxShadow: "0 25px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
           }}
         >
-          {/* Glow accent */}
           <div className="absolute -top-20 -right-20 w-40 h-40 bg-indigo-500/20 rounded-full blur-[80px] animate-pulse" />
           <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/15 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: "1s" }} />
 
-          {/* Logo */}
           <div className="flex flex-col items-center mb-8">
             <div
               className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30 mb-4 animate-bounce"
@@ -247,7 +235,6 @@ function Login() {
           </div>
 
           <form onSubmit={handlesubmit} className="space-y-5">
-            {/* Email Field */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-white/50 uppercase tracking-wider pl-1">Email</label>
               <div className="relative group">
@@ -267,7 +254,6 @@ function Login() {
               {error.email && <p className="text-red-400 text-xs pl-1">{error.email}</p>}
             </div>
 
-            {/* Password Field */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-white/50 uppercase tracking-wider pl-1">Password</label>
               <div className="relative group">
@@ -286,7 +272,6 @@ function Login() {
               </div>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
@@ -296,7 +281,6 @@ function Login() {
                 boxShadow: "0 4px 25px rgba(99,102,241,0.4)",
               }}
             >
-              {/* Shimmer */}
               <span
                 className="absolute inset-0 opacity-0 group-hover:opacity-20 pointer-events-none transition-opacity duration-500"
                 style={{
@@ -315,7 +299,6 @@ function Login() {
             </button>
           </form>
 
-          {/* Register Link */}
           <div className="mt-6 text-center">
             <p className="text-white/30 text-sm">
               Don't have an account?{" "}
@@ -330,7 +313,6 @@ function Login() {
         </div>
       </div>
 
-      {/* Inline animations */}
       <style>{`
         @keyframes shimmer {
           0% { transform: translateX(-100%); }

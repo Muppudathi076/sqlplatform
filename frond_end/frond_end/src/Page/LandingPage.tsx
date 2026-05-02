@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import { ArrowUp, Database, Code, Server, Layers, ChevronRight, Sparkles, Zap, Trophy, BookOpen } from "lucide-react"
 
-/* ─── Antigravity Confetti Particle System ─── */
 interface Particle {
   x: number
   y: number
@@ -96,11 +95,9 @@ function AntigravityCanvas() {
       const mouse = mouseRef.current
 
       for (const p of particlesRef.current) {
-        // Only render particles visible on screen
         const screenY = p.y - scrollY
         if (screenY < -50 || screenY > canvas.height + 50) continue
 
-        // Repel from cursor
         const dx = p.x - mouse.x
         const dy = p.y - mouse.y
         const dist = Math.sqrt(dx * dx + dy * dy)
@@ -111,11 +108,9 @@ function AntigravityCanvas() {
           p.vy += (dy / dist) * force
         }
 
-        // Return to origin
         p.vx += (p.originX - p.x) * RETURN_SPEED
         p.vy += (p.originY - p.y) * RETURN_SPEED
 
-        // Apply friction
         p.vx *= FRICTION
         p.vy *= FRICTION
 
@@ -123,7 +118,6 @@ function AntigravityCanvas() {
         p.y += p.vy
         p.rotation += p.rotationSpeed
 
-        // Draw
         ctx.save()
         ctx.translate(p.x, screenY)
         ctx.rotate((p.rotation * Math.PI) / 180)
@@ -186,7 +180,6 @@ function AntigravityCanvas() {
   )
 }
 
-/* ─── Session Data ─── */
 const sessions = [
   {
     id: 1,
@@ -230,7 +223,6 @@ const sessions = [
   },
 ]
 
-/* ─── Animated Counter ─── */
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
@@ -262,7 +254,6 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
   return <div ref={ref}>{count}{suffix}</div>
 }
 
-/* ─── Landing Page ─── */
 export default function LandingPage() {
   const navigate = useNavigate()
   const [showScrollTop, setShowScrollTop] = useState(false)
@@ -277,7 +268,6 @@ export default function LandingPage() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  /* Intersection observer for scroll animations */
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -300,9 +290,7 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a1a] text-white overflow-x-hidden">
-      {/* ═══ ANTIGRAVITY CONFETTI CANVAS ═══ */}
       <AntigravityCanvas />
-      {/* ═══ NAVBAR ═══ */}
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-[#0a0a1a]/70 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={scrollToTop}>
@@ -330,17 +318,12 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* ═══ HERO SECTION ═══ */}
       <section ref={heroRef} id="hero" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-        {/* Animated Background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-transparent to-purple-900/20" />
-          {/* Grid */}
           <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
-          {/* Floating Orbs */}
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] animate-pulse" />
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: "1s" }} />
-          {/* Particles */}
           {[...Array(30)].map((_, i) => (
             <div
               key={i}
@@ -390,7 +373,6 @@ export default function LandingPage() {
             </button>
           </div>
 
-          {/* Stats */}
           <div className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto animate-fade-in-up" style={{ animationDelay: "0.6s" }}>
             {[
               { value: 4, suffix: "", label: "Sessions" },
@@ -407,7 +389,6 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Scroll Indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
           <span className="text-xs text-white/30">Scroll</span>
           <div className="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center pt-2">
@@ -416,7 +397,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ SESSIONS SECTION ═══ */}
       <section id="sessions" className="relative py-28 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-20" data-section={0}>
@@ -442,22 +422,18 @@ export default function LandingPage() {
                   className={`flex flex-col ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"} items-center gap-10 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-16"}`}
                   style={{ transitionDelay: `${idx * 100}ms` }}
                 >
-                  {/* Card Visual */}
                   <div className="flex-1 w-full max-w-md">
                     <div
                       className="relative group rounded-3xl p-[1px] overflow-hidden"
                       style={{ background: `linear-gradient(135deg, ${session.glow}, transparent 60%)` }}
                     >
                       <div className="bg-[#12122a] rounded-3xl p-8 relative overflow-hidden">
-                        {/* Glow BG */}
                         <div
                           className={`absolute -top-20 -right-20 w-60 h-60 rounded-full blur-[80px] opacity-20 group-hover:opacity-40 transition-opacity duration-700 bg-gradient-to-br ${session.gradient}`}
                         />
-                        {/* Session Number */}
                         <div className="absolute top-6 right-6 text-7xl font-black text-white/[0.03] select-none">
                           0{session.id}
                         </div>
-                        {/* Icon */}
                         <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${session.gradient} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`} style={{ boxShadow: `0 10px 40px ${session.glow}` }}>
                           <Icon size={28} className="text-white" />
                         </div>
@@ -473,7 +449,6 @@ export default function LandingPage() {
                     </div>
                   </div>
 
-                  {/* Topics List */}
                   <div className="flex-1 w-full max-w-md space-y-3">
                     {session.topics.map((topic, tIdx) => (
                       <div
@@ -496,7 +471,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ WHY CHOOSE US ═══ */}
       <section className="relative py-28 px-6">
         <div className="max-w-5xl mx-auto text-center" data-section={10}>
           <h2 className={`text-4xl sm:text-5xl font-black mb-16 transition-all duration-1000 ${visibleSections.has(10) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
@@ -528,7 +502,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ CTA SECTION ═══ */}
       <section className="relative py-28 px-6" data-section={11}>
         <div className={`max-w-3xl mx-auto text-center transition-all duration-1000 ${visibleSections.has(11) ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
           <div className="relative p-12 rounded-[2rem] overflow-hidden border border-white/5">
@@ -552,7 +525,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ FOOTER ═══ */}
       <footer className="border-t border-white/5 py-8 px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
@@ -563,7 +535,6 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      {/* ═══ SCROLL TO TOP ═══ */}
       <button
         onClick={scrollToTop}
         className={`fixed bottom-8 right-8 z-50 w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-2xl shadow-blue-500/40 hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center ${showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}`}
@@ -572,7 +543,6 @@ export default function LandingPage() {
         <ArrowUp size={24} />
       </button>
 
-      {/* ═══ INLINE STYLES FOR ANIMATIONS ═══ */}
       <style>{`
         @keyframes float-particle {
           0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
