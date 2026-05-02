@@ -29,10 +29,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-h^jizalyheof@*t$0^0dwz_d0k!al#vs9xy#dl5xv=d&n@vl@)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
 # ALLOWED_HOSTS = ['sqlmaster.onrender.com', 'localhost', '127.0.0.1', '*']
-# DEBUG = False
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -169,6 +169,8 @@ SIMPLE_JWT = {
 # CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS')
 CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
+    # "http://localhost:3000",
+    "https://sql-master-rwon.vercel.app"
 ]
 CORS_ALLOW_ALL_HEADERS = True
+CORS_ALLOW_CREDENTIALS = True
