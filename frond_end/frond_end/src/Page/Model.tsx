@@ -25,6 +25,7 @@ const routeMap: Record<string, string> = {
   case_study: "/api/case-study",
 };
 
+/* ─── Error Page Component ─── */
 function ErrorPage({ errorMessage, onRetry }: { errorMessage: string; onRetry: () => void }) {
   const navigate = useNavigate();
 
@@ -59,12 +60,10 @@ function ErrorPage({ errorMessage, onRetry }: { errorMessage: string; onRetry: (
           </div>
         </div>
 
-        {/* Title */}
         <h1 className="text-3xl font-extrabold text-white mb-2 tracking-wide">
           Oops! Something Went Wrong
         </h1>
 
-        {/* Error Message */}
         <div className="inline-block px-4 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20 mb-4">
           <p className="text-amber-400 font-bold text-base flex items-center gap-2 justify-center">
             <AlertTriangle size={18} />
@@ -118,7 +117,6 @@ function LoadingPage() {
       </div>
 
       <div className="relative z-10 text-center">
-        {/* Animated Spinner */}
         <div className="flex justify-center mb-8">
           <div className="relative w-20 h-20">
             <div
@@ -139,7 +137,6 @@ function LoadingPage() {
         <h2 className="text-2xl font-bold text-white mb-2">Loading Questions...</h2>
         <p className="text-white/40 text-sm">Preparing your learning session</p>
 
-        {/* Animated dots */}
         <div className="flex justify-center gap-1.5 mt-4">
           {[0, 1, 2].map((i) => (
             <div
@@ -161,7 +158,7 @@ function Model() {
   const [lockedMessage, setLockedMessage] = useState<string | null>(null);
   const [pendingRoute, setPendingRoute] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { setAllQuestions, questions, resetCache } = useQuestionCache();
+  const { setAllQuestions, questions } = useQuestionCache();
 
   const token = localStorage.getItem("access_token") || "";
 
@@ -233,12 +230,10 @@ function Model() {
   };
 
   useEffect(() => {
-    setPendingRoute(null);
+    fetchData();
     setShowCompleted(false);
     setLockedMessage(null);
     setErrorMessage(null);
-    resetCache();
-    fetchData();
   }, [id]);
 
   if (lockedMessage) {

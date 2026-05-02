@@ -9,8 +9,8 @@ const OPTION_LABELS = ["A", "B", "C", "D"];
 
 const OPTION_ACCENTS = [
   { border: "#818cf8", bg: "rgba(129,140,248,0.13)", label: "#818cf8" },
-  { border: "#34d399", bg: "rgba(52,211,153,0.13)",  label: "#34d399" },
-  { border: "#fb923c", bg: "rgba(251,146,60,0.13)",  label: "#fb923c" },
+  { border: "#34d399", bg: "rgba(52,211,153,0.13)", label: "#34d399" },
+  { border: "#fb923c", bg: "rgba(251,146,60,0.13)", label: "#fb923c" },
   { border: "#f472b6", bg: "rgba(244,114,182,0.13)", label: "#f472b6" },
 ];
 
@@ -50,7 +50,6 @@ function ChooseBestAnswer() {
     );
   }
 
-  // Parse options
   let parsedOptions: string[] = [];
   if (Array.isArray(questionData.option)) {
     parsedOptions = questionData.option;
@@ -81,10 +80,10 @@ function ChooseBestAnswer() {
 
     if (isCorrect) {
       setCheckingState("correct");
-      toast.success("Correct! Great job 🎉");
+      toast.success("Correct! Great job ");
     } else {
       setCheckingState("wrong");
-      toast.error("Oops! Wrong answer ❌");
+      toast.error("Oops! Wrong answer ");
     }
     setIsAnswered(true);
   };
@@ -99,8 +98,6 @@ function ChooseBestAnswer() {
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-gray-50 dark:bg-[#0d0d1a] transition-colors duration-300">
-
-      {/* Dark mode background orbs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute top-[-100px] left-[-100px] w-[350px] h-[350px] rounded-full opacity-0 dark:opacity-[0.06]"
@@ -113,11 +110,7 @@ function ChooseBestAnswer() {
       </div>
 
       <div className="relative min-h-screen flex flex-col max-w-2xl mx-auto px-4 py-6 gap-6">
-
-        {/* ── TOP BAR ── */}
         <div className="flex items-center gap-3">
-
-          {/* ✖ Cancel Button — clearly visible in both modes */}
           <button
             onClick={() => navigate("/api/dashboard")}
             title="Exit"
@@ -144,12 +137,10 @@ function ChooseBestAnswer() {
             <X size={18} style={{ color: "#f87171", strokeWidth: 2.5 }} />
           </button>
 
-          {/* Single ScoreBar — only one */}
           <div className="flex-1 min-w-0">
             <ScoreBar score={score} maxScore={100} hearts={hearts} title="" />
           </div>
 
-          {/* Counter pill */}
           <div
             className="flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold"
             style={{
@@ -164,7 +155,6 @@ function ChooseBestAnswer() {
           </div>
         </div>
 
-        {/* ── QUESTION CARD ── */}
         <div
           className="rounded-2xl p-5 sm:p-7"
           style={{
@@ -185,12 +175,10 @@ function ChooseBestAnswer() {
           </h2>
         </div>
 
-        {/* ── OPTIONS ── */}
         <div className="flex flex-col gap-3">
           {options.map((opt: string, index: number) => {
             const isSelected = selectedOption === opt;
             const accent = OPTION_ACCENTS[index % OPTION_ACCENTS.length];
-            const isCorrectOption = opt.trim().toLowerCase() === questionData.answer.trim().toLowerCase();
 
             let borderColor = "rgba(255,255,255,0.06)";
             let bgStyle = "rgba(255,255,255,0.03)";
@@ -198,35 +186,33 @@ function ChooseBestAnswer() {
             let ringGlow = "none";
             let accentLine = "transparent";
 
-            if (isAnswered) {
-              // After checking: highlight correct answer green, wrong selected red
-              if (isCorrectOption) {
+            if (isSelected) {
+              if (checkingState === "correct") {
                 borderColor = "#22c55e";
                 bgStyle = "rgba(34,197,94,0.10)";
                 labelBg = "#22c55e";
                 ringGlow = "0 0 20px rgba(34,197,94,0.35)";
                 accentLine = "#22c55e";
-              } else if (isSelected && checkingState === "wrong") {
+              } else if (checkingState === "wrong") {
                 borderColor = "#ef4444";
                 bgStyle = "rgba(239,68,68,0.10)";
                 labelBg = "#ef4444";
                 ringGlow = "0 0 20px rgba(239,68,68,0.35)";
                 accentLine = "#ef4444";
+              } else {
+                borderColor = accent.border;
+                bgStyle = accent.bg;
+                labelBg = accent.label;
+                ringGlow = `0 0 16px ${accent.border}55`;
+                accentLine = accent.border;
               }
-            } else if (isSelected) {
-              // Before checking: show selected accent
-              borderColor = accent.border;
-              bgStyle = accent.bg;
-              labelBg = accent.label;
-              ringGlow = `0 0 16px ${accent.border}55`;
-              accentLine = accent.border;
             }
 
             return (
               <button
                 key={index}
-                onClick={() => { if (!isAnswered) setSelectedOption(opt); }}
-                disabled={isAnswered}
+                onClick={() => { if (checkingState === "idle") setSelectedOption(opt); }}
+                disabled={checkingState !== "idle"}
                 className="relative flex items-center gap-4 w-full text-left px-4 py-4 rounded-xl transition-all duration-250 transform active:scale-[0.985] disabled:cursor-default"
                 style={{
                   border: `1.5px solid ${borderColor}`,
@@ -246,8 +232,8 @@ function ChooseBestAnswer() {
                   className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white transition-all duration-300"
                   style={{
                     background: labelBg,
-                    boxShadow: (isSelected || (isAnswered && isCorrectOption)) ? `0 0 10px ${labelBg}88` : "none",
-                    transform: (isSelected || (isAnswered && isCorrectOption)) ? "scale(1.1)" : "scale(1)",
+                    boxShadow: isSelected ? `0 0 10px ${labelBg}88` : "none",
+                    transform: isSelected ? "scale(1.1)" : "scale(1)",
                   }}
                 >
                   {OPTION_LABELS[index] ?? index + 1}
@@ -260,13 +246,13 @@ function ChooseBestAnswer() {
 
                 {/* Right state indicator */}
                 <span className="flex-shrink-0">
-                  {isAnswered && isCorrectOption && (
+                  {isSelected && checkingState === "correct" && (
                     <CheckCircle2 size={22} color="#22c55e" />
                   )}
-                  {isAnswered && isSelected && checkingState === "wrong" && !isCorrectOption && (
+                  {isSelected && checkingState === "wrong" && (
                     <XCircle size={22} color="#ef4444" />
                   )}
-                  {!isAnswered && isSelected && (
+                  {isSelected && (checkingState === "idle" || checkingState === "checking") && (
                     <span
                       className="w-5 h-5 rounded-full border-2 flex items-center justify-center"
                       style={{ borderColor: accent.border }}
@@ -274,7 +260,7 @@ function ChooseBestAnswer() {
                       <span className="w-2.5 h-2.5 rounded-full" style={{ background: accent.border }} />
                     </span>
                   )}
-                  {!isAnswered && !isSelected && (
+                  {!isSelected && (
                     <span className="w-5 h-5 rounded-full border-2 border-gray-200 dark:border-white/10 block" />
                   )}
                 </span>

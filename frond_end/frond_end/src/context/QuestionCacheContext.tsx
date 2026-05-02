@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useCallback, useRef, useEffect, ty
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-// Route map for question methods
 const routeMap: Record<string, string> = {
   "choose the best answer": "/api/modal/choose/answer",
   "true or false": "/api/modal/true-false",
@@ -66,9 +65,8 @@ export function QuestionCacheProvider({ children }: { children: ReactNode }) {
   const [hearts, setHearts] = useState(5);
   const [modelId, setModelId] = useState("");
 
-  // Use a ref to hold the latest state, preventing stale closures in timeouts
   const stateRef = useRef({ questions, currentIndex, completedQuestions, score, modelId });
-  
+
   useEffect(() => {
     stateRef.current = { questions, currentIndex, completedQuestions, score, modelId };
   }, [questions, currentIndex, completedQuestions, score, modelId]);
@@ -102,35 +100,21 @@ export function QuestionCacheProvider({ children }: { children: ReactNode }) {
 
     if (isCorrect) {
       const scorePerQuestion = Math.round(100 / questions.length);
-      const newScore = Math.min(score + scorePerQuestion, 100);
-      const newIndex = currentIndex + 1;
-      const newCompleted = [
-        ...completedQuestions,
+      setScore((prev) => Math.min(prev + scorePerQuestion, 100));
+      setCompletedQuestions((prev) => [
+        ...prev,
         { questionId: currentQ.id, userAnswer, isCorrect: true, questionDetail: currentQ },
-      ];
-
-      setScore(newScore);
-      setCompletedQuestions(newCompleted);
-      setCurrentIndex(newIndex);
-
-      // Sync ref IMMEDIATELY so navigateToNextQuestion sees the latest values
-      stateRef.current = {
-        ...stateRef.current,
-        score: newScore,
-        currentIndex: newIndex,
-        completedQuestions: newCompleted,
-      };
+      ]);
+      setCurrentIndex((prev) => prev + 1);
     } else {
       setHearts((prev) => Math.max(prev - 1, 0));
     }
-  }, [questions, currentIndex, score, completedQuestions]);
+  }, [questions, currentIndex]);
 
   const navigateToNextQuestion = useCallback(async () => {
     const { questions, currentIndex, completedQuestions, score, modelId } = stateRef.current;
 
-    // Check if all questions are done
     if (currentIndex >= questions.length) {
-      // Navigate to success page with all data — success page handles API submission
       navigate("/api/modal/success", {
         state: {
           modelId,
@@ -142,7 +126,6 @@ export function QuestionCacheProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Navigate to next question's page
     const nextQuestion = questions[currentIndex];
     const method = nextQuestion?.methods;
     const route = method ? routeMap[method] : null;
