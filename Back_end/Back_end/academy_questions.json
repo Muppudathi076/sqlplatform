@@ -1,0 +1,2571 @@
+[
+  {
+    "id": 1,
+    "title": "Meet Your Data: The Full Picture",
+    "instruction": "Welcome, new recruit! Our database holds vital information. Your first mission: retrieve ALL data from the `employees` table to understand who's on our team. Show me everything!",
+    "expectedQuery": "SELECT * FROM employees",
+    "columns": [
+      "id",
+      "name",
+      "department",
+      "salary"
+    ],
+    "tableData": [
+      {
+        "id": 1,
+        "name": "Alice",
+        "department": "Sales",
+        "salary": 55000
+      },
+      {
+        "id": 2,
+        "name": "Bob",
+        "department": "IT",
+        "salary": 75000
+      },
+      {
+        "id": 3,
+        "name": "Charlie",
+        "department": "HR",
+        "salary": 50000
+      },
+      {
+        "id": 4,
+        "name": "Diana",
+        "department": "Sales",
+        "salary": 65000
+      }
+    ],
+    "successMsg": "Excellent! You've successfully viewed all employee data.",
+    "hint": "To see every column and every row, use the wildcard character `*` after `SELECT`."
+  },
+  {
+    "id": 2,
+    "title": "Focus on the Essentials: Employee Names and Departments",
+    "instruction": "Great start! Now, the boss only needs a list of employee names and their respective departments. No need for their IDs or salaries this time. Can you select just the `name` and `department` columns from the `employees` table?",
+    "expectedQuery": "SELECT name, department FROM employees",
+    "columns": [
+      "name",
+      "department"
+    ],
+    "tableData": [
+      {
+        "name": "Alice",
+        "department": "Sales"
+      },
+      {
+        "name": "Bob",
+        "department": "IT"
+      },
+      {
+        "name": "Charlie",
+        "department": "HR"
+      },
+      {
+        "name": "Diana",
+        "department": "Sales"
+      }
+    ],
+    "successMsg": "Perfect! You've learned to select specific pieces of information.",
+    "hint": "List the column names you want to see, separated by commas, after `SELECT`."
+  },
+  {
+    "id": 3,
+    "title": "Find the 'Sales' Team",
+    "instruction": "Our Sales department is planning a meeting. Can you find all employees who belong to the 'Sales' department? Retrieve all their details from the `employees` table.",
+    "expectedQuery": "SELECT * FROM employees WHERE department = 'Sales'",
+    "columns": [
+      "id",
+      "name",
+      "department",
+      "salary"
+    ],
+    "tableData": [
+      {
+        "id": 1,
+        "name": "Alice",
+        "department": "Sales",
+        "salary": 55000
+      },
+      {
+        "id": 4,
+        "name": "Diana",
+        "department": "Sales",
+        "salary": 65000
+      }
+    ],
+    "successMsg": "You've successfully filtered for specific departments! The Sales team appreciates it.",
+    "hint": "Use the `WHERE` clause to filter rows based on a condition. Remember to put string values in single quotes."
+  },
+  {
+    "id": 4,
+    "title": "High Earners: Employees Above $60000",
+    "instruction": "Management wants to identify employees earning more than $60,000. Show me all details for employees whose `salary` is greater than 60000 from the `employees` table.",
+    "expectedQuery": "SELECT * FROM employees WHERE salary > 60000",
+    "columns": [
+      "id",
+      "name",
+      "department",
+      "salary"
+    ],
+    "tableData": [
+      {
+        "id": 2,
+        "name": "Bob",
+        "department": "IT",
+        "salary": 75000
+      },
+      {
+        "id": 4,
+        "name": "Diana",
+        "department": "Sales",
+        "salary": 65000
+      },
+      {
+        "id": 5,
+        "name": "Eve",
+        "department": "IT",
+        "salary": 90000
+      }
+    ],
+    "successMsg": "Great job! You can now filter data based on numeric comparisons.",
+    "hint": "Comparison operators like `>`, `<`, `>=`, `<=` are your friends in the `WHERE` clause."
+  },
+  {
+    "id": 5,
+    "title": "Find Employees with 'Manager' in Their Name",
+    "instruction": "We need to find anyone whose name might indicate a managerial role, specifically names that contain 'Manager'. Use the `LIKE` operator and the wildcard `%` to find employees from the `employees` table whose `name` contains the substring 'Manager'.",
+    "expectedQuery": "SELECT * FROM employees WHERE name LIKE '%Manager%'",
+    "columns": [
+      "id",
+      "name",
+      "department",
+      "salary"
+    ],
+    "tableData": [
+      {
+        "id": 5,
+        "name": "Eve Project Manager",
+        "department": "IT",
+        "salary": 90000
+      }
+    ],
+    "successMsg": "Excellent use of `LIKE`! Pattern matching is a powerful tool.",
+    "hint": "`%` matches any sequence of zero or more characters. Use it with `LIKE`."
+  },
+  {
+    "id": 6,
+    "title": "Double Conditions: IT & High Salary",
+    "instruction": "We're looking for experienced IT professionals. Find all employees who work in the 'IT' department AND have a `salary` greater than or equal to $70,000. Show all their details from the `employees` table.",
+    "expectedQuery": "SELECT * FROM employees WHERE department = 'IT' AND salary >= 70000",
+    "columns": [
+      "id",
+      "name",
+      "department",
+      "salary"
+    ],
+    "tableData": [
+      {
+        "id": 2,
+        "name": "Bob",
+        "department": "IT",
+        "salary": 75000
+      },
+      {
+        "id": 5,
+        "name": "Eve Project Manager",
+        "department": "IT",
+        "salary": 90000
+      }
+    ],
+    "successMsg": "You've mastered combining conditions with `AND`!",
+    "hint": "To combine two conditions that both must be true, use the `AND` keyword."
+  },
+  {
+    "id": 7,
+    "title": "Flexible Conditions: Sales or Marketing",
+    "instruction": "We need to contact everyone in either the 'Sales' department OR the 'Marketing' department. Show all details for employees who belong to either of these departments from the `employees` table. (Assume a 'Marketing' department exists in your dataset for this exercise, even if empty).",
+    "expectedQuery": "SELECT * FROM employees WHERE department = 'Sales' OR department = 'Marketing'",
+    "columns": [
+      "id",
+      "name",
+      "department",
+      "salary"
+    ],
+    "tableData": [
+      {
+        "id": 1,
+        "name": "Alice",
+        "department": "Sales",
+        "salary": 55000
+      },
+      {
+        "id": 4,
+        "name": "Diana",
+        "department": "Sales",
+        "salary": 65000
+      }
+    ],
+    "successMsg": "Great! You can now use `OR` to find data that meets at least one of several conditions.",
+    "hint": "Use `OR` when you want rows that satisfy *any* of the given conditions."
+  },
+  {
+    "id": 8,
+    "title": "Alphabetical Order: Employee Names",
+    "instruction": "Our HR team needs an alphabetical list of all employees by their `name`. Retrieve all employee details from the `employees` table, sorted by `name` in ascending order.",
+    "expectedQuery": "SELECT * FROM employees ORDER BY name ASC",
+    "columns": [
+      "id",
+      "name",
+      "department",
+      "salary"
+    ],
+    "tableData": [
+      {
+        "id": 1,
+        "name": "Alice",
+        "department": "Sales",
+        "salary": 55000
+      },
+      {
+        "id": 2,
+        "name": "Bob",
+        "department": "IT",
+        "salary": 75000
+      },
+      {
+        "id": 3,
+        "name": "Charlie",
+        "department": "HR",
+        "salary": 50000
+      },
+      {
+        "id": 4,
+        "name": "Diana",
+        "department": "Sales",
+        "salary": 65000
+      },
+      {
+        "id": 5,
+        "name": "Eve Project Manager",
+        "department": "IT",
+        "salary": 90000
+      }
+    ],
+    "successMsg": "Nicely done! Sorting data makes it much easier to read.",
+    "hint": "The `ORDER BY` clause is used for sorting. `ASC` is for ascending, `DESC` for descending. `ASC` is often the default."
+  },
+  {
+    "id": 9,
+    "title": "Top Earners: Highest Salary First",
+    "instruction": "Who are our highest-paid employees? Show all employee details, but this time, order them by `salary` in descending order, so the highest salaries appear first.",
+    "expectedQuery": "SELECT * FROM employees ORDER BY salary DESC",
+    "columns": [
+      "id",
+      "name",
+      "department",
+      "salary"
+    ],
+    "tableData": [
+      {
+        "id": 5,
+        "name": "Eve Project Manager",
+        "department": "IT",
+        "salary": 90000
+      },
+      {
+        "id": 2,
+        "name": "Bob",
+        "department": "IT",
+        "salary": 75000
+      },
+      {
+        "id": 4,
+        "name": "Diana",
+        "department": "Sales",
+        "salary": 65000
+      },
+      {
+        "id": 1,
+        "name": "Alice",
+        "department": "Sales",
+        "salary": 55000
+      },
+      {
+        "id": 3,
+        "name": "Charlie",
+        "department": "HR",
+        "salary": 50000
+      }
+    ],
+    "successMsg": "Fantastic! You can now identify your top performers based on salary.",
+    "hint": "To sort from highest to lowest, use `DESC` after the column name in `ORDER BY`."
+  },
+  {
+    "id": 10,
+    "title": "Organized by Department, Then Name",
+    "instruction": "For a new organizational chart, we need employees sorted first by `department` (alphabetically), and then within each department, by `name` (alphabetically). Show all details from the `employees` table.",
+    "expectedQuery": "SELECT * FROM employees ORDER BY department ASC, name ASC",
+    "columns": [
+      "id",
+      "name",
+      "department",
+      "salary"
+    ],
+    "tableData": [
+      {
+        "id": 3,
+        "name": "Charlie",
+        "department": "HR",
+        "salary": 50000
+      },
+      {
+        "id": 2,
+        "name": "Bob",
+        "department": "IT",
+        "salary": 75000
+      },
+      {
+        "id": 5,
+        "name": "Eve Project Manager",
+        "department": "IT",
+        "salary": 90000
+      },
+      {
+        "id": 1,
+        "name": "Alice",
+        "department": "Sales",
+        "salary": 55000
+      },
+      {
+        "id": 4,
+        "name": "Diana",
+        "department": "Sales",
+        "salary": 65000
+      }
+    ],
+    "successMsg": "Excellent! You've mastered multi-column sorting for even better data organization.",
+    "hint": "You can specify multiple columns in the `ORDER BY` clause, separated by commas. SQL will sort by the first, then the second, and so on."
+  },
+  {
+    "id": 11,
+    "title": "Just the Top 3 Employees",
+    "instruction": "We only need to see the first 3 employees listed by their `id`. Retrieve all details for the top 3 employees from the `employees` table.",
+    "expectedQuery": "SELECT * FROM employees ORDER BY id ASC LIMIT 3",
+    "columns": [
+      "id",
+      "name",
+      "department",
+      "salary"
+    ],
+    "tableData": [
+      {
+        "id": 1,
+        "name": "Alice",
+        "department": "Sales",
+        "salary": 55000
+      },
+      {
+        "id": 2,
+        "name": "Bob",
+        "department": "IT",
+        "salary": 75000
+      },
+      {
+        "id": 3,
+        "name": "Charlie",
+        "department": "HR",
+        "salary": 50000
+      }
+    ],
+    "successMsg": "Great! `LIMIT` is essential for handling large datasets and showing only a subset.",
+    "hint": "Use `LIMIT N` to retrieve only the first `N` rows after any `ORDER BY` clause."
+  },
+  {
+    "id": 12,
+    "title": "How Many Employees Do We Have?",
+    "instruction": "Quickly, how many employees are there in total? Use an aggregate function to count all rows in the `employees` table.",
+    "expectedQuery": "SELECT COUNT(*) AS total_employees FROM employees",
+    "columns": [
+      "total_employees"
+    ],
+    "tableData": [
+      {
+        "total_employees": 5
+      }
+    ],
+    "successMsg": "You've successfully counted all employees! `COUNT(*)` is a fundamental aggregate function.",
+    "hint": "The `COUNT(*)` function counts the total number of rows. You can often give the result a temporary name using `AS`."
+  },
+  {
+    "id": 13,
+    "title": "Total Monthly Payroll",
+    "instruction": "What's the combined total of all employee salaries for our monthly payroll? Calculate the sum of all `salary` values from the `employees` table.",
+    "expectedQuery": "SELECT SUM(salary) AS total_payroll FROM employees",
+    "columns": [
+      "total_payroll"
+    ],
+    "tableData": [
+      {
+        "total_payroll": 335000
+      }
+    ],
+    "successMsg": "Excellent! You can now calculate sums for numeric columns.",
+    "hint": "Use the `SUM()` function to add up values in a numeric column."
+  },
+  {
+    "id": 14,
+    "title": "Average Employee Salary",
+    "instruction": "What's the average salary across all our employees? Calculate the average of the `salary` column from the `employees` table.",
+    "expectedQuery": "SELECT AVG(salary) AS average_salary FROM employees",
+    "columns": [
+      "average_salary"
+    ],
+    "tableData": [
+      {
+        "average_salary": 67000.0
+      }
+    ],
+    "successMsg": "Well done! You can now find the average of numerical data.",
+    "hint": "The `AVG()` function calculates the arithmetic mean of a numeric column."
+  },
+  {
+    "id": 15,
+    "title": "Salary Range: Lowest and Highest",
+    "instruction": "HR wants to know the minimum and maximum salary paid to any employee. Find both the `MIN` and `MAX` `salary` from the `employees` table in a single query.",
+    "expectedQuery": "SELECT MIN(salary) AS min_salary, MAX(salary) AS max_salary FROM employees",
+    "columns": [
+      "min_salary",
+      "max_salary"
+    ],
+    "tableData": [
+      {
+        "min_salary": 50000,
+        "max_salary": 90000
+      }
+    ],
+    "successMsg": "Fantastic! Identifying value ranges is crucial for data analysis.",
+    "hint": "You can select multiple aggregate functions in one `SELECT` statement, separating them with commas."
+  },
+  {
+    "id": 16,
+    "title": "Employees Per Department",
+    "instruction": "How many employees are in each department? Count the number of employees for each unique `department` in the `employees` table.",
+    "expectedQuery": "SELECT department, COUNT(*) AS num_employees FROM employees GROUP BY department ORDER BY department",
+    "columns": [
+      "department",
+      "num_employees"
+    ],
+    "tableData": [
+      {
+        "department": "HR",
+        "num_employees": 1
+      },
+      {
+        "department": "IT",
+        "num_employees": 2
+      },
+      {
+        "department": "Sales",
+        "num_employees": 2
+      }
+    ],
+    "successMsg": "Excellent use of `GROUP BY`! You can now categorize and count data.",
+    "hint": "When using aggregate functions to count items in groups, you need to specify the grouping column(s) with `GROUP BY`."
+  },
+  {
+    "id": 17,
+    "title": "Average Salary Per Department",
+    "instruction": "Management wants to know the average `salary` for each `department`. Calculate this from the `employees` table.",
+    "expectedQuery": "SELECT department, AVG(salary) AS avg_dept_salary FROM employees GROUP BY department ORDER BY department",
+    "columns": [
+      "department",
+      "avg_dept_salary"
+    ],
+    "tableData": [
+      {
+        "department": "HR",
+        "avg_dept_salary": 50000.0
+      },
+      {
+        "department": "IT",
+        "avg_dept_salary": 82500.0
+      },
+      {
+        "department": "Sales",
+        "avg_dept_salary": 60000.0
+      }
+    ],
+    "successMsg": "Great job! Grouped averages provide valuable insights into departmental spending.",
+    "hint": "Combine `AVG()` with `GROUP BY` to get averages for distinct categories."
+  },
+  {
+    "id": 18,
+    "title": "Departments with High Average Salary",
+    "instruction": "Which departments have an average `salary` greater than $70,000? Show the `department` and its `avg_dept_salary` from the `employees` table.",
+    "expectedQuery": "SELECT department, AVG(salary) AS avg_dept_salary FROM employees GROUP BY department HAVING AVG(salary) > 70000 ORDER BY department",
+    "columns": [
+      "department",
+      "avg_dept_salary"
+    ],
+    "tableData": [
+      {
+        "department": "IT",
+        "avg_dept_salary": 82500.0
+      }
+    ],
+    "successMsg": "You've successfully filtered groups using `HAVING`! Very powerful.",
+    "hint": "`HAVING` is like `WHERE` but for filtering *grouped* results after aggregation. It comes after `GROUP BY`."
+  },
+  {
+    "id": 19,
+    "title": "Unique Departments",
+    "instruction": "Just list all the unique `department` names we have. No duplicates, please! Use the `DISTINCT` keyword on the `employees` table.",
+    "expectedQuery": "SELECT DISTINCT department FROM employees ORDER BY department",
+    "columns": [
+      "department"
+    ],
+    "tableData": [
+      {
+        "department": "HR"
+      },
+      {
+        "department": "IT"
+      },
+      {
+        "department": "Sales"
+      }
+    ],
+    "successMsg": "Excellent! `DISTINCT` helps you quickly see all unique values in a column.",
+    "hint": "Place `DISTINCT` right after `SELECT` and before the column name to get unique values."
+  },
+  {
+    "id": 20,
+    "title": "Employees and Their Project Assignments",
+    "instruction": "We have two tables: `employees` (id, name, department, salary) and `projects` (project_id, project_name, employee_id). Find the `name` of each employee and the `project_name` of the project they are assigned to. Link these two tables using their common `id` from `employees` and `employee_id` from `projects`.",
+    "expectedQuery": "SELECT e.name, p.project_name FROM employees e JOIN projects p ON e.id = p.employee_id ORDER BY e.name",
+    "columns": [
+      "name",
+      "project_name"
+    ],
+    "tableData": [
+      {
+        "name": "Alice",
+        "project_name": "New Product Launch"
+      },
+      {
+        "name": "Bob",
+        "project_name": "Database Upgrade"
+      },
+      {
+        "name": "Diana",
+        "project_name": "Client Acquisition"
+      },
+      {
+        "name": "Eve Project Manager",
+        "project_name": "Cloud Migration"
+      }
+    ],
+    "successMsg": "You've completed your first `JOIN`! Connecting data from multiple tables is a core SQL skill. Well done!",
+    "hint": "Use `JOIN` to combine rows from two or more tables based on a related column between them. Specify the join condition with `ON`."
+  },
+  {
+    "id": 21,
+    "title": "Welcome to the Academy: See All Students!",
+    "instruction": "Welcome, new recruit! Your first mission is to retrieve ALL information about our 'Students'. We need to see every column and every row from the `Students` table. Your query should use `SELECT *`.",
+    "expectedQuery": "SELECT * FROM Students",
+    "columns": [
+      "student_id",
+      "name",
+      "age"
+    ],
+    "tableData": [
+      {
+        "student_id": 1,
+        "name": "Alice",
+        "age": 20
+      },
+      {
+        "student_id": 2,
+        "name": "Bob",
+        "age": 22
+      },
+      {
+        "student_id": 3,
+        "name": "Carol",
+        "age": 21
+      }
+    ],
+    "successMsg": "Excellent! You've successfully viewed all student data. That's a great start!",
+    "hint": "To select all columns from a table, use `SELECT *` followed by `FROM` and the table name."
+  },
+  {
+    "id": 22,
+    "title": "Product Showcase: Name and Price",
+    "instruction": "Our marketing team needs a quick list of product names and their prices from the `Products` table. Don't worry about other details like category or ID, just the name and price for each product.",
+    "expectedQuery": "SELECT name, price FROM Products",
+    "columns": [
+      "name",
+      "price"
+    ],
+    "tableData": [
+      {
+        "name": "Laptop",
+        "price": 1200
+      },
+      {
+        "name": "Mouse",
+        "price": 25
+      },
+      {
+        "name": "Keyboard",
+        "price": 75
+      }
+    ],
+    "successMsg": "Fantastic! The marketing team has exactly what they need. You're getting the hang of selecting specific columns.",
+    "hint": "List the column names you want to see, separated by commas, after `SELECT`."
+  },
+  {
+    "id": 23,
+    "title": "Employee Roster: First Name and Department",
+    "instruction": "The HR department is reorganizing and needs a list of all employees showing their first name and the department they belong to. Fetch this information from the `Employees` table.",
+    "expectedQuery": "SELECT first_name, department FROM Employees",
+    "columns": [
+      "first_name",
+      "department"
+    ],
+    "tableData": [
+      {
+        "first_name": "John",
+        "department": "Sales"
+      },
+      {
+        "first_name": "Jane",
+        "department": "Marketing"
+      },
+      {
+        "first_name": "Peter",
+        "department": "Sales"
+      }
+    ],
+    "successMsg": "Perfect! HR can now easily see who works where. Good job focusing on the requested columns!",
+    "hint": "Remember to specify exactly which columns you need after `SELECT`."
+  },
+  {
+    "id": 24,
+    "title": "Customer Order History: Customer 101",
+    "instruction": "A specific customer, with `customer_id` 101, is asking about their past orders. Retrieve all details for every order placed by this customer from the `Orders` table.",
+    "expectedQuery": "SELECT * FROM Orders WHERE customer_id = 101",
+    "columns": [
+      "order_id",
+      "customer_id",
+      "total_amount"
+    ],
+    "tableData": [
+      {
+        "order_id": 1,
+        "customer_id": 101,
+        "total_amount": 150.0
+      },
+      {
+        "order_id": 3,
+        "customer_id": 101,
+        "total_amount": 50.0
+      }
+    ],
+    "successMsg": "Excellent filtering! Customer 101's order history is now clear.",
+    "hint": "Use the `WHERE` clause to filter rows based on a condition, like `column_name = value`."
+  },
+  {
+    "id": 25,
+    "title": "Library Catalog: Fantasy Books",
+    "instruction": "Our library wants to showcase all books from the 'Fantasy' genre. Please retrieve all details for every book in the `Books` table where the `genre` is 'Fantasy'.",
+    "expectedQuery": "SELECT * FROM Books WHERE genre = 'Fantasy'",
+    "columns": [
+      "book_id",
+      "title",
+      "author",
+      "genre"
+    ],
+    "tableData": [
+      {
+        "book_id": 1,
+        "title": "The Hobbit",
+        "author": "Tolkien",
+        "genre": "Fantasy"
+      },
+      {
+        "book_id": 3,
+        "title": "LOTR",
+        "author": "Tolkien",
+        "genre": "Fantasy"
+      }
+    ],
+    "successMsg": "Great! The Fantasy section is now perfectly organized.",
+    "hint": "When filtering by text (strings), remember to enclose the text in single quotes, e.g., `'Text'`."
+  },
+  {
+    "id": 26,
+    "title": "Modern Cinema: Movies Released After 2000",
+    "instruction": "The cinema club is only interested in modern films. Show them all details of movies from the `Movies` table that were released `after the year 2000`. This means the `release_year` should be greater than 2000.",
+    "expectedQuery": "SELECT * FROM Movies WHERE release_year > 2000",
+    "columns": [
+      "movie_id",
+      "title",
+      "release_year",
+      "rating"
+    ],
+    "tableData": [
+      {
+        "movie_id": 2,
+        "title": "Avatar",
+        "release_year": 2009,
+        "rating": 7.8
+      },
+      {
+        "movie_id": 3,
+        "title": "Inception",
+        "release_year": 2010,
+        "rating": 8.8
+      }
+    ],
+    "successMsg": "Fantastic! Only the latest and greatest films for the cinema club.",
+    "hint": "You can use comparison operators like `>` (greater than), `<` (less than), `>=` (greater than or equal to), and `<=` (less than or equal to) in your `WHERE` clause."
+  },
+  {
+    "id": 27,
+    "title": "Course Selection: Computer Science with 3 Credits",
+    "instruction": "Students are looking for specific courses: those offered by the 'Computer Science' department AND worth exactly 3 credits. Find all details for such courses from the `Courses` table.",
+    "expectedQuery": "SELECT * FROM Courses WHERE department = 'Computer Science' AND credits = 3",
+    "columns": [
+      "course_id",
+      "title",
+      "department",
+      "credits"
+    ],
+    "tableData": [
+      {
+        "course_id": 101,
+        "title": "Intro",
+        "department": "Computer Science",
+        "credits": 3
+      }
+    ],
+    "successMsg": "Spot on! These are the exact courses students were looking for. Combining conditions works!",
+    "hint": "Use the `AND` operator to combine multiple conditions, requiring all of them to be true."
+  },
+  {
+    "id": 28,
+    "title": "Showroom Inventory: Toyota or Honda Vehicles",
+    "instruction": "Our showroom needs to display all vehicles from either 'Toyota' OR 'Honda'. Retrieve all information for these vehicles from the `Vehicles` table.",
+    "expectedQuery": "SELECT * FROM Vehicles WHERE make = 'Toyota' OR make = 'Honda'",
+    "columns": [
+      "vehicle_id",
+      "make",
+      "model",
+      "year"
+    ],
+    "tableData": [
+      {
+        "vehicle_id": 1,
+        "make": "Toyota",
+        "model": "Camry",
+        "year": 2020
+      },
+      {
+        "vehicle_id": 2,
+        "make": "Honda",
+        "model": "Civic",
+        "year": 2021
+      },
+      {
+        "vehicle_id": 4,
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2019
+      }
+    ],
+    "successMsg": "Excellent! The showroom now has a perfectly filtered list of vehicles. You're a master of logical operators!",
+    "hint": "Use the `OR` operator when at least one of the conditions must be true."
+  },
+  {
+    "id": 29,
+    "title": "Game Leaderboard: Lowest Scores First",
+    "instruction": "We're setting up a 'lowest score wins' leaderboard for our new game. Display all game scores from the `Scores` table, ordered from the lowest score to the highest. (Ascending order is the default if you just use ORDER BY, but it's good practice to specify ASC!)",
+    "expectedQuery": "SELECT * FROM Scores ORDER BY score ASC",
+    "columns": [
+      "player_id",
+      "game_id",
+      "score"
+    ],
+    "tableData": [
+      {
+        "player_id": 2,
+        "game_id": 11,
+        "score": 120
+      },
+      {
+        "player_id": 1,
+        "game_id": 10,
+        "score": 150
+      },
+      {
+        "player_id": 3,
+        "game_id": 10,
+        "score": 180
+      }
+    ],
+    "successMsg": "You've successfully sorted the scores! The lowest score winner is clear.",
+    "hint": "Use `ORDER BY column_name ASC` to sort results in ascending order."
+  },
+  {
+    "id": 30,
+    "title": "Transaction Review: Highest Amounts First",
+    "instruction": "Our finance department needs to review the largest transactions first. List all transactions from the `Transactions` table, ordered by `amount` from highest to lowest.",
+    "expectedQuery": "SELECT * FROM Transactions ORDER BY amount DESC",
+    "columns": [
+      "transaction_id",
+      "date",
+      "amount"
+    ],
+    "tableData": [
+      {
+        "transaction_id": 2,
+        "date": "2023-01-02",
+        "amount": 120.0
+      },
+      {
+        "transaction_id": 3,
+        "date": "2023-01-01",
+        "amount": 75.0
+      },
+      {
+        "transaction_id": 1,
+        "date": "2023-01-01",
+        "amount": 50.0
+      }
+    ],
+    "successMsg": "Excellent! The finance team can now prioritize their review. Ordering by amount DESC worked perfectly!",
+    "hint": "Use `ORDER BY column_name DESC` to sort results in descending order."
+  },
+  {
+    "id": 31,
+    "title": "New User Outreach: Early Birds by Username",
+    "instruction": "We want to send a special welcome to users who registered before 2023-01-01. Retrieve all their details from the `Users` table and display them sorted alphabetically by their `username`.",
+    "expectedQuery": "SELECT * FROM Users WHERE registration_date < '2023-01-01' ORDER BY username ASC",
+    "columns": [
+      "user_id",
+      "username",
+      "registration_date",
+      "last_login"
+    ],
+    "tableData": [
+      {
+        "user_id": 3,
+        "username": "Alice",
+        "registration_date": "2022-11-20",
+        "last_login": "2023-02-28"
+      },
+      {
+        "user_id": 1,
+        "username": "Charlie",
+        "registration_date": "2022-12-15",
+        "last_login": "2023-03-01"
+      },
+      {
+        "user_id": 4,
+        "username": "David",
+        "registration_date": "2022-12-25",
+        "last_login": "2023-03-10"
+      }
+    ],
+    "successMsg": "Fantastic! The early bird users are now identified and sorted. You're mastering multi-clause queries!",
+    "hint": "Combine `WHERE` and `ORDER BY` clauses. `WHERE` comes before `ORDER BY`."
+  },
+  {
+    "id": 32,
+    "title": "Top Stories: First Two Articles",
+    "instruction": "Our homepage can only display the first two articles. Fetch the complete details for the first 2 articles from the `Articles` table.",
+    "expectedQuery": "SELECT * FROM Articles LIMIT 2",
+    "columns": [
+      "article_id",
+      "title",
+      "author",
+      "publish_date"
+    ],
+    "tableData": [
+      {
+        "article_id": 1,
+        "title": "SQL Basics",
+        "author": "Ana",
+        "publish_date": "2023-01-01"
+      },
+      {
+        "article_id": 2,
+        "title": "Joins Guide",
+        "author": "Ben",
+        "publish_date": "2023-01-05"
+      }
+    ],
+    "successMsg": "Excellent! Only the top two articles are displayed. `LIMIT` is a powerful tool!",
+    "hint": "Use `LIMIT N` at the end of your query to restrict the number of rows returned."
+  },
+  {
+    "id": 33,
+    "title": "Game Champions: Top 2 High Scores",
+    "instruction": "The 'Game Champions' section needs to show the top 2 highest scores. Retrieve the player's name, score, and game date from the `HighScores` table, ordered by `score` in descending order, and limited to only the top 2 entries.",
+    "expectedQuery": "SELECT * FROM HighScores ORDER BY score DESC LIMIT 2",
+    "columns": [
+      "player_name",
+      "score",
+      "game_date"
+    ],
+    "tableData": [
+      {
+        "player_name": "Bob",
+        "score": 2000,
+        "game_date": "2023-01-11"
+      },
+      {
+        "player_name": "Charlie",
+        "score": 1800,
+        "game_date": "2023-01-10"
+      }
+    ],
+    "successMsg": "Champion effort! You've successfully identified the top 2 players.",
+    "hint": "`ORDER BY` usually comes before `LIMIT` when you want to get the 'top N' records."
+  },
+  {
+    "id": 34,
+    "title": "Workforce Size: Count All Employees",
+    "instruction": "Our CEO wants to know the total number of employees in the company. Count all entries in the `Employees` table.",
+    "expectedQuery": "SELECT COUNT(*) FROM Employees",
+    "columns": [
+      "COUNT(*)"
+    ],
+    "tableData": [
+      {
+        "COUNT(*)": 3
+      }
+    ],
+    "successMsg": "Precisely! The CEO now knows the exact number of employees. Aggregations are key!",
+    "hint": "Use the `COUNT(*)` function to count all rows in a table. It's an aggregation function, so it will return a single row with the count."
+  },
+  {
+    "id": 35,
+    "title": "Inventory Check: How Many Electronics?",
+    "instruction": "The inventory manager needs to know how many products fall under the 'Electronics' category. Count only the products from the `Products` table where the `category` is 'Electronics'.",
+    "expectedQuery": "SELECT COUNT(*) FROM Products WHERE category = 'Electronics'",
+    "columns": [
+      "COUNT(*)"
+    ],
+    "tableData": [
+      {
+        "COUNT(*)": 2
+      }
+    ],
+    "successMsg": "Inventory updated! You successfully counted specific items.",
+    "hint": "You can combine `COUNT(*)` with a `WHERE` clause to count rows that meet a certain condition."
+  },
+  {
+    "id": 36,
+    "title": "Sales Performance: Average Sale Amount",
+    "instruction": "The sales team wants to understand their average sale performance. Calculate the average `amount` of all sales recorded in the `Sales` table.",
+    "expectedQuery": "SELECT AVG(amount) FROM Sales",
+    "columns": [
+      "AVG(amount)"
+    ],
+    "tableData": [
+      {
+        "AVG(amount)": 433.33
+      }
+    ],
+    "successMsg": "Spot on! The sales team now has a clear picture of their average sale. AVG is a useful aggregate!",
+    "hint": "The `AVG()` function calculates the average value of a numeric column. You can round your result if you wish, but for this level, the direct average is fine."
+  },
+  {
+    "id": 37,
+    "title": "Customer Activity: Orders Per Customer",
+    "instruction": "We need to understand our customer's ordering habits. For each `customer_id`, count how many orders they have placed from the `Orders` table. Label the count column `total_orders`.",
+    "expectedQuery": "SELECT customer_id, COUNT(*) AS total_orders FROM Orders GROUP BY customer_id",
+    "columns": [
+      "customer_id",
+      "total_orders"
+    ],
+    "tableData": [
+      {
+        "customer_id": 101,
+        "total_orders": 2
+      },
+      {
+        "customer_id": 102,
+        "total_orders": 1
+      },
+      {
+        "customer_id": 103,
+        "total_orders": 1
+      }
+    ],
+    "successMsg": "Fantastic! You've successfully grouped and counted orders per customer. GROUP BY is powerful!",
+    "hint": "Use `GROUP BY` with the `customer_id` column to group orders, then `COUNT(*)` to count orders within each group. Use `AS` to rename the `COUNT(*)` column."
+  },
+  {
+    "id": 38,
+    "title": "Account Balances: Total Transactions Per Account",
+    "instruction": "Our bank needs to know the total `amount` of all transactions for each `account_id` from the `Transactions` table. Calculate the sum of amounts for each account and label it `total_amount`.",
+    "expectedQuery": "SELECT account_id, SUM(amount) AS total_amount FROM Transactions GROUP BY account_id",
+    "columns": [
+      "account_id",
+      "total_amount"
+    ],
+    "tableData": [
+      {
+        "account_id": 1,
+        "total_amount": 300.0
+      },
+      {
+        "account_id": 2,
+        "total_amount": 50.0
+      },
+      {
+        "account_id": 3,
+        "total_amount": 75.0
+      }
+    ],
+    "successMsg": "Excellent! Account balances summarized. SUM and GROUP BY are essential for financial analysis!",
+    "hint": "Similar to `COUNT`, use the `SUM()` function with `GROUP BY` to aggregate amounts for each `account_id`."
+  },
+  {
+    "id": 39,
+    "title": "Customer Orders: Linking Customers and Orders",
+    "instruction": "We want to see the `name` of each customer and the `total_amount` of their orders. You'll need to combine information from the `Customers` and `Orders` tables using a `JOIN`. Remember to use aliases for tables to make your query shorter!",
+    "expectedQuery": "SELECT C.name, O.total_amount FROM Customers AS C JOIN Orders AS O ON C.customer_id = O.customer_id",
+    "columns": [
+      "name",
+      "total_amount"
+    ],
+    "tableData": [
+      {
+        "name": "Alice",
+        "total_amount": 150.0
+      },
+      {
+        "name": "Bob",
+        "total_amount": 200.0
+      },
+      {
+        "name": "Alice",
+        "total_amount": 50.0
+      }
+    ],
+    "successMsg": "Wonderful! You've successfully linked customer and order data. Joins are fundamental to relational databases!",
+    "hint": "Use `JOIN table2 ON table1.common_column = table2.common_column`. Aliases like `C` for `Customers` and `O` for `Orders` are helpful."
+  },
+  {
+    "id": 40,
+    "title": "Department Review: New York Employees",
+    "instruction": "The HR department needs a list of employee `name`s and their `department_name` for all departments located in 'New York'. You'll need to `JOIN` `Employees` and `Departments` tables, then filter the results.",
+    "expectedQuery": "SELECT E.name, D.department_name FROM Employees AS E JOIN Departments AS D ON E.department_id = D.department_id WHERE D.location = 'New York'",
+    "columns": [
+      "name",
+      "department_name"
+    ],
+    "tableData": [
+      {
+        "name": "John",
+        "department_name": "Sales"
+      },
+      {
+        "name": "Peter",
+        "department_name": "Sales"
+      },
+      {
+        "name": "Sarah",
+        "department_name": "HR"
+      }
+    ],
+    "successMsg": "Congratulations, SQL Master! You've successfully performed a multi-table query with filtering. You're ready for more advanced SQL!",
+    "hint": "Combine `JOIN` and `WHERE` clauses. The `WHERE` clause comes after the `JOIN` clause."
+  },
+  {
+    "id": 41,
+    "title": "Welcome to SQL Academy!",
+    "instruction": "Welcome, new recruit! Your first mission: retrieve ALL data from the `Students` table. Use the wildcard character.",
+    "expectedQuery": "SELECT * FROM Students",
+    "columns": [
+      "student_id",
+      "name",
+      "age",
+      "major"
+    ],
+    "tableData": [
+      {
+        "student_id": 101,
+        "name": "Alice",
+        "age": 20,
+        "major": "Computer Science"
+      },
+      {
+        "student_id": 102,
+        "name": "Bob",
+        "age": 22,
+        "major": "Physics"
+      },
+      {
+        "student_id": 103,
+        "name": "Charlie",
+        "age": 21,
+        "major": "Mathematics"
+      }
+    ],
+    "successMsg": "Excellent work! You've successfully selected all columns. The '*' is a powerful shorthand!",
+    "hint": "Remember the universal selector: '*'. And don't forget 'FROM' to specify the table."
+  },
+  {
+    "id": 42,
+    "title": "Picking Specific Columns",
+    "instruction": "We don't always need everything. This time, I only want to see the `name` and `major` of all students. List the column names explicitly.",
+    "expectedQuery": "SELECT name, major FROM Students",
+    "columns": [
+      "name",
+      "major"
+    ],
+    "tableData": [
+      {
+        "name": "Alice",
+        "major": "Computer Science"
+      },
+      {
+        "name": "Bob",
+        "major": "Physics"
+      },
+      {
+        "name": "Charlie",
+        "major": "Mathematics"
+      }
+    ],
+    "successMsg": "Perfect! You've learned to select specific data points. This saves bandwidth and focuses your query.",
+    "hint": "Instead of '*', list the column names separated by commas after SELECT."
+  },
+  {
+    "id": 43,
+    "title": "Filtering with WHERE: Equality",
+    "instruction": "Our dean wants to find all students who are majoring in 'Computer Science'. Use the `WHERE` clause to filter the results.",
+    "expectedQuery": "SELECT * FROM Students WHERE major = 'Computer Science'",
+    "columns": [
+      "student_id",
+      "name",
+      "age",
+      "major"
+    ],
+    "tableData": [
+      {
+        "student_id": 101,
+        "name": "Alice",
+        "age": 20,
+        "major": "Computer Science"
+      }
+    ],
+    "successMsg": "Fantastic! You've mastered basic filtering. The WHERE clause is essential for precise data retrieval.",
+    "hint": "Add 'WHERE' followed by the column, an equals sign, and the value (remember quotes for text!)."
+  },
+  {
+    "id": 44,
+    "title": "Filtering with WHERE: Numeric Comparison",
+    "instruction": "Now, let's find all students older than 20. Use the `age` column and a comparison operator.",
+    "expectedQuery": "SELECT name, age FROM Students WHERE age > 20",
+    "columns": [
+      "name",
+      "age"
+    ],
+    "tableData": [
+      {
+        "name": "Bob",
+        "age": 22
+      },
+      {
+        "name": "Charlie",
+        "age": 21
+      }
+    ],
+    "successMsg": "Excellent! You can now filter based on numerical conditions. Keep an eye on those operators!",
+    "hint": "Use '>' for 'greater than'. Numeric values don't need quotes."
+  },
+  {
+    "id": 45,
+    "title": "Filtering with WHERE: LIKE for Partial Matches",
+    "instruction": "A student's name might be misspelled or we only remember part of it. Find all students whose name starts with 'B'. Use the `LIKE` operator with a wildcard.",
+    "expectedQuery": "SELECT name FROM Students WHERE name LIKE 'B%'",
+    "columns": [
+      "name"
+    ],
+    "tableData": [
+      {
+        "name": "Bob"
+      }
+    ],
+    "successMsg": "Great job with `LIKE`! The '%' wildcard is incredibly useful for pattern matching.",
+    "hint": "Use 'LIKE' and the '%' wildcard. For names starting with 'B', it would be 'B%'."
+  },
+  {
+    "id": 46,
+    "title": "Combining Conditions: AND Operator",
+    "instruction": "We need to find students who are 'Computer Science' majors AND are older than 20. Combine two conditions using `AND`.",
+    "expectedQuery": "SELECT name, major, age FROM Students WHERE major = 'Computer Science' AND age > 20",
+    "columns": [
+      "name",
+      "major",
+      "age"
+    ],
+    "tableData": [],
+    "successMsg": "You've successfully used `AND`! This allows for very precise filtering, requiring both conditions to be true.",
+    "hint": "Place `AND` between your two `WHERE` conditions. Remember the previous challenges for each part."
+  },
+  {
+    "id": 47,
+    "title": "Combining Conditions: OR Operator",
+    "instruction": "Now, let's find students who are either 'Physics' majors OR 'Mathematics' majors. Use the `OR` operator.",
+    "expectedQuery": "SELECT name, major FROM Students WHERE major = 'Physics' OR major = 'Mathematics'",
+    "columns": [
+      "name",
+      "major"
+    ],
+    "tableData": [
+      {
+        "name": "Bob",
+        "major": "Physics"
+      },
+      {
+        "name": "Charlie",
+        "major": "Mathematics"
+      }
+    ],
+    "successMsg": "Excellent use of `OR`! Now you can retrieve data where at least one of your conditions is met.",
+    "hint": "Place `OR` between the two conditions for the `major` column."
+  },
+  {
+    "id": 48,
+    "title": "Filtering with NOT Operator",
+    "instruction": "Show me all students who are NOT 'Computer Science' majors. Use the `NOT` operator.",
+    "expectedQuery": "SELECT name, major FROM Students WHERE NOT major = 'Computer Science'",
+    "columns": [
+      "name",
+      "major"
+    ],
+    "tableData": [
+      {
+        "name": "Bob",
+        "major": "Physics"
+      },
+      {
+        "name": "Charlie",
+        "major": "Mathematics"
+      }
+    ],
+    "successMsg": "Nicely done! The `NOT` operator is great for excluding specific data points from your results.",
+    "hint": "Put `NOT` before your condition in the `WHERE` clause."
+  },
+  {
+    "id": 49,
+    "title": "Filtering with IN Operator",
+    "instruction": "Instead of multiple ORs, let's find students majoring in 'Physics' or 'Mathematics' using the `IN` operator. It's cleaner!",
+    "expectedQuery": "SELECT name, major FROM Students WHERE major IN ('Physics', 'Mathematics')",
+    "columns": [
+      "name",
+      "major"
+    ],
+    "tableData": [
+      {
+        "name": "Bob",
+        "major": "Physics"
+      },
+      {
+        "name": "Charlie",
+        "major": "Mathematics"
+      }
+    ],
+    "successMsg": "Fantastic! `IN` is a powerful way to check for multiple possible values efficiently.",
+    "hint": "Use `IN` followed by a list of values in parentheses, separated by commas."
+  },
+  {
+    "id": 50,
+    "title": "Filtering with BETWEEN Operator",
+    "instruction": "Find all students whose `age` is between 20 and 22 (inclusive). Use the `BETWEEN` operator.",
+    "expectedQuery": "SELECT name, age FROM Students WHERE age BETWEEN 20 AND 22",
+    "columns": [
+      "name",
+      "age"
+    ],
+    "tableData": [
+      {
+        "name": "Alice",
+        "age": 20
+      },
+      {
+        "name": "Bob",
+        "age": 22
+      },
+      {
+        "name": "Charlie",
+        "age": 21
+      }
+    ],
+    "successMsg": "Excellent use of `BETWEEN`! It makes range queries much simpler and more readable.",
+    "hint": "The syntax is `column BETWEEN value1 AND value2`."
+  },
+  {
+    "id": 51,
+    "title": "Ordering Results: ASCENDING",
+    "instruction": "Let's get organized! Retrieve all student names and ages, ordered by `age` from youngest to oldest.",
+    "expectedQuery": "SELECT name, age FROM Students ORDER BY age ASC",
+    "columns": [
+      "name",
+      "age"
+    ],
+    "tableData": [
+      {
+        "name": "Alice",
+        "age": 20
+      },
+      {
+        "name": "Charlie",
+        "age": 21
+      },
+      {
+        "name": "Bob",
+        "age": 22
+      }
+    ],
+    "successMsg": "Brilliant! `ORDER BY` with `ASC` is crucial for arranging your data in a logical sequence.",
+    "hint": "Add `ORDER BY` followed by the column name and `ASC` for ascending order (or omit `ASC` as it's the default)."
+  },
+  {
+    "id": 52,
+    "title": "Ordering Results: DESCENDING",
+    "instruction": "Now, order the students by `age` from oldest to youngest. This time, specify `DESC`.",
+    "expectedQuery": "SELECT name, age FROM Students ORDER BY age DESC",
+    "columns": [
+      "name",
+      "age"
+    ],
+    "tableData": [
+      {
+        "name": "Bob",
+        "age": 22
+      },
+      {
+        "name": "Charlie",
+        "age": 21
+      },
+      {
+        "name": "Alice",
+        "age": 20
+      }
+    ],
+    "successMsg": "Perfect! `DESC` allows you to reverse the order, which is great for finding the latest or highest values.",
+    "hint": "Use `DESC` after the column name in your `ORDER BY` clause."
+  },
+  {
+    "id": 53,
+    "title": "Limiting Results: The TOP N",
+    "instruction": "We only need the `name` of the top 2 oldest students. Combine `ORDER BY` and `LIMIT`.",
+    "expectedQuery": "SELECT name FROM Students ORDER BY age DESC LIMIT 2",
+    "columns": [
+      "name"
+    ],
+    "tableData": [
+      {
+        "name": "Bob"
+      },
+      {
+        "name": "Charlie"
+      }
+    ],
+    "successMsg": "Excellent! `LIMIT` is incredibly useful for fetching only a subset of data, especially for performance or 'top N' reports.",
+    "hint": "First, `ORDER BY age DESC`, then add `LIMIT 2` at the very end of your query."
+  },
+  {
+    "id": 54,
+    "title": "Counting Records: COUNT()",
+    "instruction": "How many students do we have in total? Use the `COUNT(*)` aggregate function.",
+    "expectedQuery": "SELECT COUNT(*) FROM Students",
+    "columns": [
+      "COUNT(*)"
+    ],
+    "tableData": [
+      {
+        "COUNT(*)": 3
+      }
+    ],
+    "successMsg": "You've successfully counted all records! `COUNT(*)` is a fundamental function for getting record totals.",
+    "hint": "Simply `SELECT COUNT(*)` and specify the `FROM` table."
+  },
+  {
+    "id": 55,
+    "title": "Counting with a Condition: COUNT() + WHERE",
+    "instruction": "How many students are majoring in 'Computer Science'? Combine `COUNT(*)` with a `WHERE` clause.",
+    "expectedQuery": "SELECT COUNT(*) FROM Students WHERE major = 'Computer Science'",
+    "columns": [
+      "COUNT(*)"
+    ],
+    "tableData": [
+      {
+        "COUNT(*)": 1
+      }
+    ],
+    "successMsg": "Great job! You can now get counts for specific subsets of your data. Very useful!",
+    "hint": "Your `WHERE` clause goes after the `FROM` clause, just like before."
+  },
+  {
+    "id": 56,
+    "title": "Summing Values: SUM()",
+    "instruction": "We've added a `score` column. What's the total `score` of all students? Use the `SUM()` aggregate function.",
+    "expectedQuery": "SELECT SUM(score) FROM Students",
+    "columns": [
+      "SUM(score)"
+    ],
+    "tableData": [
+      {
+        "SUM(score)": 280
+      }
+    ],
+    "successMsg": "Awesome! `SUM()` is perfect for calculating totals from numerical columns.",
+    "hint": "The new `Students` table data will be: `student_id`, `name`, `age`, `major`, `score`. Use `SELECT SUM(score)`."
+  },
+  {
+    "id": 57,
+    "title": "Averaging Values: AVG()",
+    "instruction": "What's the average `score` of all students? Use the `AVG()` aggregate function.",
+    "expectedQuery": "SELECT AVG(score) FROM Students",
+    "columns": [
+      "AVG(score)"
+    ],
+    "tableData": [
+      {
+        "AVG(score)": 93.33
+      }
+    ],
+    "successMsg": "Excellent! `AVG()` provides a quick way to find the mean of a numerical set.",
+    "hint": "Use `SELECT AVG(score)`."
+  },
+  {
+    "id": 58,
+    "title": "Min & Max Values: MIN() and MAX()",
+    "instruction": "Find the highest (`MAX`) and lowest (`MIN`) `score` among all students. Select both in a single query.",
+    "expectedQuery": "SELECT MAX(score), MIN(score) FROM Students",
+    "columns": [
+      "MAX(score)",
+      "MIN(score)"
+    ],
+    "tableData": [
+      {
+        "MAX(score)": 100,
+        "MIN(score)": 80
+      }
+    ],
+    "successMsg": "Well done! `MIN()` and `MAX()` are essential for quickly finding extreme values in your data.",
+    "hint": "You can select multiple aggregate functions, separated by commas, in a single `SELECT` statement."
+  },
+  {
+    "id": 59,
+    "title": "Grouping Aggregations: GROUP BY",
+    "instruction": "How many students are there in each `major`? Use `GROUP BY` with `COUNT(*)` to get counts per major.",
+    "expectedQuery": "SELECT major, COUNT(*) FROM Students GROUP BY major",
+    "columns": [
+      "major",
+      "COUNT(*)"
+    ],
+    "tableData": [
+      {
+        "major": "Computer Science",
+        "COUNT(*)": 1
+      },
+      {
+        "major": "Mathematics",
+        "COUNT(*)": 1
+      },
+      {
+        "major": "Physics",
+        "COUNT(*)": 1
+      }
+    ],
+    "successMsg": "Fantastic! `GROUP BY` is a cornerstone of analytical SQL, letting you summarize data by categories.",
+    "hint": "First, select the `major` column and `COUNT(*)`. Then, add `GROUP BY major`."
+  },
+  {
+    "id": 60,
+    "title": "Connecting Tables: INNER JOIN",
+    "instruction": "We have `Students` and `Courses` tables. Each student enrolls in a course. Show the `name` of each student and the `course_title` they are enrolled in. Join the tables on `course_id`.",
+    "expectedQuery": "SELECT S.name, C.course_title FROM Students S INNER JOIN Courses C ON S.course_id = C.course_id",
+    "columns": [
+      "name",
+      "course_title"
+    ],
+    "tableData": [
+      {
+        "name": "Alice",
+        "course_title": "Database Systems"
+      },
+      {
+        "name": "Bob",
+        "course_title": "Quantum Mechanics"
+      },
+      {
+        "name": "Charlie",
+        "course_title": "Linear Algebra"
+      }
+    ],
+    "successMsg": "Congratulations, you've completed the academy's beginner levels! Joining tables is a critical skill for real-world databases.",
+    "hint": "Start with `SELECT S.name, C.course_title FROM Students S`. Then use `INNER JOIN Courses C ON S.course_id = C.course_id`. The Students table now includes a `course_id` column. The Courses table has `course_id` and `course_title`."
+  },
+  {
+    "id": 61,
+    "title": "Welcome to the Academy!",
+    "instruction": "You've just enrolled in the SQL Academy! Let's start by getting familiar with our student roster. Your first task is to view all information about all students. Select all columns and all rows from the `Students` table.",
+    "expectedQuery": "SELECT * FROM Students",
+    "columns": [
+      "student_id",
+      "name",
+      "age",
+      "major"
+    ],
+    "tableData": [
+      {
+        "student_id": 1,
+        "name": "Alice",
+        "age": 18,
+        "major": "Computer Science"
+      },
+      {
+        "student_id": 2,
+        "name": "Bob",
+        "age": 19,
+        "major": "Physics"
+      },
+      {
+        "student_id": 3,
+        "name": "Charlie",
+        "age": 18,
+        "major": "Biology"
+      }
+    ],
+    "successMsg": "Excellent! You've successfully viewed the entire student table. On to the next challenge!",
+    "hint": "Use the '*' wildcard to select all columns."
+  },
+  {
+    "id": 62,
+    "title": "Focusing on Key Information",
+    "instruction": "The administration often needs to see just a subset of information for privacy reasons. Now, they only want to see the `name` and `age` of each student. Select only these two columns from the `Students` table.",
+    "expectedQuery": "SELECT name, age FROM Students",
+    "columns": [
+      "name",
+      "age"
+    ],
+    "tableData": [
+      {
+        "name": "Alice",
+        "age": 18
+      },
+      {
+        "name": "Bob",
+        "age": 19
+      },
+      {
+        "name": "Charlie",
+        "age": 18
+      }
+    ],
+    "successMsg": "Perfect! You've learned how to pick specific columns. Keep up the great work!",
+    "hint": "List the column names you want, separated by commas, after SELECT."
+  },
+  {
+    "id": 63,
+    "title": "Filtering by Age",
+    "instruction": "Our academic advisor wants to identify all students who are exactly 18 years old for a special orientation. Retrieve all columns for students whose `age` is 18 from the `Students` table.",
+    "expectedQuery": "SELECT student_id, name, age, major FROM Students WHERE age = 18",
+    "columns": [
+      "student_id",
+      "name",
+      "age",
+      "major"
+    ],
+    "tableData": [
+      {
+        "student_id": 1,
+        "name": "Alice",
+        "age": 18,
+        "major": "Computer Science"
+      },
+      {
+        "student_id": 3,
+        "name": "Charlie",
+        "age": 18,
+        "major": "Biology"
+      }
+    ],
+    "successMsg": "Fantastic! You've used the WHERE clause to filter numerical data effectively.",
+    "hint": "Add a WHERE clause followed by your condition (e.g., column_name = value)."
+  },
+  {
+    "id": 64,
+    "title": "Department Specific Courses",
+    "instruction": "The 'IT' department is planning their course schedule and needs a list of all courses they offer. Select all columns from the `Courses` table where the `department` is 'IT'.",
+    "expectedQuery": "SELECT course_id, title, department FROM Courses WHERE department = 'IT'",
+    "columns": [
+      "course_id",
+      "title",
+      "department"
+    ],
+    "tableData": [
+      {
+        "course_id": 101,
+        "title": "Intro to Python",
+        "department": "IT"
+      },
+      {
+        "course_id": 103,
+        "title": "Database Design",
+        "department": "IT"
+      }
+    ],
+    "successMsg": "Excellent! You've successfully filtered by a string value. Remember quotes for strings!",
+    "hint": "String values in the WHERE clause need to be enclosed in single quotes."
+  },
+  {
+    "id": 65,
+    "title": "High Achievers",
+    "instruction": "We want to recognize students who are performing exceptionally well. Find all enrollments from the `Grades` table where the `score` is greater than 90. Show all columns for these enrollments.",
+    "expectedQuery": "SELECT enrollment_id, student_id, score FROM Grades WHERE score > 90",
+    "columns": [
+      "enrollment_id",
+      "student_id",
+      "score"
+    ],
+    "tableData": [
+      {
+        "enrollment_id": 1,
+        "student_id": 1,
+        "score": 95
+      },
+      {
+        "enrollment_id": 4,
+        "student_id": 2,
+        "score": 92
+      }
+    ],
+    "successMsg": "Great job! Identifying high scores is crucial. You're mastering numerical comparisons.",
+    "hint": "Use comparison operators like > (greater than), < (less than), >= (greater than or equal to), etc."
+  },
+  {
+    "id": 66,
+    "title": "Combining Conditions (AND)",
+    "instruction": "The Dean wants a very specific list: students who are 18 years old AND are majoring in 'Computer Science'. Select the `student_id`, `name`, `age`, and `major` for these students from the `Students` table.",
+    "expectedQuery": "SELECT student_id, name, age, major FROM Students WHERE age = 18 AND major = 'Computer Science'",
+    "columns": [
+      "student_id",
+      "name",
+      "age",
+      "major"
+    ],
+    "tableData": [
+      {
+        "student_id": 1,
+        "name": "Alice",
+        "age": 18,
+        "major": "Computer Science"
+      }
+    ],
+    "successMsg": "Superb! Combining conditions with AND helps you pinpoint very specific data.",
+    "hint": "Use the AND keyword to link two conditions. Both must be true for a row to be returned."
+  },
+  {
+    "id": 67,
+    "title": "Flexible Filtering (OR)",
+    "instruction": "Students are looking for elective courses. They are interested in either 'Art' or 'Music' courses. Find all courses from the `Courses` table that belong to either the 'Art' OR 'Music' department. Show all columns.",
+    "expectedQuery": "SELECT course_id, title, department FROM Courses WHERE department = 'Art' OR department = 'Music'",
+    "columns": [
+      "course_id",
+      "title",
+      "department"
+    ],
+    "tableData": [
+      {
+        "course_id": 201,
+        "title": "Painting Basics",
+        "department": "Art"
+      },
+      {
+        "course_id": 202,
+        "title": "Choir Ensemble",
+        "department": "Music"
+      }
+    ],
+    "successMsg": "Excellent! You've mastered filtering with OR. Now they have their electives!",
+    "hint": "Use the OR keyword to link two conditions. If either is true, the row is returned."
+  },
+  {
+    "id": 68,
+    "title": "Alphabetical Order",
+    "instruction": "The registrar needs a list of all students, sorted alphabetically by their `name` in ascending order. Select `student_id`, `name`, and `age` from the `Students` table and order the results.",
+    "expectedQuery": "SELECT student_id, name, age FROM Students ORDER BY name ASC",
+    "columns": [
+      "student_id",
+      "name",
+      "age"
+    ],
+    "tableData": [
+      {
+        "student_id": 1,
+        "name": "Alice",
+        "age": 18
+      },
+      {
+        "student_id": 2,
+        "name": "Bob",
+        "age": 19
+      },
+      {
+        "student_id": 3,
+        "name": "Charlie",
+        "age": 18
+      }
+    ],
+    "successMsg": "Well sorted! Ordering data makes it much easier to read and analyze.",
+    "hint": "Use ORDER BY followed by the column name and ASC for ascending order (or it's the default)."
+  },
+  {
+    "id": 69,
+    "title": "Top Scorers First",
+    "instruction": "We want to celebrate our top academic performers! Show `student_id` and `score` from the `Grades` table, sorted by `score` in descending order to see the highest scores at the top.",
+    "expectedQuery": "SELECT student_id, score FROM Grades ORDER BY score DESC",
+    "columns": [
+      "student_id",
+      "score"
+    ],
+    "tableData": [
+      {
+        "student_id": 1,
+        "score": 95
+      },
+      {
+        "student_id": 2,
+        "score": 92
+      },
+      {
+        "student_id": 3,
+        "score": 88
+      },
+      {
+        "student_id": 4,
+        "score": 75
+      }
+    ],
+    "successMsg": "Fantastic! You've correctly ordered by score, showing our highest achievers.",
+    "hint": "Use ORDER BY followed by the column name and DESC for descending order."
+  },
+  {
+    "id": 70,
+    "title": "Multi-level Sorting",
+    "instruction": "The faculty wants to review students, first by their `major` (alphabetically) and then by their `age` (oldest first) within each major. Select `name`, `age`, and `major` from `Students`.",
+    "expectedQuery": "SELECT name, age, major FROM Students ORDER BY major ASC, age DESC",
+    "columns": [
+      "name",
+      "age",
+      "major"
+    ],
+    "tableData": [
+      {
+        "name": "Charlie",
+        "age": 18,
+        "major": "Biology"
+      },
+      {
+        "name": "David",
+        "age": 20,
+        "major": "Computer Science"
+      },
+      {
+        "name": "Alice",
+        "age": 18,
+        "major": "Computer Science"
+      },
+      {
+        "name": "Bob",
+        "age": 19,
+        "major": "Physics"
+      }
+    ],
+    "successMsg": "Impressive! Sorting by multiple columns gives you precise control over data presentation.",
+    "hint": "List multiple columns after ORDER BY, separated by commas, each with its own ASC/DESC."
+  },
+  {
+    "id": 71,
+    "title": "Limiting Results",
+    "instruction": "The course catalog is quite extensive. For a quick preview, the academic committee only wants to see the first 3 course `title`s and `course_id`s from the `Courses` table. Ignore any specific order for now.",
+    "expectedQuery": "SELECT course_id, title FROM Courses LIMIT 3",
+    "columns": [
+      "course_id",
+      "title"
+    ],
+    "tableData": [
+      {
+        "course_id": 101,
+        "title": "Intro to Python"
+      },
+      {
+        "course_id": 201,
+        "title": "Painting Basics"
+      },
+      {
+        "course_id": 202,
+        "title": "Choir Ensemble"
+      }
+    ],
+    "successMsg": "Well done! Limiting results is a practical way to manage large datasets.",
+    "hint": "Add LIMIT followed by the number of rows you want at the end of your query."
+  },
+  {
+    "id": 72,
+    "title": "Counting All Students",
+    "instruction": "The administration needs an exact count of all students enrolled in the Academy. Count all rows in the `Students` table and label the resulting column `total_students`.",
+    "expectedQuery": "SELECT COUNT(*) AS total_students FROM Students",
+    "columns": [
+      "total_students"
+    ],
+    "tableData": [
+      {
+        "total_students": 4
+      }
+    ],
+    "successMsg": "Excellent counting! Aggregate functions like COUNT are essential for summaries.",
+    "hint": "Use COUNT(*) for a total count of rows, and AS to rename the output column."
+  },
+  {
+    "id": 73,
+    "title": "Counting Unique Departments",
+    "instruction": "How diverse is our course offering? We want to know how many *unique* departments offer courses. Count the distinct `department` values from the `Courses` table and label it `total_departments`.",
+    "expectedQuery": "SELECT COUNT(DISTINCT department) AS total_departments FROM Courses",
+    "columns": [
+      "total_departments"
+    ],
+    "tableData": [
+      {
+        "total_departments": 4
+      }
+    ],
+    "successMsg": "Great! You've found the number of unique departments. DISTINCT is a powerful tool!",
+    "hint": "Use COUNT(DISTINCT column_name) to count only unique values in a column."
+  },
+  {
+    "id": 74,
+    "title": "Total Tuition Collected",
+    "instruction": "The finance department needs to know the total amount of `tuition_paid` across all students for auditing purposes. Sum the `amount` column from the `Payments` table and label it `total_tuition_paid`.",
+    "expectedQuery": "SELECT SUM(amount) AS total_tuition_paid FROM Payments",
+    "columns": [
+      "total_tuition_paid"
+    ],
+    "tableData": [
+      {
+        "total_tuition_paid": 5500
+      }
+    ],
+    "successMsg": "Money matters! You've successfully summed up all tuition payments.",
+    "hint": "The SUM() function calculates the total of a numeric column. Don't forget AS to rename!"
+  },
+  {
+    "id": 75,
+    "title": "Average Performance",
+    "instruction": "What's the overall academic performance of our students? Calculate the average `score` across all enrollments from the `Grades` table and label it `average_score`.",
+    "expectedQuery": "SELECT AVG(score) AS average_score FROM Grades",
+    "columns": [
+      "average_score"
+    ],
+    "tableData": [
+      {
+        "average_score": 87.5
+      }
+    ],
+    "successMsg": "Spot on! Calculating averages gives a great overview of performance.",
+    "hint": "Use the AVG() function for average values. Remember to use AS."
+  },
+  {
+    "id": 76,
+    "title": "Extremes in Grading",
+    "instruction": "The testing department wants to know the `highest_score` and `lowest_score` ever recorded in any enrollment. Select both as `highest_score` and `lowest_score` from the `Grades` table.",
+    "expectedQuery": "SELECT MAX(score) AS highest_score, MIN(score) AS lowest_score FROM Grades",
+    "columns": [
+      "highest_score",
+      "lowest_score"
+    ],
+    "tableData": [
+      {
+        "highest_score": 95,
+        "lowest_score": 75
+      }
+    ],
+    "successMsg": "Excellent! You've found the boundaries of our grading system.",
+    "hint": "MAX() finds the highest value, and MIN() finds the lowest value in a column. Use AS for both."
+  },
+  {
+    "id": 77,
+    "title": "Students Per Major",
+    "instruction": "The Dean needs to see how many students are enrolled in each `major`. Group the students by their `major` and count the `num_students` in each group. Select the `major` and `num_students`.",
+    "expectedQuery": "SELECT major, COUNT(student_id) AS num_students FROM Students GROUP BY major",
+    "columns": [
+      "major",
+      "num_students"
+    ],
+    "tableData": [
+      {
+        "major": "Biology",
+        "num_students": 1
+      },
+      {
+        "major": "Computer Science",
+        "num_students": 2
+      },
+      {
+        "major": "Physics",
+        "num_students": 1
+      }
+    ],
+    "successMsg": "Perfect! Grouping data reveals insightful statistics for each category.",
+    "hint": "Use GROUP BY with the column you want to group by. Any non-aggregated columns in SELECT must be in GROUP BY."
+  },
+  {
+    "id": 78,
+    "title": "Individual Student Payments",
+    "instruction": "The finance department now wants a breakdown: the `total_paid` amount for each `student_id`. Group the `Payments` table by `student_id` and sum their `amount`.",
+    "expectedQuery": "SELECT student_id, SUM(amount) AS total_paid FROM Payments GROUP BY student_id",
+    "columns": [
+      "student_id",
+      "total_paid"
+    ],
+    "tableData": [
+      {
+        "student_id": 1,
+        "total_paid": 1500
+      },
+      {
+        "student_id": 2,
+        "total_paid": 2000
+      },
+      {
+        "student_id": 3,
+        "total_paid": 1000
+      },
+      {
+        "student_id": 4,
+        "total_paid": 1000
+      }
+    ],
+    "successMsg": "Outstanding! You can now see each student's total contribution.",
+    "hint": "Combine SUM() with GROUP BY to aggregate values for distinct groups."
+  },
+  {
+    "id": 79,
+    "title": "Linking Students to Enrollments",
+    "instruction": "It's time to connect the dots! We need to link students to their course enrollments. Join the `Students` table with the `Enrollments` table on `student_id`. Select `Students.name` (aliased as `student_name`), `Enrollments.enrollment_id`, and `Enrollments.course_id`.",
+    "expectedQuery": "SELECT S.name AS student_name, E.enrollment_id, E.course_id FROM Students S JOIN Enrollments E ON S.student_id = E.student_id",
+    "columns": [
+      "student_name",
+      "enrollment_id",
+      "course_id"
+    ],
+    "tableData": [
+      {
+        "student_name": "Alice",
+        "enrollment_id": 1,
+        "course_id": 101
+      },
+      {
+        "student_name": "Alice",
+        "enrollment_id": 4,
+        "course_id": 103
+      },
+      {
+        "student_name": "Bob",
+        "enrollment_id": 2,
+        "course_id": 103
+      },
+      {
+        "student_name": "Charlie",
+        "enrollment_id": 3,
+        "course_id": 201
+      }
+    ],
+    "successMsg": "Congratulations! You've successfully performed your first JOIN. Data relationships are now clear!",
+    "hint": "Use the JOIN keyword, specify the second table, and then ON to define the matching columns. Use table aliases (e.g., S for Students) to shorten your query."
+  },
+  {
+    "id": 80,
+    "title": "Top Performing Students (Joined & Filtered)",
+    "instruction": "For your final challenge, identify the names of students who scored above 90. Join the `Students` and `Grades` tables on `student_id`. Select `Students.name` (aliased as `student_name`) and `Grades.score`, but only for students with a `score` greater than 90.",
+    "expectedQuery": "SELECT S.name AS student_name, G.score FROM Students S JOIN Grades G ON S.student_id = G.student_id WHERE G.score > 90",
+    "columns": [
+      "student_name",
+      "score"
+    ],
+    "tableData": [
+      {
+        "student_name": "Alice",
+        "score": 95
+      },
+      {
+        "student_name": "Bob",
+        "score": 92
+      }
+    ],
+    "successMsg": "You've done it! You've combined joining, filtering, and selecting specific data. You are now a SQL Academy graduate!",
+    "hint": "Start with the JOIN, then add your WHERE clause to filter the joined results."
+  },
+  {
+    "id": 81,
+    "title": "Welcome to the SQL Academy!",
+    "instruction": "Greetings, aspiring data analyst! Your first mission is simple: get a complete overview of all employees in the 'Employees' table. Show every column and every row.",
+    "expectedQuery": "SELECT * FROM Employees",
+    "columns": [
+      "EmployeeID",
+      "EmployeeName",
+      "Department",
+      "Salary"
+    ],
+    "tableData": [
+      {
+        "EmployeeID": 1,
+        "EmployeeName": "Alice Smith",
+        "Department": "HR",
+        "Salary": 60000
+      },
+      {
+        "EmployeeID": 2,
+        "EmployeeName": "Bob Johnson",
+        "Department": "Sales",
+        "Salary": 75000
+      },
+      {
+        "EmployeeID": 3,
+        "EmployeeName": "Charlie Brown",
+        "Department": "IT",
+        "Salary": 80000
+      },
+      {
+        "EmployeeID": 4,
+        "EmployeeName": "Diana Prince",
+        "Department": "HR",
+        "Salary": 62000
+      }
+    ],
+    "successMsg": "Excellent! You've successfully viewed your first dataset. On to the next challenge!",
+    "hint": "Use the '*' wildcard to select all columns."
+  },
+  {
+    "id": 82,
+    "title": "Picking Specific Information",
+    "instruction": "The CEO just needs a quick list of all product names and their prices from the 'Products' table. Don't show any other details.",
+    "expectedQuery": "SELECT ProductName, Price FROM Products",
+    "columns": [
+      "ProductName",
+      "Price"
+    ],
+    "tableData": [
+      {
+        "ProductName": "Laptop",
+        "Price": 1200.0
+      },
+      {
+        "ProductName": "Mouse",
+        "Price": 25.0
+      },
+      {
+        "ProductName": "Keyboard",
+        "Price": 75.0
+      },
+      {
+        "ProductName": "Monitor",
+        "Price": 300.0
+      }
+    ],
+    "successMsg": "Great job! You've learned how to select specific columns.",
+    "hint": "List the column names separated by commas after SELECT."
+  },
+  {
+    "id": 83,
+    "title": "Filtering by Numbers",
+    "instruction": "We need to identify high-value orders. From the 'Orders' table, retrieve all orders where the 'TotalAmount' is greater than 100.",
+    "expectedQuery": "SELECT * FROM Orders WHERE TotalAmount > 100",
+    "columns": [
+      "OrderID",
+      "CustomerID",
+      "TotalAmount",
+      "OrderDate"
+    ],
+    "tableData": [
+      {
+        "OrderID": 101,
+        "CustomerID": 1,
+        "TotalAmount": 150.0,
+        "OrderDate": "2023-01-10"
+      },
+      {
+        "OrderID": 103,
+        "CustomerID": 2,
+        "TotalAmount": 220.5,
+        "OrderDate": "2023-01-12"
+      },
+      {
+        "OrderID": 104,
+        "CustomerID": 1,
+        "TotalAmount": 110.0,
+        "OrderDate": "2023-01-13"
+      }
+    ],
+    "successMsg": "Fantastic! You've mastered filtering with numeric conditions.",
+    "hint": "Use the WHERE clause with a comparison operator like '>'."
+  },
+  {
+    "id": 84,
+    "title": "Filtering by Text",
+    "instruction": "Our marketing team wants to send a special promotion to customers in 'New York'. List all customers from the 'Customers' table who live in 'New York'.",
+    "expectedQuery": "SELECT * FROM Customers WHERE City = 'New York'",
+    "columns": [
+      "CustomerID",
+      "CustomerName",
+      "City",
+      "Email"
+    ],
+    "tableData": [
+      {
+        "CustomerID": 1,
+        "CustomerName": "Alice Wonderland",
+        "City": "New York",
+        "Email": "alice@example.com"
+      },
+      {
+        "CustomerID": 3,
+        "CustomerName": "Charlie Chaplin",
+        "City": "New York",
+        "Email": "charlie@example.com"
+      }
+    ],
+    "successMsg": "Perfect! Filtering by text is now a breeze for you.",
+    "hint": "Remember to enclose text values in single quotes (' ')."
+  },
+  {
+    "id": 85,
+    "title": "Finding Patterns with LIKE",
+    "instruction": "A customer is looking for books about 'SQL', but they might not remember the exact title. Find all books in the 'Books' table where the 'Title' contains the word 'SQL'.",
+    "expectedQuery": "SELECT * FROM Books WHERE Title LIKE '%SQL%'",
+    "columns": [
+      "BookID",
+      "Title",
+      "Author",
+      "Genre"
+    ],
+    "tableData": [
+      {
+        "BookID": 1,
+        "Title": "Learning SQL",
+        "Author": "Adam Smith",
+        "Genre": "Programming"
+      },
+      {
+        "BookID": 3,
+        "Title": "Advanced SQL Techniques",
+        "Author": "Eve Johnson",
+        "Genre": "Database"
+      }
+    ],
+    "successMsg": "Excellent! Pattern matching with LIKE is a powerful tool.",
+    "hint": "Use the '%' wildcard before and after the search term for partial matches."
+  },
+  {
+    "id": 86,
+    "title": "Combining Conditions (AND/OR)",
+    "instruction": "The movie critics want to highlight highly-rated, recent films. Find movies from the 'Movies' table that were 'ReleaseYear' after 2000 AND have a 'Rating' of 'PG-13'.",
+    "expectedQuery": "SELECT * FROM Movies WHERE ReleaseYear > 2000 AND Rating = 'PG-13'",
+    "columns": [
+      "MovieID",
+      "Title",
+      "ReleaseYear",
+      "Rating"
+    ],
+    "tableData": [
+      {
+        "MovieID": 1,
+        "Title": "The Future",
+        "ReleaseYear": 2005,
+        "Rating": "PG-13"
+      },
+      {
+        "MovieID": 3,
+        "Title": "Space Odyssey",
+        "ReleaseYear": 2010,
+        "Rating": "PG-13"
+      }
+    ],
+    "successMsg": "You're a master of logical operators! Keep up the great work.",
+    "hint": "Combine conditions using AND or OR keywords."
+  },
+  {
+    "id": 87,
+    "title": "Sorting Results (ASC)",
+    "instruction": "We need to see which students are struggling the most. List all students from the 'Students' table, ordered by their 'Grade' from lowest to highest.",
+    "expectedQuery": "SELECT * FROM Students ORDER BY Grade ASC",
+    "columns": [
+      "StudentID",
+      "StudentName",
+      "Grade",
+      "Major"
+    ],
+    "tableData": [
+      {
+        "StudentID": 4,
+        "StudentName": "Eve Green",
+        "Grade": "C",
+        "Major": "Physics"
+      },
+      {
+        "StudentID": 1,
+        "StudentName": "Frank White",
+        "Grade": "B",
+        "Major": "Math"
+      },
+      {
+        "StudentID": 3,
+        "StudentName": "Grace Black",
+        "Grade": "B",
+        "Major": "Chemistry"
+      },
+      {
+        "StudentID": 2,
+        "StudentName": "Harry Blue",
+        "Grade": "A",
+        "Major": "Computer Science"
+      }
+    ],
+    "successMsg": "Excellent sorting! Ordering data makes it much easier to analyze.",
+    "hint": "Use ORDER BY followed by the column name and ASC for ascending order (or omit ASC as it's the default)."
+  },
+  {
+    "id": 88,
+    "title": "Sorting Results (DESC)",
+    "instruction": "Our gaming leaderboard needs updating. Display all game scores from the 'Scores' table, from highest to lowest.",
+    "expectedQuery": "SELECT * FROM Scores ORDER BY Score DESC",
+    "columns": [
+      "PlayerID",
+      "Game",
+      "Score",
+      "PlayDate"
+    ],
+    "tableData": [
+      {
+        "PlayerID": 2,
+        "Game": "Star Blaster",
+        "Score": 9800,
+        "PlayDate": "2023-03-02"
+      },
+      {
+        "PlayerID": 1,
+        "Game": "Space Invaders",
+        "Score": 8500,
+        "PlayDate": "2023-03-01"
+      },
+      {
+        "PlayerID": 3,
+        "Game": "Alien Attack",
+        "Score": 7200,
+        "PlayDate": "2023-03-03"
+      }
+    ],
+    "successMsg": "Top score! You've successfully ordered in descending order.",
+    "hint": "Use ORDER BY followed by the column name and DESC for descending order."
+  },
+  {
+    "id": 89,
+    "title": "Limiting Your Results",
+    "instruction": "The news feed only shows a few articles. Get the 3 most recent articles from the 'Articles' table. Assume higher 'ArticleID' means more recent.",
+    "expectedQuery": "SELECT * FROM Articles ORDER BY ArticleID DESC LIMIT 3",
+    "columns": [
+      "ArticleID",
+      "Title",
+      "Author",
+      "PublishDate"
+    ],
+    "tableData": [
+      {
+        "ArticleID": 104,
+        "Title": "Future of AI",
+        "Author": "Jane Doe",
+        "PublishDate": "2023-04-04"
+      },
+      {
+        "ArticleID": 103,
+        "Title": "SQL Tips",
+        "Author": "John Smith",
+        "PublishDate": "2023-04-03"
+      },
+      {
+        "ArticleID": 102,
+        "Title": "New Tech Gadgets",
+        "Author": "Emily White",
+        "PublishDate": "2023-04-02"
+      }
+    ],
+    "successMsg": "You've successfully curated the feed! LIMIT is very useful for concise results.",
+    "hint": "After ordering, use the LIMIT clause to specify the number of rows."
+  },
+  {
+    "id": 90,
+    "title": "Counting Rows with COUNT()",
+    "instruction": "The project manager needs to know how many tasks are currently 'Pending'. Count the number of tasks with a 'Status' of 'Pending' in the 'Tasks' table.",
+    "expectedQuery": "SELECT COUNT(*) FROM Tasks WHERE Status = 'Pending'",
+    "columns": [
+      "COUNT(*)"
+    ],
+    "tableData": [
+      {
+        "COUNT(*)": 2
+      }
+    ],
+    "successMsg": "Counted perfectly! You're getting good at aggregations.",
+    "hint": "Use the COUNT() function. You can count all rows with COUNT(*) or a specific column with COUNT(column_name)."
+  },
+  {
+    "id": 91,
+    "title": "Summing Values with SUM()",
+    "instruction": "Our finance department wants to know the total revenue generated from all sales. Calculate the sum of the 'Amount' column from the 'Sales' table.",
+    "expectedQuery": "SELECT SUM(Amount) FROM Sales",
+    "columns": [
+      "SUM(Amount)"
+    ],
+    "tableData": [
+      {
+        "SUM(Amount)": 550.0
+      }
+    ],
+    "successMsg": "Total calculated! Your financial reports will be accurate.",
+    "hint": "The SUM() function is used to calculate the total of a numeric column."
+  },
+  {
+    "id": 92,
+    "title": "Averaging Values with AVG()",
+    "instruction": "The teacher wants to know the average score of all tests. Find the average 'Score' from the 'Grades' table.",
+    "expectedQuery": "SELECT AVG(Score) FROM Grades",
+    "columns": [
+      "AVG(Score)"
+    ],
+    "tableData": [
+      {
+        "AVG(Score)": 85.0
+      }
+    ],
+    "successMsg": "Average achieved! You're an aggregation pro!",
+    "hint": "Use the AVG() function to compute the average of a numeric column."
+  },
+  {
+    "id": 93,
+    "title": "Finding Extremes (MAX/MIN)",
+    "instruction": "The purchasing department needs to know the range of product prices. Find the highest and lowest 'Price' from the 'Products' table.",
+    "expectedQuery": "SELECT MAX(Price), MIN(Price) FROM Products",
+    "columns": [
+      "MAX(Price)",
+      "MIN(Price)"
+    ],
+    "tableData": [
+      {
+        "MAX(Price)": 1200.0,
+        "MIN(Price)": 25.0
+      }
+    ],
+    "successMsg": "Extremes found! Knowing the max and min is often very useful.",
+    "hint": "Use MAX() for the highest value and MIN() for the lowest value."
+  },
+  {
+    "id": 94,
+    "title": "Grouping Data (COUNT)",
+    "instruction": "The customer service team wants to know how many orders each customer has placed. Group the data by 'CustomerID' and count the orders from the 'Orders' table.",
+    "expectedQuery": "SELECT CustomerID, COUNT(OrderID) FROM Orders GROUP BY CustomerID",
+    "columns": [
+      "CustomerID",
+      "COUNT(OrderID)"
+    ],
+    "tableData": [
+      {
+        "CustomerID": 1,
+        "COUNT(OrderID)": 2
+      },
+      {
+        "CustomerID": 2,
+        "COUNT(OrderID)": 1
+      },
+      {
+        "CustomerID": 3,
+        "COUNT(OrderID)": 1
+      }
+    ],
+    "successMsg": "Great grouping! You've successfully summarized data by customer.",
+    "hint": "Use GROUP BY after your aggregation function, specifying the column you want to group by."
+  },
+  {
+    "id": 95,
+    "title": "Grouping Data (SUM)",
+    "instruction": "The sales director wants to see the total sales amount for each product 'Category'. Group the 'Sales' table by 'Category' and sum the 'Amount'.",
+    "expectedQuery": "SELECT Category, SUM(Amount) FROM Sales GROUP BY Category",
+    "columns": [
+      "Category",
+      "SUM(Amount)"
+    ],
+    "tableData": [
+      {
+        "Category": "Electronics",
+        "SUM(Amount)": 325.0
+      },
+      {
+        "Category": "Books",
+        "SUM(Amount)": 100.0
+      },
+      {
+        "Category": "Home Goods",
+        "SUM(Amount)": 125.0
+      }
+    ],
+    "successMsg": "Sales by category calculated! You're providing valuable insights.",
+    "hint": "Remember to include both the grouping column and the aggregate function in your SELECT statement."
+  },
+  {
+    "id": 96,
+    "title": "Finding Unique Values (DISTINCT)",
+    "instruction": "We need a list of all unique 'Department' names available in the 'Courses' table to update our catalog. Eliminate any duplicate department names.",
+    "expectedQuery": "SELECT DISTINCT Department FROM Courses",
+    "columns": [
+      "Department"
+    ],
+    "tableData": [
+      {
+        "Department": "Computer Science"
+      },
+      {
+        "Department": "Mathematics"
+      },
+      {
+        "Department": "Physics"
+      }
+    ],
+    "successMsg": "Unique departments found! No more duplicates in your lists.",
+    "hint": "Use the DISTINCT keyword right after SELECT to show only unique values."
+  },
+  {
+    "id": 97,
+    "title": "Joining Two Tables",
+    "instruction": "You have 'Orders' and 'Customers' tables. Combine them to see which customer ('CustomerName') placed each 'OrderID'. You'll need to join them using the common 'CustomerID'.",
+    "expectedQuery": "SELECT Orders.OrderID, Customers.CustomerName FROM Orders INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID",
+    "columns": [
+      "OrderID",
+      "CustomerName"
+    ],
+    "tableData": [
+      {
+        "OrderID": 101,
+        "CustomerName": "Alice Wonderland"
+      },
+      {
+        "OrderID": 102,
+        "CustomerName": "Bob The Builder"
+      },
+      {
+        "OrderID": 103,
+        "CustomerName": "Charlie Chaplin"
+      }
+    ],
+    "successMsg": "First join complete! You've connected data from two different tables.",
+    "hint": "Use INNER JOIN with an ON clause to specify the joining condition."
+  },
+  {
+    "id": 98,
+    "title": "Joining and Selecting Specifics",
+    "instruction": "Now, let's get a bit more precise with joins. Display only the 'ProductName' from the 'Products' table and its corresponding 'CategoryName' from the 'Categories' table.",
+    "expectedQuery": "SELECT Products.ProductName, Categories.CategoryName FROM Products INNER JOIN Categories ON Products.CategoryID = Categories.CategoryID",
+    "columns": [
+      "ProductName",
+      "CategoryName"
+    ],
+    "tableData": [
+      {
+        "ProductName": "Laptop",
+        "CategoryName": "Electronics"
+      },
+      {
+        "ProductName": "Mouse",
+        "CategoryName": "Electronics"
+      },
+      {
+        "ProductName": "SQL Book",
+        "CategoryName": "Books"
+      },
+      {
+        "ProductName": "Keyboard",
+        "CategoryName": "Electronics"
+      }
+    ],
+    "successMsg": "Excellent! You're selecting just the right information from joined tables.",
+    "hint": "Remember to qualify column names with their table names (e.g., TableName.ColumnName) when selecting from joined tables."
+  },
+  {
+    "id": 99,
+    "title": "Filtering Joined Data",
+    "instruction": "The HR department wants to see which employees work in the 'Sales' department. Join the 'Employees' and 'Departments' tables, then filter the results to only show employees in the 'Sales' department.",
+    "expectedQuery": "SELECT Employees.EmployeeName, Departments.DepartmentName FROM Employees INNER JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID WHERE Departments.DepartmentName = 'Sales'",
+    "columns": [
+      "EmployeeName",
+      "DepartmentName"
+    ],
+    "tableData": [
+      {
+        "EmployeeName": "Bob Johnson",
+        "DepartmentName": "Sales"
+      },
+      {
+        "EmployeeName": "Peter Jones",
+        "DepartmentName": "Sales"
+      }
+    ],
+    "successMsg": "Filtered joined data perfectly! This is very powerful for targeted analysis.",
+    "hint": "Apply the WHERE clause *after* the JOIN operation."
+  },
+  {
+    "id": 100,
+    "title": "Joining and Ordering Data",
+    "instruction": "For a comprehensive report, list all orders, their customer names, and cities. Then, order the entire result set by the customer's 'CustomerName' alphabetically.",
+    "expectedQuery": "SELECT Orders.OrderID, Customers.CustomerName, Customers.City FROM Orders INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID ORDER BY Customers.CustomerName ASC",
+    "columns": [
+      "OrderID",
+      "CustomerName",
+      "City"
+    ],
+    "tableData": [
+      {
+        "OrderID": 101,
+        "CustomerName": "Alice Wonderland",
+        "City": "New York"
+      },
+      {
+        "OrderID": 102,
+        "CustomerName": "Bob The Builder",
+        "City": "Los Angeles"
+      },
+      {
+        "OrderID": 103,
+        "CustomerName": "Charlie Chaplin",
+        "City": "New York"
+      },
+      {
+        "OrderID": 104,
+        "CustomerName": "Diana Prince",
+        "City": "Chicago"
+      }
+    ],
+    "successMsg": "Congratulations! You've mastered complex queries involving joins, filtering, and ordering. You are now ready for more advanced SQL challenges!",
+    "hint": "The ORDER BY clause comes at the very end of your query, after any JOINs and WHERE clauses."
+  }
+]

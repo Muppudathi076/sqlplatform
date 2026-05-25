@@ -1,14 +1,18 @@
 from datetime import date
 from django.db.models import F
 import sqlite3
+import os
+import json
 import re
 from rest_framework.decorators import api_view,permission_classes,authentication_classes
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .serializer import LoginSerializer,RegisterSerializer,UserdetailsSerializer,QuestionallSerializer,QuestionSerializer
+from .serializer import LoginSerializer,RegisterSerializer,UserdetailsSerializer
+from My_admin.serializers import QuestionallSerializer, QuestionSerializer
 from .utils import generate_custom_access_token,CustomJWTAuthentication,validate_query
-from .models import SQLQuestion,Login,UserProgress,DailyUsage
+from .models import Login,UserProgress,DailyUsage
+from My_admin.models import SQLQuestion
 from django.db import connection 
 from django.utils.timezone import now
 from django.db.models import Count, Sum,Q
@@ -522,7 +526,8 @@ def all_user_details(request):
             "name": user.Name,
             "score": score,
             "model": level,
-            "total_time": time
+            "total_time": time,
+            "sql_academy_level": getattr(user, 'sql_academy_level', 0)
         })
 
     return Response({
@@ -690,3 +695,78 @@ def model_complete(request, model_id):
         "success": True,
         "message": "Progress saved successfully in UserProgress table"
     })
+
+@api_view(['GET'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def get_sql_dictionary(request):
+    try:
+        file_path = os.path.join(os.path.dirname(__file__), 'sql_dictionary.json')
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+        return Response({
+            "success": True,
+            "data": data
+        }, status=200)
+    except Exception as e:
+        return Response({
+            "success": False,
+            "message": "Dictionary file not found or could not be read.",
+            "error": str(e)
+        }, status=500)
+
+@api_view(['GET'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def get_sql_academy(request):
+    try:
+        user = request.user
+        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'academy_questions.json')
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+        return Response({
+            "success": True,
+            "data": data,
+            "currentLevel": getattr(user, 'sql_academy_level', 0)
+        }, status=200)
+    except Exception as e:
+        return Response({
+            "success": False,
+            "message": "Academy file not found or could not be read.",
+            "error": str(e)
+        }, status=500)
+
+@api_view(['POST'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def update_sql_academy(request):
+    try:
+        user = request.user
+        level = request.data.get('level')
+        if level is not None:
+            # Update the user directly in database using QuerySet for instant persistence
+            Login.objects.filter(id=user.id).update(sql_academy_level=int(level))
+            return Response({"success": True, "saved_level": int(level)}, status=200)
+        return Response({"success": False, "message": "No level provided"}, status=400)
+    except Exception as e:
+        return Response({"success": False, "error": str(e)}, status=500)
+
+@api_view(['PUT'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    try:
+        user = request.user
+        data = request.data
+        if 'name' in data:
+            user.Name = data['name']
+        if 'email' in data:
+            user.Email = data['email']
+        if 'password' in data:
+            user.Password = data['password']
+        if 'age' in data:
+            user.age = data['age']
+        user.save()
+        return Response({"success": True, "message": "Profile updated successfully"}, status=200)
+    except Exception as e:
+        return Response({"success": False, "error": str(e)}, status=500)

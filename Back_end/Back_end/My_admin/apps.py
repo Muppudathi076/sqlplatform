@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class QueationsConfig(AppConfig):
+class MyAdminConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'Queations'
+    name = 'My_admin'

@@ -1,0 +1,2052 @@
+[
+  {
+    "keyword": "SELECT",
+    "meaning": "Choose or Take",
+    "analogy": "Like ordering your favorite dish.",
+    "syntax": "SELECT column FROM table;",
+    "example_query": "SELECT name FROM Users;",
+    "icon": "BookOpen",
+    "color": "from-blue-400 to-indigo-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of SELECT?",
+        "options": [
+          "Throws an error",
+          "Restarts database",
+          "Makes a coffee",
+          "Choose or Take"
+        ],
+        "answer": "Choose or Take"
+      },
+      {
+        "question": "Which of these shows correct syntax for SELECT?",
+        "options": [
+          "SELECT *;",
+          "SELECT column FROM table;",
+          "INVALID SYNTAX",
+          "SELECT NOTHING;"
+        ],
+        "answer": "SELECT column FROM table;"
+      },
+      {
+        "question": "What is a good real-world analogy for SELECT?",
+        "options": [
+          "Sleeping in bed",
+          "Like ordering your favorite dish.",
+          "Drinking water",
+          "Flying an airplane"
+        ],
+        "answer": "Like ordering your favorite dish."
+      }
+    ]
+  },
+  {
+    "keyword": "* (Asterisk)",
+    "meaning": "Everything",
+    "analogy": "Like saying 'Bring me everything!'",
+    "syntax": "SELECT * FROM table;",
+    "example_query": "SELECT * FROM Users;",
+    "icon": "BookOpen",
+    "color": "from-purple-400 to-fuchsia-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of * (Asterisk)?",
+        "options": [
+          "Throws an error",
+          "Makes a coffee",
+          "Restarts database",
+          "Everything"
+        ],
+        "answer": "Everything"
+      },
+      {
+        "question": "Which of these shows correct syntax for * (Asterisk)?",
+        "options": [
+          "SELECT * FROM table;",
+          "SELECT NOTHING;",
+          "INVALID SYNTAX",
+          "* (Asterisk) *;"
+        ],
+        "answer": "SELECT * FROM table;"
+      },
+      {
+        "question": "What is a good real-world analogy for * (Asterisk)?",
+        "options": [
+          "Flying an airplane",
+          "Sleeping in bed",
+          "Like saying 'Bring me everything!'",
+          "Drinking water"
+        ],
+        "answer": "Like saying 'Bring me everything!'"
+      }
+    ]
+  },
+  {
+    "keyword": "FROM",
+    "meaning": "Where to take it from",
+    "analogy": "Tells the database which shop to look into.",
+    "syntax": "SELECT col FROM table;",
+    "example_query": "SELECT * FROM Products;",
+    "icon": "BookOpen",
+    "color": "from-emerald-400 to-teal-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of FROM?",
+        "options": [
+          "Makes a coffee",
+          "Where to take it from",
+          "Throws an error",
+          "Restarts database"
+        ],
+        "answer": "Where to take it from"
+      },
+      {
+        "question": "Which of these shows correct syntax for FROM?",
+        "options": [
+          "INVALID SYNTAX",
+          "FROM *;",
+          "SELECT NOTHING;",
+          "SELECT col FROM table;"
+        ],
+        "answer": "SELECT col FROM table;"
+      },
+      {
+        "question": "What is a good real-world analogy for FROM?",
+        "options": [
+          "Sleeping in bed",
+          "Flying an airplane",
+          "Drinking water",
+          "Tells the database which shop to look into."
+        ],
+        "answer": "Tells the database which shop to look into."
+      }
+    ]
+  },
+  {
+    "keyword": "WHERE",
+    "meaning": "The Filter",
+    "analogy": "Like asking for only RED shirts.",
+    "syntax": "SELECT * FROM table WHERE cond;",
+    "example_query": "SELECT * FROM Users WHERE age > 18;",
+    "icon": "BookOpen",
+    "color": "from-amber-400 to-orange-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of WHERE?",
+        "options": [
+          "The Filter",
+          "Makes a coffee",
+          "Restarts database",
+          "Throws an error"
+        ],
+        "answer": "The Filter"
+      },
+      {
+        "question": "Which of these shows correct syntax for WHERE?",
+        "options": [
+          "SELECT NOTHING;",
+          "SELECT * FROM table WHERE cond;",
+          "WHERE *;",
+          "INVALID SYNTAX"
+        ],
+        "answer": "SELECT * FROM table WHERE cond;"
+      },
+      {
+        "question": "What is a good real-world analogy for WHERE?",
+        "options": [
+          "Flying an airplane",
+          "Drinking water",
+          "Like asking for only RED shirts.",
+          "Sleeping in bed"
+        ],
+        "answer": "Like asking for only RED shirts."
+      }
+    ]
+  },
+  {
+    "keyword": "INSERT INTO",
+    "meaning": "Add new data",
+    "analogy": "Writing your first entry in a notebook.",
+    "syntax": "INSERT INTO table (col) VALUES (val);",
+    "example_query": "INSERT INTO Users (name) VALUES ('John');",
+    "icon": "BookOpen",
+    "color": "from-cyan-400 to-blue-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of INSERT INTO?",
+        "options": [
+          "Makes a coffee",
+          "Throws an error",
+          "Restarts database",
+          "Add new data"
+        ],
+        "answer": "Add new data"
+      },
+      {
+        "question": "Which of these shows correct syntax for INSERT INTO?",
+        "options": [
+          "INVALID SYNTAX",
+          "INSERT INTO table (col) VALUES (val);",
+          "SELECT NOTHING;",
+          "INSERT INTO *;"
+        ],
+        "answer": "INSERT INTO table (col) VALUES (val);"
+      },
+      {
+        "question": "What is a good real-world analogy for INSERT INTO?",
+        "options": [
+          "Sleeping in bed",
+          "Drinking water",
+          "Flying an airplane",
+          "Writing your first entry in a notebook."
+        ],
+        "answer": "Writing your first entry in a notebook."
+      }
+    ]
+  },
+  {
+    "keyword": "UPDATE",
+    "meaning": "Modify existing data",
+    "analogy": "Using an eraser to change an answer.",
+    "syntax": "UPDATE table SET col = val WHERE cond;",
+    "example_query": "UPDATE Users SET age=20 WHERE id=1;",
+    "icon": "BookOpen",
+    "color": "from-lime-400 to-green-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of UPDATE?",
+        "options": [
+          "Restarts database",
+          "Throws an error",
+          "Modify existing data",
+          "Makes a coffee"
+        ],
+        "answer": "Modify existing data"
+      },
+      {
+        "question": "Which of these shows correct syntax for UPDATE?",
+        "options": [
+          "UPDATE table SET col = val WHERE cond;",
+          "INVALID SYNTAX",
+          "UPDATE *;",
+          "SELECT NOTHING;"
+        ],
+        "answer": "UPDATE table SET col = val WHERE cond;"
+      },
+      {
+        "question": "What is a good real-world analogy for UPDATE?",
+        "options": [
+          "Using an eraser to change an answer.",
+          "Flying an airplane",
+          "Sleeping in bed",
+          "Drinking water"
+        ],
+        "answer": "Using an eraser to change an answer."
+      }
+    ]
+  },
+  {
+    "keyword": "DELETE",
+    "meaning": "Remove data",
+    "analogy": "Tearing a page out of the notebook.",
+    "syntax": "DELETE FROM table WHERE cond;",
+    "example_query": "DELETE FROM Users WHERE id=5;",
+    "icon": "BookOpen",
+    "color": "from-red-400 to-rose-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of DELETE?",
+        "options": [
+          "Makes a coffee",
+          "Throws an error",
+          "Restarts database",
+          "Remove data"
+        ],
+        "answer": "Remove data"
+      },
+      {
+        "question": "Which of these shows correct syntax for DELETE?",
+        "options": [
+          "INVALID SYNTAX",
+          "DELETE *;",
+          "DELETE FROM table WHERE cond;",
+          "SELECT NOTHING;"
+        ],
+        "answer": "DELETE FROM table WHERE cond;"
+      },
+      {
+        "question": "What is a good real-world analogy for DELETE?",
+        "options": [
+          "Tearing a page out of the notebook.",
+          "Flying an airplane",
+          "Sleeping in bed",
+          "Drinking water"
+        ],
+        "answer": "Tearing a page out of the notebook."
+      }
+    ]
+  },
+  {
+    "keyword": "CREATE TABLE",
+    "meaning": "Make a new table",
+    "analogy": "Buying a new empty notebook.",
+    "syntax": "CREATE TABLE name (col type);",
+    "example_query": "CREATE TABLE Users (id INT);",
+    "icon": "BookOpen",
+    "color": "from-green-400 to-emerald-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of CREATE TABLE?",
+        "options": [
+          "Make a new table",
+          "Throws an error",
+          "Restarts database",
+          "Makes a coffee"
+        ],
+        "answer": "Make a new table"
+      },
+      {
+        "question": "Which of these shows correct syntax for CREATE TABLE?",
+        "options": [
+          "INVALID SYNTAX",
+          "CREATE TABLE *;",
+          "CREATE TABLE name (col type);",
+          "SELECT NOTHING;"
+        ],
+        "answer": "CREATE TABLE name (col type);"
+      },
+      {
+        "question": "What is a good real-world analogy for CREATE TABLE?",
+        "options": [
+          "Sleeping in bed",
+          "Flying an airplane",
+          "Drinking water",
+          "Buying a new empty notebook."
+        ],
+        "answer": "Buying a new empty notebook."
+      }
+    ]
+  },
+  {
+    "keyword": "DROP TABLE",
+    "meaning": "Delete completely",
+    "analogy": "Throwing the notebook in the fire.",
+    "syntax": "DROP TABLE name;",
+    "example_query": "DROP TABLE Users;",
+    "icon": "BookOpen",
+    "color": "from-rose-400 to-red-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of DROP TABLE?",
+        "options": [
+          "Restarts database",
+          "Throws an error",
+          "Delete completely",
+          "Makes a coffee"
+        ],
+        "answer": "Delete completely"
+      },
+      {
+        "question": "Which of these shows correct syntax for DROP TABLE?",
+        "options": [
+          "DROP TABLE name;",
+          "INVALID SYNTAX",
+          "DROP TABLE *;",
+          "SELECT NOTHING;"
+        ],
+        "answer": "DROP TABLE name;"
+      },
+      {
+        "question": "What is a good real-world analogy for DROP TABLE?",
+        "options": [
+          "Throwing the notebook in the fire.",
+          "Drinking water",
+          "Sleeping in bed",
+          "Flying an airplane"
+        ],
+        "answer": "Throwing the notebook in the fire."
+      }
+    ]
+  },
+  {
+    "keyword": "ALTER TABLE",
+    "meaning": "Change table structure",
+    "analogy": "Adding a new column to your notebook.",
+    "syntax": "ALTER TABLE name ADD col type;",
+    "example_query": "ALTER TABLE Users ADD email VARCHAR;",
+    "icon": "BookOpen",
+    "color": "from-orange-400 to-red-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of ALTER TABLE?",
+        "options": [
+          "Makes a coffee",
+          "Change table structure",
+          "Restarts database",
+          "Throws an error"
+        ],
+        "answer": "Change table structure"
+      },
+      {
+        "question": "Which of these shows correct syntax for ALTER TABLE?",
+        "options": [
+          "ALTER TABLE *;",
+          "SELECT NOTHING;",
+          "ALTER TABLE name ADD col type;",
+          "INVALID SYNTAX"
+        ],
+        "answer": "ALTER TABLE name ADD col type;"
+      },
+      {
+        "question": "What is a good real-world analogy for ALTER TABLE?",
+        "options": [
+          "Adding a new column to your notebook.",
+          "Flying an airplane",
+          "Drinking water",
+          "Sleeping in bed"
+        ],
+        "answer": "Adding a new column to your notebook."
+      }
+    ]
+  },
+  {
+    "keyword": "PRIMARY KEY",
+    "meaning": "Unique ID",
+    "analogy": "Like your Aadhaar Card number.",
+    "syntax": "col INT PRIMARY KEY",
+    "example_query": "id INT PRIMARY KEY",
+    "icon": "BookOpen",
+    "color": "from-yellow-400 to-orange-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of PRIMARY KEY?",
+        "options": [
+          "Unique ID",
+          "Restarts database",
+          "Throws an error",
+          "Makes a coffee"
+        ],
+        "answer": "Unique ID"
+      },
+      {
+        "question": "Which of these shows correct syntax for PRIMARY KEY?",
+        "options": [
+          "col INT PRIMARY KEY",
+          "SELECT NOTHING;",
+          "INVALID SYNTAX",
+          "PRIMARY KEY *;"
+        ],
+        "answer": "col INT PRIMARY KEY"
+      },
+      {
+        "question": "What is a good real-world analogy for PRIMARY KEY?",
+        "options": [
+          "Flying an airplane",
+          "Sleeping in bed",
+          "Like your Aadhaar Card number.",
+          "Drinking water"
+        ],
+        "answer": "Like your Aadhaar Card number."
+      }
+    ]
+  },
+  {
+    "keyword": "FOREIGN KEY",
+    "meaning": "Link to another table",
+    "analogy": "Like a phonebook linking to addresses.",
+    "syntax": "FOREIGN KEY (col) REFERENCES other(col)",
+    "example_query": "FOREIGN KEY (user_id) REFERENCES Users(id)",
+    "icon": "BookOpen",
+    "color": "from-blue-300 to-blue-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of FOREIGN KEY?",
+        "options": [
+          "Throws an error",
+          "Restarts database",
+          "Makes a coffee",
+          "Link to another table"
+        ],
+        "answer": "Link to another table"
+      },
+      {
+        "question": "Which of these shows correct syntax for FOREIGN KEY?",
+        "options": [
+          "SELECT NOTHING;",
+          "INVALID SYNTAX",
+          "FOREIGN KEY (col) REFERENCES other(col)",
+          "FOREIGN KEY *;"
+        ],
+        "answer": "FOREIGN KEY (col) REFERENCES other(col)"
+      },
+      {
+        "question": "What is a good real-world analogy for FOREIGN KEY?",
+        "options": [
+          "Drinking water",
+          "Like a phonebook linking to addresses.",
+          "Sleeping in bed",
+          "Flying an airplane"
+        ],
+        "answer": "Like a phonebook linking to addresses."
+      }
+    ]
+  },
+  {
+    "keyword": "JOIN",
+    "meaning": "Combine tables",
+    "analogy": "Stitching two pages together.",
+    "syntax": "SELECT * FROM t1 JOIN t2 ON cond;",
+    "example_query": "SELECT * FROM Users JOIN Orders ON ...;",
+    "icon": "BookOpen",
+    "color": "from-indigo-400 to-purple-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of JOIN?",
+        "options": [
+          "Makes a coffee",
+          "Combine tables",
+          "Restarts database",
+          "Throws an error"
+        ],
+        "answer": "Combine tables"
+      },
+      {
+        "question": "Which of these shows correct syntax for JOIN?",
+        "options": [
+          "SELECT NOTHING;",
+          "INVALID SYNTAX",
+          "SELECT * FROM t1 JOIN t2 ON cond;",
+          "JOIN *;"
+        ],
+        "answer": "SELECT * FROM t1 JOIN t2 ON cond;"
+      },
+      {
+        "question": "What is a good real-world analogy for JOIN?",
+        "options": [
+          "Flying an airplane",
+          "Sleeping in bed",
+          "Drinking water",
+          "Stitching two pages together."
+        ],
+        "answer": "Stitching two pages together."
+      }
+    ]
+  },
+  {
+    "keyword": "INNER JOIN",
+    "meaning": "Matching rows only",
+    "analogy": "Only people who have both a phone and email.",
+    "syntax": "SELECT * FROM t1 INNER JOIN t2 ON cond;",
+    "example_query": "SELECT * FROM A INNER JOIN B ON A.id=B.id;",
+    "icon": "BookOpen",
+    "color": "from-indigo-400 to-purple-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of INNER JOIN?",
+        "options": [
+          "Throws an error",
+          "Restarts database",
+          "Matching rows only",
+          "Makes a coffee"
+        ],
+        "answer": "Matching rows only"
+      },
+      {
+        "question": "Which of these shows correct syntax for INNER JOIN?",
+        "options": [
+          "INVALID SYNTAX",
+          "SELECT * FROM t1 INNER JOIN t2 ON cond;",
+          "INNER JOIN *;",
+          "SELECT NOTHING;"
+        ],
+        "answer": "SELECT * FROM t1 INNER JOIN t2 ON cond;"
+      },
+      {
+        "question": "What is a good real-world analogy for INNER JOIN?",
+        "options": [
+          "Flying an airplane",
+          "Drinking water",
+          "Sleeping in bed",
+          "Only people who have both a phone and email."
+        ],
+        "answer": "Only people who have both a phone and email."
+      }
+    ]
+  },
+  {
+    "keyword": "LEFT JOIN",
+    "meaning": "All from left, matching from right",
+    "analogy": "Everyone from class A, and their scores from class B if they have them.",
+    "syntax": "SELECT * FROM t1 LEFT JOIN t2 ON cond;",
+    "example_query": "SELECT * FROM A LEFT JOIN B ON ...;",
+    "icon": "BookOpen",
+    "color": "from-blue-400 to-indigo-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of LEFT JOIN?",
+        "options": [
+          "All from left, matching from right",
+          "Makes a coffee",
+          "Restarts database",
+          "Throws an error"
+        ],
+        "answer": "All from left, matching from right"
+      },
+      {
+        "question": "Which of these shows correct syntax for LEFT JOIN?",
+        "options": [
+          "SELECT * FROM t1 LEFT JOIN t2 ON cond;",
+          "SELECT NOTHING;",
+          "INVALID SYNTAX",
+          "LEFT JOIN *;"
+        ],
+        "answer": "SELECT * FROM t1 LEFT JOIN t2 ON cond;"
+      },
+      {
+        "question": "What is a good real-world analogy for LEFT JOIN?",
+        "options": [
+          "Flying an airplane",
+          "Drinking water",
+          "Sleeping in bed",
+          "Everyone from class A, and their scores from class B if they have them."
+        ],
+        "answer": "Everyone from class A, and their scores from class B if they have them."
+      }
+    ]
+  },
+  {
+    "keyword": "RIGHT JOIN",
+    "meaning": "All from right, matching from left",
+    "analogy": "Everyone from class B, and their details from class A if they have them.",
+    "syntax": "SELECT * FROM t1 RIGHT JOIN t2 ON cond;",
+    "example_query": "SELECT * FROM A RIGHT JOIN B ON ...;",
+    "icon": "BookOpen",
+    "color": "from-blue-400 to-indigo-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of RIGHT JOIN?",
+        "options": [
+          "Throws an error",
+          "All from right, matching from left",
+          "Makes a coffee",
+          "Restarts database"
+        ],
+        "answer": "All from right, matching from left"
+      },
+      {
+        "question": "Which of these shows correct syntax for RIGHT JOIN?",
+        "options": [
+          "SELECT NOTHING;",
+          "INVALID SYNTAX",
+          "RIGHT JOIN *;",
+          "SELECT * FROM t1 RIGHT JOIN t2 ON cond;"
+        ],
+        "answer": "SELECT * FROM t1 RIGHT JOIN t2 ON cond;"
+      },
+      {
+        "question": "What is a good real-world analogy for RIGHT JOIN?",
+        "options": [
+          "Flying an airplane",
+          "Everyone from class B, and their details from class A if they have them.",
+          "Sleeping in bed",
+          "Drinking water"
+        ],
+        "answer": "Everyone from class B, and their details from class A if they have them."
+      }
+    ]
+  },
+  {
+    "keyword": "FULL OUTER JOIN",
+    "meaning": "Everything from both",
+    "analogy": "Combine everyone from class A and class B.",
+    "syntax": "SELECT * FROM t1 FULL OUTER JOIN t2;",
+    "example_query": "...",
+    "icon": "BookOpen",
+    "color": "from-purple-400 to-fuchsia-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of FULL OUTER JOIN?",
+        "options": [
+          "Makes a coffee",
+          "Restarts database",
+          "Everything from both",
+          "Throws an error"
+        ],
+        "answer": "Everything from both"
+      },
+      {
+        "question": "Which of these shows correct syntax for FULL OUTER JOIN?",
+        "options": [
+          "FULL OUTER JOIN *;",
+          "SELECT NOTHING;",
+          "SELECT * FROM t1 FULL OUTER JOIN t2;",
+          "INVALID SYNTAX"
+        ],
+        "answer": "SELECT * FROM t1 FULL OUTER JOIN t2;"
+      },
+      {
+        "question": "What is a good real-world analogy for FULL OUTER JOIN?",
+        "options": [
+          "Flying an airplane",
+          "Sleeping in bed",
+          "Combine everyone from class A and class B.",
+          "Drinking water"
+        ],
+        "answer": "Combine everyone from class A and class B."
+      }
+    ]
+  },
+  {
+    "keyword": "GROUP BY",
+    "meaning": "Group rows",
+    "analogy": "Sorting candies by color.",
+    "syntax": "SELECT col, COUNT(*) FROM table GROUP BY col;",
+    "example_query": "SELECT age, COUNT(*) FROM Users GROUP BY age;",
+    "icon": "BookOpen",
+    "color": "from-teal-400 to-emerald-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of GROUP BY?",
+        "options": [
+          "Group rows",
+          "Throws an error",
+          "Restarts database",
+          "Makes a coffee"
+        ],
+        "answer": "Group rows"
+      },
+      {
+        "question": "Which of these shows correct syntax for GROUP BY?",
+        "options": [
+          "GROUP BY *;",
+          "INVALID SYNTAX",
+          "SELECT col, COUNT(*) FROM table GROUP BY col;",
+          "SELECT NOTHING;"
+        ],
+        "answer": "SELECT col, COUNT(*) FROM table GROUP BY col;"
+      },
+      {
+        "question": "What is a good real-world analogy for GROUP BY?",
+        "options": [
+          "Drinking water",
+          "Sleeping in bed",
+          "Flying an airplane",
+          "Sorting candies by color."
+        ],
+        "answer": "Sorting candies by color."
+      }
+    ]
+  },
+  {
+    "keyword": "HAVING",
+    "meaning": "Filter groups",
+    "analogy": "Like WHERE, but for groups (only groups > 5).",
+    "syntax": "GROUP BY col HAVING cond;",
+    "example_query": "GROUP BY age HAVING COUNT(*) > 2;",
+    "icon": "BookOpen",
+    "color": "from-amber-500 to-orange-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of HAVING?",
+        "options": [
+          "Makes a coffee",
+          "Filter groups",
+          "Throws an error",
+          "Restarts database"
+        ],
+        "answer": "Filter groups"
+      },
+      {
+        "question": "Which of these shows correct syntax for HAVING?",
+        "options": [
+          "GROUP BY col HAVING cond;",
+          "SELECT NOTHING;",
+          "INVALID SYNTAX",
+          "HAVING *;"
+        ],
+        "answer": "GROUP BY col HAVING cond;"
+      },
+      {
+        "question": "What is a good real-world analogy for HAVING?",
+        "options": [
+          "Drinking water",
+          "Flying an airplane",
+          "Sleeping in bed",
+          "Like WHERE, but for groups (only groups > 5)."
+        ],
+        "answer": "Like WHERE, but for groups (only groups > 5)."
+      }
+    ]
+  },
+  {
+    "keyword": "ORDER BY",
+    "meaning": "Sort results",
+    "analogy": "Arranging students by height.",
+    "syntax": "ORDER BY col ASC|DESC;",
+    "example_query": "ORDER BY age DESC;",
+    "icon": "BookOpen",
+    "color": "from-blue-500 to-cyan-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of ORDER BY?",
+        "options": [
+          "Restarts database",
+          "Sort results",
+          "Throws an error",
+          "Makes a coffee"
+        ],
+        "answer": "Sort results"
+      },
+      {
+        "question": "Which of these shows correct syntax for ORDER BY?",
+        "options": [
+          "ORDER BY *;",
+          "ORDER BY col ASC|DESC;",
+          "INVALID SYNTAX",
+          "SELECT NOTHING;"
+        ],
+        "answer": "ORDER BY col ASC|DESC;"
+      },
+      {
+        "question": "What is a good real-world analogy for ORDER BY?",
+        "options": [
+          "Sleeping in bed",
+          "Arranging students by height.",
+          "Flying an airplane",
+          "Drinking water"
+        ],
+        "answer": "Arranging students by height."
+      }
+    ]
+  },
+  {
+    "keyword": "LIMIT",
+    "meaning": "Restrict number of rows",
+    "analogy": "Only showing top 10 results.",
+    "syntax": "LIMIT number;",
+    "example_query": "SELECT * FROM Users LIMIT 5;",
+    "icon": "BookOpen",
+    "color": "from-rose-400 to-pink-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of LIMIT?",
+        "options": [
+          "Restrict number of rows",
+          "Makes a coffee",
+          "Restarts database",
+          "Throws an error"
+        ],
+        "answer": "Restrict number of rows"
+      },
+      {
+        "question": "Which of these shows correct syntax for LIMIT?",
+        "options": [
+          "INVALID SYNTAX",
+          "SELECT NOTHING;",
+          "LIMIT number;",
+          "LIMIT *;"
+        ],
+        "answer": "LIMIT number;"
+      },
+      {
+        "question": "What is a good real-world analogy for LIMIT?",
+        "options": [
+          "Flying an airplane",
+          "Drinking water",
+          "Only showing top 10 results.",
+          "Sleeping in bed"
+        ],
+        "answer": "Only showing top 10 results."
+      }
+    ]
+  },
+  {
+    "keyword": "DISTINCT",
+    "meaning": "Remove duplicates",
+    "analogy": "Only unique colors.",
+    "syntax": "SELECT DISTINCT col FROM table;",
+    "example_query": "SELECT DISTINCT city FROM Users;",
+    "icon": "BookOpen",
+    "color": "from-fuchsia-400 to-purple-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of DISTINCT?",
+        "options": [
+          "Remove duplicates",
+          "Restarts database",
+          "Makes a coffee",
+          "Throws an error"
+        ],
+        "answer": "Remove duplicates"
+      },
+      {
+        "question": "Which of these shows correct syntax for DISTINCT?",
+        "options": [
+          "SELECT DISTINCT col FROM table;",
+          "DISTINCT *;",
+          "INVALID SYNTAX",
+          "SELECT NOTHING;"
+        ],
+        "answer": "SELECT DISTINCT col FROM table;"
+      },
+      {
+        "question": "What is a good real-world analogy for DISTINCT?",
+        "options": [
+          "Drinking water",
+          "Only unique colors.",
+          "Sleeping in bed",
+          "Flying an airplane"
+        ],
+        "answer": "Only unique colors."
+      }
+    ]
+  },
+  {
+    "keyword": "COUNT",
+    "meaning": "Count rows",
+    "analogy": "Counting students in a class.",
+    "syntax": "SELECT COUNT(col) FROM table;",
+    "example_query": "SELECT COUNT(*) FROM Users;",
+    "icon": "BookOpen",
+    "color": "from-blue-500 to-indigo-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of COUNT?",
+        "options": [
+          "Count rows",
+          "Makes a coffee",
+          "Restarts database",
+          "Throws an error"
+        ],
+        "answer": "Count rows"
+      },
+      {
+        "question": "Which of these shows correct syntax for COUNT?",
+        "options": [
+          "SELECT COUNT(col) FROM table;",
+          "INVALID SYNTAX",
+          "SELECT NOTHING;",
+          "COUNT *;"
+        ],
+        "answer": "SELECT COUNT(col) FROM table;"
+      },
+      {
+        "question": "What is a good real-world analogy for COUNT?",
+        "options": [
+          "Drinking water",
+          "Flying an airplane",
+          "Counting students in a class.",
+          "Sleeping in bed"
+        ],
+        "answer": "Counting students in a class."
+      }
+    ]
+  },
+  {
+    "keyword": "SUM",
+    "meaning": "Add up values",
+    "analogy": "Total price of items.",
+    "syntax": "SELECT SUM(col) FROM table;",
+    "example_query": "SELECT SUM(price) FROM Orders;",
+    "icon": "BookOpen",
+    "color": "from-green-400 to-emerald-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of SUM?",
+        "options": [
+          "Makes a coffee",
+          "Add up values",
+          "Restarts database",
+          "Throws an error"
+        ],
+        "answer": "Add up values"
+      },
+      {
+        "question": "Which of these shows correct syntax for SUM?",
+        "options": [
+          "SELECT SUM(col) FROM table;",
+          "SELECT NOTHING;",
+          "SUM *;",
+          "INVALID SYNTAX"
+        ],
+        "answer": "SELECT SUM(col) FROM table;"
+      },
+      {
+        "question": "What is a good real-world analogy for SUM?",
+        "options": [
+          "Drinking water",
+          "Flying an airplane",
+          "Sleeping in bed",
+          "Total price of items."
+        ],
+        "answer": "Total price of items."
+      }
+    ]
+  },
+  {
+    "keyword": "AVG",
+    "meaning": "Average value",
+    "analogy": "Average marks of a student.",
+    "syntax": "SELECT AVG(col) FROM table;",
+    "example_query": "SELECT AVG(score) FROM Exams;",
+    "icon": "BookOpen",
+    "color": "from-teal-400 to-cyan-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of AVG?",
+        "options": [
+          "Average value",
+          "Restarts database",
+          "Throws an error",
+          "Makes a coffee"
+        ],
+        "answer": "Average value"
+      },
+      {
+        "question": "Which of these shows correct syntax for AVG?",
+        "options": [
+          "INVALID SYNTAX",
+          "SELECT AVG(col) FROM table;",
+          "SELECT NOTHING;",
+          "AVG *;"
+        ],
+        "answer": "SELECT AVG(col) FROM table;"
+      },
+      {
+        "question": "What is a good real-world analogy for AVG?",
+        "options": [
+          "Average marks of a student.",
+          "Drinking water",
+          "Flying an airplane",
+          "Sleeping in bed"
+        ],
+        "answer": "Average marks of a student."
+      }
+    ]
+  },
+  {
+    "keyword": "MAX",
+    "meaning": "Highest value",
+    "analogy": "Tallest student.",
+    "syntax": "SELECT MAX(col) FROM table;",
+    "example_query": "SELECT MAX(price) FROM Products;",
+    "icon": "BookOpen",
+    "color": "from-red-400 to-orange-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of MAX?",
+        "options": [
+          "Highest value",
+          "Throws an error",
+          "Makes a coffee",
+          "Restarts database"
+        ],
+        "answer": "Highest value"
+      },
+      {
+        "question": "Which of these shows correct syntax for MAX?",
+        "options": [
+          "SELECT MAX(col) FROM table;",
+          "MAX *;",
+          "SELECT NOTHING;",
+          "INVALID SYNTAX"
+        ],
+        "answer": "SELECT MAX(col) FROM table;"
+      },
+      {
+        "question": "What is a good real-world analogy for MAX?",
+        "options": [
+          "Drinking water",
+          "Tallest student.",
+          "Sleeping in bed",
+          "Flying an airplane"
+        ],
+        "answer": "Tallest student."
+      }
+    ]
+  },
+  {
+    "keyword": "MIN",
+    "meaning": "Lowest value",
+    "analogy": "Shortest student.",
+    "syntax": "SELECT MIN(col) FROM table;",
+    "example_query": "SELECT MIN(price) FROM Products;",
+    "icon": "BookOpen",
+    "color": "from-blue-400 to-cyan-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of MIN?",
+        "options": [
+          "Lowest value",
+          "Makes a coffee",
+          "Restarts database",
+          "Throws an error"
+        ],
+        "answer": "Lowest value"
+      },
+      {
+        "question": "Which of these shows correct syntax for MIN?",
+        "options": [
+          "INVALID SYNTAX",
+          "SELECT NOTHING;",
+          "MIN *;",
+          "SELECT MIN(col) FROM table;"
+        ],
+        "answer": "SELECT MIN(col) FROM table;"
+      },
+      {
+        "question": "What is a good real-world analogy for MIN?",
+        "options": [
+          "Drinking water",
+          "Flying an airplane",
+          "Shortest student.",
+          "Sleeping in bed"
+        ],
+        "answer": "Shortest student."
+      }
+    ]
+  },
+  {
+    "keyword": "AND",
+    "meaning": "Both conditions true",
+    "analogy": "Red AND large shirt.",
+    "syntax": "WHERE cond1 AND cond2;",
+    "example_query": "WHERE age > 18 AND city = 'NY';",
+    "icon": "BookOpen",
+    "color": "from-indigo-400 to-blue-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of AND?",
+        "options": [
+          "Throws an error",
+          "Both conditions true",
+          "Restarts database",
+          "Makes a coffee"
+        ],
+        "answer": "Both conditions true"
+      },
+      {
+        "question": "Which of these shows correct syntax for AND?",
+        "options": [
+          "INVALID SYNTAX",
+          "AND *;",
+          "WHERE cond1 AND cond2;",
+          "SELECT NOTHING;"
+        ],
+        "answer": "WHERE cond1 AND cond2;"
+      },
+      {
+        "question": "What is a good real-world analogy for AND?",
+        "options": [
+          "Drinking water",
+          "Red AND large shirt.",
+          "Sleeping in bed",
+          "Flying an airplane"
+        ],
+        "answer": "Red AND large shirt."
+      }
+    ]
+  },
+  {
+    "keyword": "OR",
+    "meaning": "Either condition true",
+    "analogy": "Red OR Blue shirt.",
+    "syntax": "WHERE cond1 OR cond2;",
+    "example_query": "WHERE city = 'NY' OR city = 'LA';",
+    "icon": "BookOpen",
+    "color": "from-purple-400 to-fuchsia-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of OR?",
+        "options": [
+          "Makes a coffee",
+          "Throws an error",
+          "Either condition true",
+          "Restarts database"
+        ],
+        "answer": "Either condition true"
+      },
+      {
+        "question": "Which of these shows correct syntax for OR?",
+        "options": [
+          "OR *;",
+          "SELECT NOTHING;",
+          "INVALID SYNTAX",
+          "WHERE cond1 OR cond2;"
+        ],
+        "answer": "WHERE cond1 OR cond2;"
+      },
+      {
+        "question": "What is a good real-world analogy for OR?",
+        "options": [
+          "Drinking water",
+          "Sleeping in bed",
+          "Red OR Blue shirt.",
+          "Flying an airplane"
+        ],
+        "answer": "Red OR Blue shirt."
+      }
+    ]
+  },
+  {
+    "keyword": "NOT",
+    "meaning": "Opposite condition",
+    "analogy": "Any shirt NOT red.",
+    "syntax": "WHERE NOT cond;",
+    "example_query": "WHERE NOT city = 'NY';",
+    "icon": "BookOpen",
+    "color": "from-rose-400 to-red-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of NOT?",
+        "options": [
+          "Restarts database",
+          "Throws an error",
+          "Makes a coffee",
+          "Opposite condition"
+        ],
+        "answer": "Opposite condition"
+      },
+      {
+        "question": "Which of these shows correct syntax for NOT?",
+        "options": [
+          "WHERE NOT cond;",
+          "NOT *;",
+          "INVALID SYNTAX",
+          "SELECT NOTHING;"
+        ],
+        "answer": "WHERE NOT cond;"
+      },
+      {
+        "question": "What is a good real-world analogy for NOT?",
+        "options": [
+          "Flying an airplane",
+          "Drinking water",
+          "Sleeping in bed",
+          "Any shirt NOT red."
+        ],
+        "answer": "Any shirt NOT red."
+      }
+    ]
+  },
+  {
+    "keyword": "BETWEEN",
+    "meaning": "Within a range",
+    "analogy": "Price between 10 and 20.",
+    "syntax": "WHERE col BETWEEN v1 AND v2;",
+    "example_query": "WHERE age BETWEEN 18 AND 30;",
+    "icon": "BookOpen",
+    "color": "from-amber-400 to-yellow-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of BETWEEN?",
+        "options": [
+          "Throws an error",
+          "Within a range",
+          "Restarts database",
+          "Makes a coffee"
+        ],
+        "answer": "Within a range"
+      },
+      {
+        "question": "Which of these shows correct syntax for BETWEEN?",
+        "options": [
+          "BETWEEN *;",
+          "SELECT NOTHING;",
+          "WHERE col BETWEEN v1 AND v2;",
+          "INVALID SYNTAX"
+        ],
+        "answer": "WHERE col BETWEEN v1 AND v2;"
+      },
+      {
+        "question": "What is a good real-world analogy for BETWEEN?",
+        "options": [
+          "Drinking water",
+          "Flying an airplane",
+          "Sleeping in bed",
+          "Price between 10 and 20."
+        ],
+        "answer": "Price between 10 and 20."
+      }
+    ]
+  },
+  {
+    "keyword": "IN",
+    "meaning": "Matches any in list",
+    "analogy": "City in NY, LA, TX.",
+    "syntax": "WHERE col IN (v1,v2);",
+    "example_query": "WHERE city IN ('NY', 'LA');",
+    "icon": "BookOpen",
+    "color": "from-cyan-400 to-blue-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of IN?",
+        "options": [
+          "Throws an error",
+          "Restarts database",
+          "Makes a coffee",
+          "Matches any in list"
+        ],
+        "answer": "Matches any in list"
+      },
+      {
+        "question": "Which of these shows correct syntax for IN?",
+        "options": [
+          "WHERE col IN (v1,v2);",
+          "SELECT NOTHING;",
+          "INVALID SYNTAX",
+          "IN *;"
+        ],
+        "answer": "WHERE col IN (v1,v2);"
+      },
+      {
+        "question": "What is a good real-world analogy for IN?",
+        "options": [
+          "Flying an airplane",
+          "City in NY, LA, TX.",
+          "Sleeping in bed",
+          "Drinking water"
+        ],
+        "answer": "City in NY, LA, TX."
+      }
+    ]
+  },
+  {
+    "keyword": "LIKE",
+    "meaning": "Pattern matching",
+    "analogy": "Names starting with 'A'.",
+    "syntax": "WHERE col LIKE pattern;",
+    "example_query": "WHERE name LIKE 'A%';",
+    "icon": "BookOpen",
+    "color": "from-teal-400 to-emerald-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of LIKE?",
+        "options": [
+          "Makes a coffee",
+          "Pattern matching",
+          "Throws an error",
+          "Restarts database"
+        ],
+        "answer": "Pattern matching"
+      },
+      {
+        "question": "Which of these shows correct syntax for LIKE?",
+        "options": [
+          "INVALID SYNTAX",
+          "SELECT NOTHING;",
+          "LIKE *;",
+          "WHERE col LIKE pattern;"
+        ],
+        "answer": "WHERE col LIKE pattern;"
+      },
+      {
+        "question": "What is a good real-world analogy for LIKE?",
+        "options": [
+          "Names starting with 'A'.",
+          "Drinking water",
+          "Sleeping in bed",
+          "Flying an airplane"
+        ],
+        "answer": "Names starting with 'A'."
+      }
+    ]
+  },
+  {
+    "keyword": "IS NULL",
+    "meaning": "Check for empty",
+    "analogy": "Missing phone number.",
+    "syntax": "WHERE col IS NULL;",
+    "example_query": "WHERE phone IS NULL;",
+    "icon": "BookOpen",
+    "color": "from-gray-400 to-gray-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of IS NULL?",
+        "options": [
+          "Throws an error",
+          "Makes a coffee",
+          "Check for empty",
+          "Restarts database"
+        ],
+        "answer": "Check for empty"
+      },
+      {
+        "question": "Which of these shows correct syntax for IS NULL?",
+        "options": [
+          "WHERE col IS NULL;",
+          "IS NULL *;",
+          "INVALID SYNTAX",
+          "SELECT NOTHING;"
+        ],
+        "answer": "WHERE col IS NULL;"
+      },
+      {
+        "question": "What is a good real-world analogy for IS NULL?",
+        "options": [
+          "Missing phone number.",
+          "Flying an airplane",
+          "Drinking water",
+          "Sleeping in bed"
+        ],
+        "answer": "Missing phone number."
+      }
+    ]
+  },
+  {
+    "keyword": "AS",
+    "meaning": "Alias / Rename",
+    "analogy": "Nickname for a column.",
+    "syntax": "SELECT col AS name;",
+    "example_query": "SELECT first_name AS Name;",
+    "icon": "BookOpen",
+    "color": "from-blue-400 to-purple-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of AS?",
+        "options": [
+          "Alias / Rename",
+          "Throws an error",
+          "Restarts database",
+          "Makes a coffee"
+        ],
+        "answer": "Alias / Rename"
+      },
+      {
+        "question": "Which of these shows correct syntax for AS?",
+        "options": [
+          "SELECT NOTHING;",
+          "INVALID SYNTAX",
+          "AS *;",
+          "SELECT col AS name;"
+        ],
+        "answer": "SELECT col AS name;"
+      },
+      {
+        "question": "What is a good real-world analogy for AS?",
+        "options": [
+          "Flying an airplane",
+          "Drinking water",
+          "Nickname for a column.",
+          "Sleeping in bed"
+        ],
+        "answer": "Nickname for a column."
+      }
+    ]
+  },
+  {
+    "keyword": "UNION",
+    "meaning": "Combine results vertically",
+    "analogy": "Stacking two boxes on top of each other.",
+    "syntax": "query1 UNION query2;",
+    "example_query": "SELECT name FROM A UNION SELECT name FROM B;",
+    "icon": "BookOpen",
+    "color": "from-indigo-500 to-purple-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of UNION?",
+        "options": [
+          "Combine results vertically",
+          "Throws an error",
+          "Restarts database",
+          "Makes a coffee"
+        ],
+        "answer": "Combine results vertically"
+      },
+      {
+        "question": "Which of these shows correct syntax for UNION?",
+        "options": [
+          "query1 UNION query2;",
+          "SELECT NOTHING;",
+          "UNION *;",
+          "INVALID SYNTAX"
+        ],
+        "answer": "query1 UNION query2;"
+      },
+      {
+        "question": "What is a good real-world analogy for UNION?",
+        "options": [
+          "Stacking two boxes on top of each other.",
+          "Drinking water",
+          "Flying an airplane",
+          "Sleeping in bed"
+        ],
+        "answer": "Stacking two boxes on top of each other."
+      }
+    ]
+  },
+  {
+    "keyword": "CASE",
+    "meaning": "If-Else logic",
+    "analogy": "If > 18 then 'Adult'.",
+    "syntax": "CASE WHEN cond THEN v1 ELSE v2 END;",
+    "example_query": "CASE WHEN age>18 THEN 'Adult' ELSE 'Minor' END;",
+    "icon": "BookOpen",
+    "color": "from-orange-400 to-red-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of CASE?",
+        "options": [
+          "Restarts database",
+          "Makes a coffee",
+          "Throws an error",
+          "If-Else logic"
+        ],
+        "answer": "If-Else logic"
+      },
+      {
+        "question": "Which of these shows correct syntax for CASE?",
+        "options": [
+          "SELECT NOTHING;",
+          "INVALID SYNTAX",
+          "CASE WHEN cond THEN v1 ELSE v2 END;",
+          "CASE *;"
+        ],
+        "answer": "CASE WHEN cond THEN v1 ELSE v2 END;"
+      },
+      {
+        "question": "What is a good real-world analogy for CASE?",
+        "options": [
+          "Sleeping in bed",
+          "If > 18 then 'Adult'.",
+          "Drinking water",
+          "Flying an airplane"
+        ],
+        "answer": "If > 18 then 'Adult'."
+      }
+    ]
+  },
+  {
+    "keyword": "COALESCE",
+    "meaning": "First non-null",
+    "analogy": "Fallback option.",
+    "syntax": "COALESCE(col, default);",
+    "example_query": "COALESCE(phone, 'N/A');",
+    "icon": "BookOpen",
+    "color": "from-emerald-400 to-teal-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of COALESCE?",
+        "options": [
+          "Restarts database",
+          "Throws an error",
+          "Makes a coffee",
+          "First non-null"
+        ],
+        "answer": "First non-null"
+      },
+      {
+        "question": "Which of these shows correct syntax for COALESCE?",
+        "options": [
+          "COALESCE *;",
+          "SELECT NOTHING;",
+          "COALESCE(col, default);",
+          "INVALID SYNTAX"
+        ],
+        "answer": "COALESCE(col, default);"
+      },
+      {
+        "question": "What is a good real-world analogy for COALESCE?",
+        "options": [
+          "Fallback option.",
+          "Sleeping in bed",
+          "Drinking water",
+          "Flying an airplane"
+        ],
+        "answer": "Fallback option."
+      }
+    ]
+  },
+  {
+    "keyword": "CAST",
+    "meaning": "Change data type",
+    "analogy": "Converting text '1' to number 1.",
+    "syntax": "CAST(col AS type);",
+    "example_query": "CAST(price AS INT);",
+    "icon": "BookOpen",
+    "color": "from-blue-500 to-cyan-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of CAST?",
+        "options": [
+          "Restarts database",
+          "Change data type",
+          "Makes a coffee",
+          "Throws an error"
+        ],
+        "answer": "Change data type"
+      },
+      {
+        "question": "Which of these shows correct syntax for CAST?",
+        "options": [
+          "SELECT NOTHING;",
+          "CAST(col AS type);",
+          "CAST *;",
+          "INVALID SYNTAX"
+        ],
+        "answer": "CAST(col AS type);"
+      },
+      {
+        "question": "What is a good real-world analogy for CAST?",
+        "options": [
+          "Flying an airplane",
+          "Converting text '1' to number 1.",
+          "Sleeping in bed",
+          "Drinking water"
+        ],
+        "answer": "Converting text '1' to number 1."
+      }
+    ]
+  },
+  {
+    "keyword": "TRUNCATE",
+    "meaning": "Empty table fast",
+    "analogy": "Deleting all pages but keeping the cover.",
+    "syntax": "TRUNCATE TABLE name;",
+    "example_query": "TRUNCATE TABLE Users;",
+    "icon": "BookOpen",
+    "color": "from-red-500 to-rose-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of TRUNCATE?",
+        "options": [
+          "Throws an error",
+          "Restarts database",
+          "Makes a coffee",
+          "Empty table fast"
+        ],
+        "answer": "Empty table fast"
+      },
+      {
+        "question": "Which of these shows correct syntax for TRUNCATE?",
+        "options": [
+          "INVALID SYNTAX",
+          "TRUNCATE *;",
+          "SELECT NOTHING;",
+          "TRUNCATE TABLE name;"
+        ],
+        "answer": "TRUNCATE TABLE name;"
+      },
+      {
+        "question": "What is a good real-world analogy for TRUNCATE?",
+        "options": [
+          "Sleeping in bed",
+          "Drinking water",
+          "Flying an airplane",
+          "Deleting all pages but keeping the cover."
+        ],
+        "answer": "Deleting all pages but keeping the cover."
+      }
+    ]
+  },
+  {
+    "keyword": "INDEX",
+    "meaning": "Speed up search",
+    "analogy": "Index at back of a book.",
+    "syntax": "CREATE INDEX name ON table(col);",
+    "example_query": "CREATE INDEX idx_name ON Users(name);",
+    "icon": "BookOpen",
+    "color": "from-yellow-400 to-orange-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of INDEX?",
+        "options": [
+          "Restarts database",
+          "Speed up search",
+          "Makes a coffee",
+          "Throws an error"
+        ],
+        "answer": "Speed up search"
+      },
+      {
+        "question": "Which of these shows correct syntax for INDEX?",
+        "options": [
+          "INDEX *;",
+          "CREATE INDEX name ON table(col);",
+          "INVALID SYNTAX",
+          "SELECT NOTHING;"
+        ],
+        "answer": "CREATE INDEX name ON table(col);"
+      },
+      {
+        "question": "What is a good real-world analogy for INDEX?",
+        "options": [
+          "Index at back of a book.",
+          "Sleeping in bed",
+          "Flying an airplane",
+          "Drinking water"
+        ],
+        "answer": "Index at back of a book."
+      }
+    ]
+  },
+  {
+    "keyword": "VIEW",
+    "meaning": "Virtual table",
+    "analogy": "A saved query that acts like a table.",
+    "syntax": "CREATE VIEW name AS query;",
+    "example_query": "CREATE VIEW active_users AS SELECT ...;",
+    "icon": "BookOpen",
+    "color": "from-cyan-400 to-blue-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of VIEW?",
+        "options": [
+          "Makes a coffee",
+          "Restarts database",
+          "Virtual table",
+          "Throws an error"
+        ],
+        "answer": "Virtual table"
+      },
+      {
+        "question": "Which of these shows correct syntax for VIEW?",
+        "options": [
+          "VIEW *;",
+          "SELECT NOTHING;",
+          "CREATE VIEW name AS query;",
+          "INVALID SYNTAX"
+        ],
+        "answer": "CREATE VIEW name AS query;"
+      },
+      {
+        "question": "What is a good real-world analogy for VIEW?",
+        "options": [
+          "Drinking water",
+          "Flying an airplane",
+          "Sleeping in bed",
+          "A saved query that acts like a table."
+        ],
+        "answer": "A saved query that acts like a table."
+      }
+    ]
+  },
+  {
+    "keyword": "TRANSACTION",
+    "meaning": "All or nothing",
+    "analogy": "Transferring money: both debit and credit must work.",
+    "syntax": "BEGIN TRANSACTION;",
+    "example_query": "BEGIN;",
+    "icon": "BookOpen",
+    "color": "from-gray-600 to-gray-800",
+    "questions": [
+      {
+        "question": "What is the primary meaning of TRANSACTION?",
+        "options": [
+          "All or nothing",
+          "Throws an error",
+          "Makes a coffee",
+          "Restarts database"
+        ],
+        "answer": "All or nothing"
+      },
+      {
+        "question": "Which of these shows correct syntax for TRANSACTION?",
+        "options": [
+          "BEGIN TRANSACTION;",
+          "INVALID SYNTAX",
+          "TRANSACTION *;",
+          "SELECT NOTHING;"
+        ],
+        "answer": "BEGIN TRANSACTION;"
+      },
+      {
+        "question": "What is a good real-world analogy for TRANSACTION?",
+        "options": [
+          "Transferring money: both debit and credit must work.",
+          "Drinking water",
+          "Sleeping in bed",
+          "Flying an airplane"
+        ],
+        "answer": "Transferring money: both debit and credit must work."
+      }
+    ]
+  },
+  {
+    "keyword": "COMMIT",
+    "meaning": "Save transaction",
+    "analogy": "Clicking 'Save' on a document.",
+    "syntax": "COMMIT;",
+    "example_query": "COMMIT;",
+    "icon": "BookOpen",
+    "color": "from-green-500 to-emerald-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of COMMIT?",
+        "options": [
+          "Makes a coffee",
+          "Save transaction",
+          "Restarts database",
+          "Throws an error"
+        ],
+        "answer": "Save transaction"
+      },
+      {
+        "question": "Which of these shows correct syntax for COMMIT?",
+        "options": [
+          "COMMIT;",
+          "SELECT NOTHING;",
+          "INVALID SYNTAX",
+          "COMMIT *;"
+        ],
+        "answer": "COMMIT;"
+      },
+      {
+        "question": "What is a good real-world analogy for COMMIT?",
+        "options": [
+          "Sleeping in bed",
+          "Flying an airplane",
+          "Clicking 'Save' on a document.",
+          "Drinking water"
+        ],
+        "answer": "Clicking 'Save' on a document."
+      }
+    ]
+  },
+  {
+    "keyword": "ROLLBACK",
+    "meaning": "Undo transaction",
+    "analogy": "Ctrl+Z for database.",
+    "syntax": "ROLLBACK;",
+    "example_query": "ROLLBACK;",
+    "icon": "BookOpen",
+    "color": "from-red-400 to-rose-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of ROLLBACK?",
+        "options": [
+          "Throws an error",
+          "Makes a coffee",
+          "Restarts database",
+          "Undo transaction"
+        ],
+        "answer": "Undo transaction"
+      },
+      {
+        "question": "Which of these shows correct syntax for ROLLBACK?",
+        "options": [
+          "SELECT NOTHING;",
+          "ROLLBACK;",
+          "INVALID SYNTAX",
+          "ROLLBACK *;"
+        ],
+        "answer": "ROLLBACK;"
+      },
+      {
+        "question": "What is a good real-world analogy for ROLLBACK?",
+        "options": [
+          "Sleeping in bed",
+          "Drinking water",
+          "Ctrl+Z for database.",
+          "Flying an airplane"
+        ],
+        "answer": "Ctrl+Z for database."
+      }
+    ]
+  },
+  {
+    "keyword": "GRANT",
+    "meaning": "Give permission",
+    "analogy": "Giving someone a key to your house.",
+    "syntax": "GRANT prev ON table TO user;",
+    "example_query": "GRANT SELECT ON Users TO admin;",
+    "icon": "BookOpen",
+    "color": "from-blue-400 to-indigo-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of GRANT?",
+        "options": [
+          "Makes a coffee",
+          "Throws an error",
+          "Restarts database",
+          "Give permission"
+        ],
+        "answer": "Give permission"
+      },
+      {
+        "question": "Which of these shows correct syntax for GRANT?",
+        "options": [
+          "INVALID SYNTAX",
+          "GRANT prev ON table TO user;",
+          "SELECT NOTHING;",
+          "GRANT *;"
+        ],
+        "answer": "GRANT prev ON table TO user;"
+      },
+      {
+        "question": "What is a good real-world analogy for GRANT?",
+        "options": [
+          "Flying an airplane",
+          "Giving someone a key to your house.",
+          "Drinking water",
+          "Sleeping in bed"
+        ],
+        "answer": "Giving someone a key to your house."
+      }
+    ]
+  },
+  {
+    "keyword": "REVOKE",
+    "meaning": "Take back permission",
+    "analogy": "Taking the key back.",
+    "syntax": "REVOKE prev ON table FROM user;",
+    "example_query": "REVOKE SELECT ON Users FROM admin;",
+    "icon": "BookOpen",
+    "color": "from-orange-400 to-red-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of REVOKE?",
+        "options": [
+          "Take back permission",
+          "Restarts database",
+          "Makes a coffee",
+          "Throws an error"
+        ],
+        "answer": "Take back permission"
+      },
+      {
+        "question": "Which of these shows correct syntax for REVOKE?",
+        "options": [
+          "REVOKE *;",
+          "INVALID SYNTAX",
+          "SELECT NOTHING;",
+          "REVOKE prev ON table FROM user;"
+        ],
+        "answer": "REVOKE prev ON table FROM user;"
+      },
+      {
+        "question": "What is a good real-world analogy for REVOKE?",
+        "options": [
+          "Drinking water",
+          "Flying an airplane",
+          "Sleeping in bed",
+          "Taking the key back."
+        ],
+        "answer": "Taking the key back."
+      }
+    ]
+  },
+  {
+    "keyword": "EXISTS",
+    "meaning": "Check if row exists",
+    "analogy": "Looking if a box is empty.",
+    "syntax": "WHERE EXISTS (query);",
+    "example_query": "WHERE EXISTS (SELECT 1 FROM ...);",
+    "icon": "BookOpen",
+    "color": "from-teal-400 to-emerald-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of EXISTS?",
+        "options": [
+          "Throws an error",
+          "Restarts database",
+          "Makes a coffee",
+          "Check if row exists"
+        ],
+        "answer": "Check if row exists"
+      },
+      {
+        "question": "Which of these shows correct syntax for EXISTS?",
+        "options": [
+          "EXISTS *;",
+          "WHERE EXISTS (query);",
+          "INVALID SYNTAX",
+          "SELECT NOTHING;"
+        ],
+        "answer": "WHERE EXISTS (query);"
+      },
+      {
+        "question": "What is a good real-world analogy for EXISTS?",
+        "options": [
+          "Drinking water",
+          "Sleeping in bed",
+          "Looking if a box is empty.",
+          "Flying an airplane"
+        ],
+        "answer": "Looking if a box is empty."
+      }
+    ]
+  },
+  {
+    "keyword": "ANY / ALL",
+    "meaning": "Compare with subquery",
+    "analogy": "Taller than ANY student.",
+    "syntax": "WHERE col > ANY (query);",
+    "example_query": "WHERE age > ALL (SELECT age FROM ...);",
+    "icon": "BookOpen",
+    "color": "from-indigo-400 to-purple-500",
+    "questions": [
+      {
+        "question": "What is the primary meaning of ANY / ALL?",
+        "options": [
+          "Makes a coffee",
+          "Throws an error",
+          "Compare with subquery",
+          "Restarts database"
+        ],
+        "answer": "Compare with subquery"
+      },
+      {
+        "question": "Which of these shows correct syntax for ANY / ALL?",
+        "options": [
+          "INVALID SYNTAX",
+          "SELECT NOTHING;",
+          "ANY / ALL *;",
+          "WHERE col > ANY (query);"
+        ],
+        "answer": "WHERE col > ANY (query);"
+      },
+      {
+        "question": "What is a good real-world analogy for ANY / ALL?",
+        "options": [
+          "Sleeping in bed",
+          "Flying an airplane",
+          "Taller than ANY student.",
+          "Drinking water"
+        ],
+        "answer": "Taller than ANY student."
+      }
+    ]
+  },
+  {
+    "keyword": "DEFAULT",
+    "meaning": "Default value",
+    "analogy": "If you don't say color, it's black.",
+    "syntax": "col type DEFAULT val",
+    "example_query": "age INT DEFAULT 18",
+    "icon": "BookOpen",
+    "color": "from-gray-400 to-gray-600",
+    "questions": [
+      {
+        "question": "What is the primary meaning of DEFAULT?",
+        "options": [
+          "Restarts database",
+          "Default value",
+          "Makes a coffee",
+          "Throws an error"
+        ],
+        "answer": "Default value"
+      },
+      {
+        "question": "Which of these shows correct syntax for DEFAULT?",
+        "options": [
+          "col type DEFAULT val",
+          "DEFAULT *;",
+          "INVALID SYNTAX",
+          "SELECT NOTHING;"
+        ],
+        "answer": "col type DEFAULT val"
+      },
+      {
+        "question": "What is a good real-world analogy for DEFAULT?",
+        "options": [
+          "Flying an airplane",
+          "Sleeping in bed",
+          "Drinking water",
+          "If you don't say color, it's black."
+        ],
+        "answer": "If you don't say color, it's black."
+      }
+    ]
+  }
+]

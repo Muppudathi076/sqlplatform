@@ -1,0 +1,14 @@
+from django.urls import path 
+from . import views
+
+urlpatterns = [
+    path('admins/user/list/', views.all_user_details),
+    path('admins/delete/userbyid/<int:userId>', views.delete_user_byid),
+    path('admins/models/', views.get_all_question),
+    path("admins/question/update/<int:questionId>", views.questionUpdated),
+    path("admins/question/delete/<int:questionId>", views.questionDelete),
+    path("admins/question/create/", views.questionAdd),
+    path("admins/question/bulk-import/", views.bulk_import_questions),
+    path("admins/question/bulk-delete/", views.bulk_delete_questions),
+    path("admins/ai/bulk-generate/", views.ai_bulk_generate),
+]
