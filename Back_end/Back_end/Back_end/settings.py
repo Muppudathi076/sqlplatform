@@ -168,11 +168,15 @@ SIMPLE_JWT = {
 }
 
 # CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS')
-CORS_ALLOWED_ORIGINS = [origin.strip() for origin in os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",") if origin.strip()]
-# CSRF_TRUSTED_ORIGINS = [
-#     # "http://localhost:3000",
-#     "https://sql-master-rwon.vercel.app"
-# ]
-CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",") if origin.strip()]
+CORS_ALLOWED_ORIGINS = [
+    "https://sqlplatform-1q9y.vercel.app",
+    "https://sql-master.vercel.app",
+] + [origin.strip() for origin in os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",") if origin.strip()]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://sqlplatform-1q9y.vercel.app",
+    "https://sql-master.vercel.app",
+] + [origin.strip() for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",") if origin.strip()]
+
 CORS_ALLOW_ALL_HEADERS = True
 CORS_ALLOW_CREDENTIALS = True
