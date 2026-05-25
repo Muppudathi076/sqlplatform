@@ -5,15 +5,18 @@ type ScoreBarProps = {
   title: string
   maxScore?: number
   hearts?: number
+  progress?: number  // 0-100 completion % (questions answered / total). If omitted, falls back to score.
 }
 
 export default function ScoreBar({
   score,
   maxScore = 100,
   hearts = 5,
-  title
+  title,
+  progress,
 }: ScoreBarProps) {
   const [currentPercentage, setCurrentPercentage] = useState(0);
+  const [barPct, setBarPct] = useState(0);
 
   // Normalize score — handle both number (e.g. 45.5) and string (e.g. "45.5%" or "45.5")
   const normalizeScore = (raw: number | string): number => {
@@ -25,11 +28,12 @@ export default function ScoreBar({
   useEffect(() => {
     const numericScore = normalizeScore(score);
     const timer = setTimeout(() => {
-      // score is already a percentage out of 100 from backend
       setCurrentPercentage(Math.min(numericScore, 100));
+      // Bar tracks progress (completion %) if provided, else falls back to score
+      setBarPct(Math.min(progress !== undefined ? progress : numericScore, 100));
     }, 150);
     return () => clearTimeout(timer);
-  }, [score, maxScore]);
+  }, [score, maxScore, progress]);
 
   return (
     <div className="w-full px-4 py-3">
@@ -48,15 +52,15 @@ export default function ScoreBar({
       <div className="flex items-center gap-3">
         <div className="flex-1 h-4 bg-gray-200 dark:bg-zinc-800 rounded-full overflow-hidden relative border border-white/5">
           <div
-            className="h-full rounded-full transition-all duration-1000 ease-out"
+            className="h-full rounded-full transition-all duration-700 ease-out"
             style={{
-              width: `${currentPercentage}%`,
+              width: `${barPct}%`,
               background: "linear-gradient(90deg, #6D28D9, #EB2FF8)",
               boxShadow: "0 0 10px rgba(235,47,248,0.5)",
             }}
           />
           <span className="absolute inset-0 flex items-center justify-center text-white text-[10px] font-semibold drop-shadow-md">
-            {currentPercentage > 8 ? `${currentPercentage.toFixed(0)}%` : ""}
+            {barPct > 8 ? `${barPct.toFixed(0)}%` : ""}
           </span>
         </div>
 

@@ -1,0 +1,48 @@
+# Node
+node_modules/
+dist/
+dist-ssr/
+build/
+*.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+*.egg-info/
+.eggs/
+*.db
+*.sqlite3
+
+# Env files
+.env
+.env.*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Test/debug scripts
+Back_end/Back_end/test_*.py
+Back_end/Back_end/debug_*.py
+Back_end/Back_end/add_col.py
+Back_end/Back_end/check_tables.py
+Back_end/Back_end/generate_academy.py
+Back_end/Back_end/questions.json

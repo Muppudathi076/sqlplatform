@@ -84,3 +84,42 @@ export const submitModelResultsApi = async (modelId: number, results: any[], tok
   })
   return response.data
 }
+
+export const updateProfileApi = async (
+  data: { name?: string; email?: string; password?: string; age?: number },
+  token: string
+) => {
+  const response = await axiosInstance.put("/user/update/profile/", data, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return response.data
+}
+
+export const getSqlDictionaryApi = async (token: string) => {
+  const response = await axiosInstance.get("/sql-dictionary/", {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return response.data
+}
+
+export const getSqlAcademyApi = async (token: string) => {
+  const response = await axiosInstance.get("/sql-academy/", {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return response.data
+}
+
+export const updateSqlAcademyApi = async (level: number, token: string) => {
+  const response = await axiosInstance.post("/update-sql-academy/", { level }, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return response.data
+}

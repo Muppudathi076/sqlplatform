@@ -33,11 +33,7 @@ export default function ModelSuccessPage() {
         setIsSubmitted(true);
         toast.success("Progress saved successfully!", { duration: 3000 });
 
-        // Auto-navigate to dashboard after showing success for 3 seconds
-        setTimeout(() => {
-          resetCache();
-          navigate("/api/dashboard");
-        }, 3000);
+        // Auto-navigation removed so user can manually click "Next Level" or "Dashboard"
       } catch (e) {
         console.error("Failed to submit results:", e);
         toast.error("Failed to save progress, but you can retry");

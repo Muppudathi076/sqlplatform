@@ -61,3 +61,32 @@ export const questiondeleteByIdApi = async(userId:Number,token:string)=>{
     )
     return response.data
 }
+
+export const bulkImportQuestionsApi = async (questions: Record<string, any>[], token: string) => {
+  const response = await axiosInstance.post(
+    "admins/question/bulk-import/",
+    { questions },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  return response.data
+}
+
+export const bulkDeleteQuestionsApi = async (ids: number[], token: string) => {
+  const response = await axiosInstance.delete(
+    "admins/question/bulk-delete/",
+    {
+      data: { ids },
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  )
+  return response.data
+}
+
+export const aiBulkGenerateQuestionsApi = async (difficulty: string, count: number, token: string) => {
+  const response = await axiosInstance.post(
+    "admins/ai/bulk-generate/",
+    { difficulty, count },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  return response.data
+}

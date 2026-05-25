@@ -1,28 +1,28 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { X, CheckCircle2, XCircle, ArrowRight, Zap } from "lucide-react";
-import toast from "react-hot-toast";
+import { X, CheckCircle2, XCircle, ArrowRight, Zap, SkipForward } from "lucide-react";
 import ScoreBar from "../ReusableComponents/ScoreBar";
 import { useQuestionCache } from "../../context/QuestionCacheContext";
 
 type CheckState = "idle" | "correct" | "wrong";
 
 export default function TrueFalsePage() {
-  const navigate = useNavigate();
   const {
     getCurrentQuestion,
     markComplete,
     navigateToNextQuestion,
-    score,
+    skipQuestion,
+    totalScore,
     hearts,
     currentIndex,
     questions,
+    saveAndExit,
   } = useQuestionCache();
 
   const questionData = getCurrentQuestion();
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [checkingState, setCheckingState] = useState<CheckState>("idle");
-  const [isAnswered, setIsAnswered] = useState(false);
+
+  const isAnswered = checkingState !== "idle";
 
   if (!questionData) {
     return (
@@ -50,26 +50,22 @@ export default function TrueFalsePage() {
   };
 
   const handleCheck = () => {
-    if (!selectedOption) {
-      toast.error("Select True or False first!");
-      return;
-    }
+    if (!selectedOption) return;
     const isCorrect = selectedOption.toLowerCase() === correctAnswer;
-    if (isCorrect) {
-      setCheckingState("correct");
-      toast.success("Correct! Great job 🎉");
-    } else {
-      setCheckingState("wrong");
-      toast.error("Oops! Wrong answer ❌");
-    }
-    setIsAnswered(true);
+    setCheckingState(isCorrect ? "correct" : "wrong");
   };
 
   const handleNext = () => {
     markComplete(selectedOption);
     setCheckingState("idle");
     setSelectedOption("");
-    setIsAnswered(false);
+    navigateToNextQuestion();
+  };
+
+  const handleSkip = () => {
+    skipQuestion();
+    setCheckingState("idle");
+    setSelectedOption("");
     navigateToNextQuestion();
   };
 
@@ -122,7 +118,7 @@ export default function TrueFalsePage() {
         {/* ── SINGLE TOP BAR: Close + ScoreBar + Counter ── */}
         <div className="flex items-center gap-3 mb-6">
           <button
-            onClick={() => navigate("/api/dashboard")}
+            onClick={saveAndExit}
             className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all hover:scale-110 active:scale-95"
             style={{
               background: "rgba(239,68,68,0.12)",
@@ -133,7 +129,7 @@ export default function TrueFalsePage() {
           </button>
 
           <div className="flex-1 min-w-0">
-            <ScoreBar score={score} maxScore={100} hearts={hearts} title="" />
+            <ScoreBar score={totalScore} maxScore={100} hearts={hearts} title="" />
           </div>
 
           <div className="flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-bold"
@@ -312,16 +308,44 @@ export default function TrueFalsePage() {
           </button>
         </div>
 
+        {/* ── FEEDBACK BANNER ── */}
+        {isAnswered && (
+          <div
+            className="rounded-2xl px-5 py-4 flex items-start gap-3 mb-2"
+            style={
+              checkingState === "correct"
+                ? { background: "rgba(34,197,94,0.10)", border: "1.5px solid rgba(34,197,94,0.4)", boxShadow: "0 4px 20px rgba(34,197,94,0.15)" }
+                : { background: "rgba(239,68,68,0.10)", border: "1.5px solid rgba(239,68,68,0.4)", boxShadow: "0 4px 20px rgba(239,68,68,0.15)" }
+            }
+          >
+            {checkingState === "correct"
+              ? <CheckCircle2 size={22} color="#22c55e" className="flex-shrink-0 mt-0.5" />
+              : <XCircle size={22} color="#ef4444" className="flex-shrink-0 mt-0.5" />
+            }
+            <div className="flex flex-col gap-0.5">
+              <p className="font-bold text-sm" style={{ color: checkingState === "correct" ? "#22c55e" : "#ef4444" }}>
+                {checkingState === "correct" ? "Excellent! That's correct! 🎉" : "Oops! That's wrong."}
+              </p>
+              {checkingState === "wrong" && (
+                <p className="text-sm text-white/60">
+                  Correct answer: <span className="font-semibold text-green-400">{questionData.answer}</span>
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* ── BOTTOM ACTIONS ── */}
         <div className="flex items-center justify-between gap-4 pb-6">
-          <button
-            disabled={isAnswered}
-            className="px-5 py-2.5 rounded-xl text-sm font-semibold border border-white/10
-              text-white/40 hover:text-white/60 hover:bg-white/5 transition-all
-              disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            Skip
-          </button>
+          {!isAnswered ? (
+            <button
+              onClick={handleSkip}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-white/10
+                text-white/40 hover:text-white/60 hover:bg-white/5 transition-all"
+            >
+              <SkipForward size={15} /> Skip
+            </button>
+          ) : <div />}
 
           {!isAnswered ? (
             <button
@@ -332,23 +356,16 @@ export default function TrueFalsePage() {
                 transition-all duration-300 hover:scale-105 active:scale-95
                 disabled:cursor-not-allowed overflow-hidden min-w-[160px]"
               style={{
-                background: selectedOption
-                  ? "linear-gradient(135deg, #8b5cf6, #a855f7)"
-                  : "rgba(139,92,246,0.3)",
-                boxShadow: selectedOption
-                  ? "0 4px 25px rgba(139,92,246,0.45)"
-                  : "none",
+                background: selectedOption ? "linear-gradient(135deg, #8b5cf6, #a855f7)" : "rgba(139,92,246,0.3)",
+                boxShadow: selectedOption ? "0 4px 25px rgba(139,92,246,0.45)" : "none",
                 opacity: !selectedOption ? 0.5 : 1,
               }}
             >
               {selectedOption && (
                 <span className="absolute inset-0 opacity-20 pointer-events-none"
-                  style={{
-                    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)",
-                    animation: "tf-shimmer 2s ease-in-out infinite",
-                  }} />
+                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)", animation: "tf-shimmer 2s ease-in-out infinite" }} />
               )}
-              Check Answer →
+              Check Answer
             </button>
           ) : (
             <button
@@ -358,20 +375,13 @@ export default function TrueFalsePage() {
                 transition-all duration-300 hover:scale-105 active:scale-95
                 overflow-hidden min-w-[160px]"
               style={{
-                background: checkingState === "correct"
-                  ? "linear-gradient(135deg, #16a34a, #22c55e)"
-                  : "linear-gradient(135deg, #2563eb, #6366f1)",
-                boxShadow: checkingState === "correct"
-                  ? "0 4px 25px rgba(34,197,94,0.45)"
-                  : "0 4px 25px rgba(99,102,241,0.45)",
+                background: checkingState === "correct" ? "linear-gradient(135deg, #16a34a, #22c55e)" : "linear-gradient(135deg, #2563eb, #6366f1)",
+                boxShadow: checkingState === "correct" ? "0 4px 25px rgba(34,197,94,0.45)" : "0 4px 25px rgba(99,102,241,0.45)",
               }}
             >
               <span className="absolute inset-0 opacity-20 pointer-events-none"
-                style={{
-                  background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)",
-                  animation: "tf-shimmer 2s ease-in-out infinite",
-                }} />
-              Next <ArrowRight size={14} />
+                style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)", animation: "tf-shimmer 2s ease-in-out infinite" }} />
+              {checkingState === "correct" ? <CheckCircle2 size={16} /> : <ArrowRight size={16} />} Next →
             </button>
           )}
         </div>

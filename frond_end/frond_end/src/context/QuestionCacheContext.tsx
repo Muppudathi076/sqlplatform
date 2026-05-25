@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, useRef, useEffect, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { submitModelResultsApi } from "../auth/authapi";
 
 const routeMap: Record<string, string> = {
   "choose the best answer": "/api/modal/choose/answer",
@@ -43,6 +44,7 @@ type QuestionCacheContextType = {
   currentIndex: number;
   completedQuestions: CompletedQuestion[];
   score: number;
+  totalScore: number;
   hearts: number;
   modelId: string;
   setAllQuestions: (questions: Question[], modelId: string) => void;
@@ -51,6 +53,8 @@ type QuestionCacheContextType = {
   getCurrentQuestion: () => Question | null;
   isAllDone: () => boolean;
   resetCache: () => void;
+  saveAndExit: () => Promise<void>;
+  skipQuestion: () => void;
 };
 
 const QuestionCacheContext = createContext<QuestionCacheContextType | null>(null);
@@ -62,14 +66,15 @@ export function QuestionCacheProvider({ children }: { children: ReactNode }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completedQuestions, setCompletedQuestions] = useState<CompletedQuestion[]>([]);
   const [score, setScore] = useState(0);
+  const [totalScore, setTotalScore] = useState(0);
   const [hearts, setHearts] = useState(5);
   const [modelId, setModelId] = useState("");
 
-  const stateRef = useRef({ questions, currentIndex, completedQuestions, score, modelId });
+  const stateRef = useRef({ questions, currentIndex, completedQuestions, score, totalScore, modelId });
 
   useEffect(() => {
-    stateRef.current = { questions, currentIndex, completedQuestions, score, modelId };
-  }, [questions, currentIndex, completedQuestions, score, modelId]);
+    stateRef.current = { questions, currentIndex, completedQuestions, score, totalScore, modelId };
+  }, [questions, currentIndex, completedQuestions, score, totalScore, modelId]);
 
   const setAllQuestions = useCallback((qs: Question[], mId: string) => {
     setQuestions(qs);
@@ -92,24 +97,45 @@ export function QuestionCacheProvider({ children }: { children: ReactNode }) {
   }, [currentIndex, questions.length]);
 
   const markComplete = useCallback((userAnswer: string) => {
-    const currentQ = questions[currentIndex];
+    const currentQ = stateRef.current.questions[stateRef.current.currentIndex];
     if (!currentQ) return;
 
     const isCorrect =
       userAnswer.trim().toLowerCase() === currentQ.answer.trim().toLowerCase();
 
+    const newIndex = stateRef.current.currentIndex + 1;
+    const newCompleted = [
+      ...stateRef.current.completedQuestions,
+      { questionId: currentQ.id, userAnswer, isCorrect, questionDetail: currentQ },
+    ];
+
     if (isCorrect) {
-      const scorePerQuestion = Math.round(100 / questions.length);
-      setScore((prev) => Math.min(prev + scorePerQuestion, 100));
-      setCompletedQuestions((prev) => [
-        ...prev,
-        { questionId: currentQ.id, userAnswer, isCorrect: true, questionDetail: currentQ },
-      ]);
-      setCurrentIndex((prev) => prev + 1);
+      const scorePerQuestion = Math.round(100 / stateRef.current.questions.length);
+      const newScore = Math.min(stateRef.current.score + scorePerQuestion, 100);
+      const newTotalScore = stateRef.current.totalScore + scorePerQuestion;
+      setScore(newScore);
+      setTotalScore(newTotalScore);
+      stateRef.current = {
+        ...stateRef.current,
+        score: newScore,
+        totalScore: newTotalScore,
+        completedQuestions: newCompleted,
+        currentIndex: newIndex,
+      };
     } else {
-      setHearts((prev) => Math.max(prev - 1, 0));
+      const newHearts = Math.max(hearts - 1, 0);
+      setHearts(newHearts);
+      stateRef.current = {
+        ...stateRef.current,
+        completedQuestions: newCompleted,
+        currentIndex: newIndex,
+      };
     }
-  }, [questions, currentIndex]);
+
+    // Always advance index and record answer
+    setCompletedQuestions(newCompleted);
+    setCurrentIndex(newIndex);
+  }, [hearts]);
 
   const navigateToNextQuestion = useCallback(async () => {
     const { questions, currentIndex, completedQuestions, score, modelId } = stateRef.current;
@@ -137,6 +163,22 @@ export function QuestionCacheProvider({ children }: { children: ReactNode }) {
     }
   }, [navigate]);
 
+  const skipQuestion = useCallback(() => {
+    const { questions, currentIndex } = stateRef.current;
+    if (currentIndex >= questions.length) return;
+
+    const currentQ = questions[currentIndex];
+    const newQuestions = [
+      ...questions.slice(0, currentIndex),
+      ...questions.slice(currentIndex + 1),
+      currentQ, // push to end for retry
+    ];
+
+    setQuestions(newQuestions);
+    stateRef.current = { ...stateRef.current, questions: newQuestions };
+    // currentIndex unchanged → now points to the next question
+  }, []);
+
   const resetCache = useCallback(() => {
     setQuestions([]);
     setCurrentIndex(0);
@@ -146,6 +188,23 @@ export function QuestionCacheProvider({ children }: { children: ReactNode }) {
     setModelId("");
   }, []);
 
+  const saveAndExit = useCallback(async () => {
+    const { completedQuestions, modelId } = stateRef.current;
+    
+    if (completedQuestions.length > 0) {
+      try {
+        const token = localStorage.getItem("access_token") || "";
+        await submitModelResultsApi(Number(modelId), completedQuestions, token);
+        toast.success("Partial progress saved!");
+      } catch (e) {
+        console.error("Failed to save partial progress:", e);
+      }
+    }
+    
+    resetCache();
+    navigate("/api/dashboard");
+  }, [navigate, resetCache]);
+
   return (
     <QuestionCacheContext.Provider
       value={{
@@ -153,6 +212,7 @@ export function QuestionCacheProvider({ children }: { children: ReactNode }) {
         currentIndex,
         completedQuestions,
         score,
+        totalScore,
         hearts,
         modelId,
         setAllQuestions,
@@ -161,6 +221,8 @@ export function QuestionCacheProvider({ children }: { children: ReactNode }) {
         getCurrentQuestion,
         isAllDone,
         resetCache,
+        saveAndExit,
+        skipQuestion,
       }}
     >
       {children}

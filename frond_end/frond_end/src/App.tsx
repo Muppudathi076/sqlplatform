@@ -12,12 +12,15 @@ import ModelsPage from "./Page/ModelsPage"
 import AdminDashboard from "./components/AdminComponents/Admindashboard"
 import UserList from "./components/AdminComponents/UserList"
 import QuestionPage from "./components/AdminComponents/QuestionPage"
+import RankPage from "./components/AdminComponents/RankPage"
 import FillInTheBlanksPage from "./components/QuestionModel/FillInTheBlanksPage"
 import ChooseBestAnswer from "./components/QuestionModel/ChooseBestAnswer"
 import ModelSuccessPage from "./components/QuestionModel/ModelSuccessPage"
 import TrueFalsePage from "./components/QuestionModel/TrueFalsePage"
 import DragAndDropPage from "./components/QuestionModel/DragAndDropPage"
 import { QuestionCacheProvider } from "./context/QuestionCacheContext"
+import SqlDictionary from "./Page/SqlDictionary"
+import SqlAcademy from "./Page/SqlAcademy"
 
 function App() {
   return (
@@ -36,11 +39,14 @@ function App() {
         </ProtectedRoute>}>
           <Route path='dashboard' element={<Dashboard/>}/>
           <Route path='model' element={<ModelsPage/>}/>
+          <Route path='dictionary' element={<SqlDictionary/>}/>
+          <Route path='academy' element={<SqlAcademy/>}/>
           <Route path='modal/:id' element={<Model/>}/>
           <Route path='profile' element={<UserProfile/>}/>
           <Route path='admin/dashboard' element={<AdminDashboard/>}/>
           <Route path='admin/userlist' element={<UserList/>}/>
           <Route path='admin/modalpage' element={<QuestionPage/>}/>
+          <Route path='admin/rank' element={<RankPage/>}/>
           <Route path='modal/fling/blangs' element={<FillInTheBlanksPage/>}/>
           <Route path='modal/choose/answer' element={<ChooseBestAnswer/>}/>
           <Route path='modal/true-false' element={<TrueFalsePage/>}/>
