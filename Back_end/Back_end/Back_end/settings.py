@@ -26,16 +26,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-h^jizalyheof@*t$0^0dwz_d0k!al#vs9xy#dl5xv=d&n@vl@)'
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-h^jizalyheof@*t$0^0dwz_d0k!al#vs9xy#dl5xv=d&n@vl@)")
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-# ALLOWED_HOSTS = ['sqlmaster.onrender.com', 'localhost', '127.0.0.1', '*']
-# DEBUG = False
-DEBUG = os.environ.get("DEBUG") == "True"
-# ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = [host.strip() for host in os.environ.get("ALLOWED_HOSTS", "").split(",") if host.strip()]
+# ALLOWED_HOSTS - defaults to ['*'] if not set
+_allowed_hosts_raw = os.environ.get("ALLOWED_HOSTS", "*")
+if _allowed_hosts_raw.strip() == "*":
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = [host.strip() for host in _allowed_hosts_raw.split(",") if host.strip()]
 # Application definition
 
 INSTALLED_APPS = [
@@ -146,13 +146,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #     }
 # }
 import dj_database_url
-# import os
 
-DATABASES = {
-    'default': dj_database_url.parse(
-        os.environ.get("DATABASE_URL")
-    )
-}
+_database_url = os.environ.get("DATABASE_URL")
+if _database_url:
+    DATABASES = {
+        'default': dj_database_url.parse(_database_url)
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(str(BASE_DIR), 'db.sqlite3'),
+        }
+    }
 
 from datetime import timedelta
 
@@ -167,16 +173,22 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
-# CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS')
+# CORS Configuration
 CORS_ALLOWED_ORIGINS = [
+    "https://sqlplatform-n5qg.vercel.app",
     "https://sqlplatform-1q9y.vercel.app",
     "https://sql-master.vercel.app",
-] + [origin.strip() for origin in os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",") if origin.strip()]
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+] + [origin.strip().rstrip("/") for origin in os.environ.get("CORS_ALLOWED_ORIGINS", "").split(",") if origin.strip()]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://sqlplatform-n5qg.vercel.app",
     "https://sqlplatform-1q9y.vercel.app",
     "https://sql-master.vercel.app",
-] + [origin.strip() for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",") if origin.strip()]
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+] + [origin.strip().rstrip("/") for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",") if origin.strip()]
 
 CORS_ALLOW_ALL_HEADERS = True
 CORS_ALLOW_CREDENTIALS = True

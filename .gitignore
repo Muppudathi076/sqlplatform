@@ -21,6 +21,7 @@ env/
 # Env files
 .env
 .env.*
+!.env.production
 
 # Logs
 *.log
