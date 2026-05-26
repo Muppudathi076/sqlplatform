@@ -11,20 +11,25 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='SQLQuestion',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('question', models.TextField()),
-                ('methods', models.TextField()),
-                ('difficulty', models.CharField(max_length=10)),
-                ('model_no', models.IntegerField()),
-                ('answer', models.TextField()),
-                ('option', models.TextField()),
-                ('sample_data', models.JSONField()),
-            ],
-            options={
-                'db_table': 'My_app_sqlquestion',
-            },
-        ),
+        migrations.SeparateDatabaseAndState(
+            database_operations=[],
+            state_operations=[
+                migrations.CreateModel(
+                    name='SQLQuestion',
+                    fields=[
+                        ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                        ('question', models.TextField()),
+                        ('methods', models.TextField()),
+                        ('difficulty', models.CharField(max_length=10)),
+                        ('model_no', models.IntegerField()),
+                        ('answer', models.TextField()),
+                        ('option', models.TextField()),
+                        ('sample_data', models.JSONField()),
+                    ],
+                    options={
+                        'db_table': 'My_app_sqlquestion',
+                    },
+                ),
+            ]
+        )
     ]

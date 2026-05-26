@@ -22,7 +22,12 @@ class Migration(migrations.Migration):
             name='sql_academy_level',
             field=models.IntegerField(default=0),
         ),
-        migrations.DeleteModel(
-            name='SQLQuestion',
+        migrations.SeparateDatabaseAndState(
+            database_operations=[],
+            state_operations=[
+                migrations.DeleteModel(
+                    name='SQLQuestion',
+                ),
+            ]
         ),
     ]
