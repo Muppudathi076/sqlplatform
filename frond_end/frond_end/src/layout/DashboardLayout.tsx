@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Outlet, useNavigate, NavLink, useLocation } from "react-router-dom"
 import toast from "react-hot-toast"
 import { logoutApi, UserGetApi, updateProfileApi, userdashboardApi } from "../auth/authapi"
 import { Sun, Moon, LayoutDashboard, Boxes, Users, LogOut, Menu, X, Trophy, Shield, Mail, Loader2, Star, Clock, Activity, Pencil, User, Calendar, Lock, Check, BookOpen, Rocket } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { SpaceAnimal } from "../components/SpaceAnimal"
 
 function DashboardLayout() {
   const navigate = useNavigate()
@@ -22,18 +23,101 @@ function DashboardLayout() {
   const [editForm, setEditForm] = useState({ name: "", email: "", password: "", age: "" })
   const [saving, setSaving] = useState(false)
 
+  const [cartoonState, setCartoonState] = useState<"idle" | "hello" | "sleep" | "left" | "right" | "read" | "write" |"hide"| "jump">("idle")
+  const [pandaDirection, setPandaDirection] = useState<1 | -1>(1)
+  const [pandaX, setPandaX] = useState(0)
+  const pandaXRef = useRef(0)
+  const stateRef = useRef(cartoonState)
+
+  useEffect(() => {
+    stateRef.current = cartoonState;
+  }, [cartoonState]);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    const prevState = stateRef.current;
+
+    let nextAction:
+      | "idle"
+      | "hello"
+      | "sleep"
+      | "left"
+      | "right"
+      | "read"
+      | "hide"
+      | "write"
+      | "jump" = "idle";
+
+    let newX = pandaXRef.current;
+    const r = Math.random();
+
+    if (prevState === "hide") {
+      nextAction = "jump";
+      newX = (Math.random() > 0.5 ? 1 : -1) * Math.floor(Math.random() * 60);
+    } else {
+      if (r < 0.25) nextAction = "left";
+      else if (r < 0.5) nextAction = "right";
+      else if (r < 0.65) nextAction = "hide";
+      else if (r < 0.8) nextAction = "sleep";
+      else if (r < 0.9) nextAction = "hello";
+      else nextAction = "idle";
+    }
+
+    const random = Math.random();
+
+    if (prevState === "left" || prevState === "right") {
+      if (random > 0.5) nextAction = "idle";
+      else if (random > 0.3) nextAction = "read";
+      else if (random > 0.1) nextAction = "write";
+      else nextAction = prevState;
+    } else {
+      if (random > 0.7) {
+        nextAction = pandaDirection === 1 ? "right" : "left";
+      } else if (random > 0.55) nextAction = "hello";
+      else if (random > 0.4) nextAction = "sleep";
+      else if (random > 0.2) nextAction = "read";
+      else if (random > 0.1) nextAction = "write";
+      else nextAction = "idle";
+    }
+
+    if (nextAction === "left" || nextAction === "right") {
+      const speed = 40;
+      let newX = pandaXRef.current + (nextAction === "right" ? speed : -speed);
+
+      if (newX > 90) {
+        nextAction = "left";
+        newX = 90 - speed;
+        setPandaDirection(-1);
+      } else if (newX < -90) {
+        nextAction = "right";
+        newX = -90 + speed;
+        setPandaDirection(1);
+      } else {
+        setPandaDirection(nextAction === "right" ? 1 : -1);
+      }
+
+      pandaXRef.current = newX;
+      setPandaX(newX);
+    }
+
+    setCartoonState(nextAction);
+  }, 4000);
+
+  return () => clearInterval(interval);
+}, [pandaDirection]);
+
   const role = localStorage.getItem("role") || ""
   const userName = localStorage.getItem("user") || ""
 
   const isQuestionPage = location.pathname.includes("/api/modal/") || location.pathname.includes("/admin/modalpage/");
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     const token = localStorage.getItem("access_token") || ""
-    try{
+    try {
       await logoutApi(token)
       localStorage.removeItem("access_token")
-    }catch(e:any){
-      console.log("logout api :",e)
+    } catch (e: any) {
+      console.log("logout api :", e)
     }
     navigate("/")
     toast.success("Logout successfully", { duration: 2000 })
@@ -155,7 +239,7 @@ function DashboardLayout() {
 
   return (
     <div className="h-screen bg-slate-50 dark:bg-black transition-colors duration-500 flex overflow-hidden text-slate-900 dark:text-white relative">
-      
+
       {(role === "user" || role === "admin") && !isQuestionPage && (
         <aside className="hidden lg:flex flex-col w-64 bg-white dark:bg-zinc-900/10 backdrop-blur-xl border-r border-slate-200 dark:border-zinc-800 h-full relative z-50 animate-in fade-in slide-in-from-left duration-500 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
           <div className="p-6">
@@ -174,8 +258,8 @@ function DashboardLayout() {
                 to={item.path}
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative
-                  ${isActive 
-                    ? "bg-blue-500/10 text-blue-500 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.1)]" 
+                  ${isActive
+                    ? "bg-blue-500/10 text-blue-500 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.1)]"
                     : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-800/50 hover:text-blue-500"}`
                 }
               >
@@ -186,20 +270,69 @@ function DashboardLayout() {
             ))}
           </div>
 
-          <div className="p-4 border-t border-gray-200 dark:border-zinc-800 space-y-4">
-            <button 
-              onClick={openProfile}
-              className="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 dark:bg-blue-500/10 border border-slate-200 dark:border-blue-500/10 hover:border-slate-300 dark:hover:border-blue-500/30 rounded-2xl text-left transition-all group shadow-sm"
-            >
-              <p className="text-[10px] text-gray-400 uppercase tracking-tighter mb-1">Account</p>
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
-                  {userName.charAt(0).toUpperCase()}
-                </div>
-                <p className="font-bold text-sm text-black dark:text-white truncate group-hover:text-blue-500 transition-colors">{userName}</p>
+          <div className="p-4 border-t border-gray-200 dark:border-zinc-800 relative z-10 space-y-4">
+
+            {/* Live Cartoon Character & User Profile Wrapper */}
+            <div className="relative w-full">
+
+              {/* Panda Container - Sits exactly at 0px space above the button. overflow-hidden hides it completely when it drops down */}
+              <div className="absolute bottom-full left-0 w-full h-32 pointer-events-none z-0 overflow-hidden">
+                <motion.div
+                  animate={{ x: pandaX }}
+                  transition={{
+                    duration: 4,
+                    ease: "easeInOut"
+                  }}
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center justify-end"
+                >
+                  {cartoonState === 'sleep' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 0 }}
+                      animate={{ opacity: [0, 1, 0], y: -20 }}
+                      transition={{ repeat: Infinity, duration: 2 }}
+                      className="absolute -top-4 right-0 text-xs font-bold text-blue-500 z-10"
+                    >
+                      Zzz...
+                    </motion.div>
+                  )}
+
+                  {cartoonState === 'hello' && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5, y: 0 }}
+                      animate={{ opacity: 1, scale: 1, y: -5 }}
+                      exit={{ opacity: 0, scale: 0.5 }}
+                      className="absolute -top-6 bg-white dark:bg-zinc-800 px-3 py-1 rounded-full shadow-md border border-gray-200 dark:border-zinc-700 text-[10px] font-bold text-blue-500 z-10 whitespace-nowrap"
+                    >
+                      Hi there! 👋
+                    </motion.div>
+                  )}
+
+                  <motion.div
+                    animate={{ scaleX: pandaDirection }}
+                    transition={{ duration: 0.3 }}
+                    className="w-24 h-24 filter drop-shadow-xl"
+                    style={{ originY: 1 }}
+                  >
+                    <SpaceAnimal action={cartoonState} animal="panda" />
+                  </motion.div>
+                </motion.div>
               </div>
-            </button>
-            
+
+              {/* User Profile Button */}
+              <button
+                onClick={openProfile}
+                className="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 dark:bg-blue-500/10 border border-slate-200 dark:border-blue-500/10 hover:border-slate-300 dark:hover:border-blue-500/30 rounded-2xl text-left transition-all group shadow-sm relative z-10"
+              >
+                <p className="text-[10px] text-gray-400 uppercase tracking-tighter mb-1">Account</p>
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                    {userName.charAt(0).toUpperCase()}
+                  </div>
+                  <p className="font-bold text-sm text-black dark:text-white truncate group-hover:text-blue-500 transition-colors">{userName}</p>
+                </div>
+              </button>
+            </div>
+
             <button
               onClick={() => setShowLogoutModal(true)}
               className="flex items-center gap-3 w-full px-4 py-3 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-500 hover:bg-red-100 dark:hover:bg-red-500/20 rounded-xl transition-all duration-300 font-bold shadow-sm"
@@ -213,44 +346,44 @@ function DashboardLayout() {
 
       {(role === "user" || role === "admin") && !isQuestionPage && (
         <div className="lg:hidden fixed top-0 left-0 right-0 z-[60] bg-white/5 dark:bg-black/20 backdrop-blur-xl border-b border-gray-200 dark:border-zinc-800 px-4 py-3 flex items-center justify-between">
-           <h1 className="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-              Tiny Todds
-            </h1>
-            <button 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-gray-600 dark:text-gray-300"
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+          <h1 className="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+            Tiny Todds
+          </h1>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 text-gray-600 dark:text-gray-300"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       )}
 
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-[55] bg-white dark:bg-black pt-20 px-6 space-y-4">
-           {menuItems.map((item, index) => (
-              <NavLink
-                key={index}
-                to={item.path}
-                onClick={() => setMobileMenuOpen(false)}
-                className={({ isActive }) =>
-                  `flex items-center gap-4 p-4 rounded-2xl
+          {menuItems.map((item, index) => (
+            <NavLink
+              key={index}
+              to={item.path}
+              onClick={() => setMobileMenuOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center gap-4 p-4 rounded-2xl
                   ${isActive ? "bg-blue-500 text-white shadow-lg" : "text-gray-600 dark:text-gray-300"}`
-                }
-              >
-                <item.icon size={22} />
-                <span className="text-lg font-medium">{item.name}</span>
-              </NavLink>
-            ))}
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false)
-                setShowLogoutModal(true)
-              }}
-              className="flex items-center gap-4 p-4 w-full text-red-500"
+              }
             >
-              <LogOut size={22} />
-              <span className="text-lg font-medium">Logout</span>
-            </button>
+              <item.icon size={22} />
+              <span className="text-lg font-medium">{item.name}</span>
+            </NavLink>
+          ))}
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false)
+              setShowLogoutModal(true)
+            }}
+            className="flex items-center gap-4 p-4 w-full text-red-500"
+          >
+            <LogOut size={22} />
+            <span className="text-lg font-medium">Logout</span>
+          </button>
         </div>
       )}
 
@@ -262,11 +395,10 @@ function DashboardLayout() {
 
       <button
         onClick={toggleDarkMode}
-        className={`fixed ${isQuestionPage ? 'bottom-32' : 'bottom-6'} right-6 z-[70] w-14 h-14 rounded-full shadow-lg hover:scale-110 active:scale-90 transition-all duration-500 flex items-center justify-center ${
-          darkMode
+        className={`fixed ${isQuestionPage ? 'bottom-32' : 'bottom-6'} right-6 z-[70] w-14 h-14 rounded-full shadow-lg hover:scale-110 active:scale-90 transition-all duration-500 flex items-center justify-center ${darkMode
             ? "bg-gradient-to-r from-indigo-600 to-blue-700 shadow-[0_4px_20px_rgba(99,102,241,0.5)]"
             : "bg-gradient-to-r from-amber-400 to-orange-500 shadow-[0_4px_20px_rgba(251,191,36,0.5)]"
-        }`}
+          }`}
       >
         <div className={`transition-transform duration-500 ${darkMode ? "rotate-[360deg]" : "rotate-0"}`}>
           {darkMode ? <Moon size={24} className="text-white" /> : <Sun size={24} className="text-white" />}
@@ -303,177 +435,177 @@ function DashboardLayout() {
       <AnimatePresence>
         {showProfileModal && (
           <div className="fixed inset-0 flex items-center justify-center z-[100]">
-             <motion.div 
-               initial={{ opacity: 0 }}
-               animate={{ opacity: 1 }}
-               exit={{ opacity: 0 }}
-               className="absolute inset-0 bg-black/60 backdrop-blur-md"
-               onClick={() => setShowProfileModal(false)}
-             />
-             <motion.div
-               initial={{ opacity: 0, scale: 0.8, y: 50, rotateX: 20 }}
-               animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
-               exit={{ opacity: 0, scale: 0.8, y: 50, rotateX: -20 }}
-               transition={{ type: "spring", stiffness: 300, damping: 25 }}
-               className="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-sm w-full shadow-2xl relative overflow-hidden border border-slate-200 dark:border-gray-700 z-10 m-4"
-             >
-               {/* Decorative bg element */}
-               <div className="absolute -top-32 -right-32 w-64 h-64 rounded-full blur-3xl opacity-20 bg-gradient-to-br from-blue-500 to-purple-500" />
-               
-               <button 
-                 onClick={() => setShowProfileModal(false)}
-                 className="absolute top-4 right-4 p-2 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors z-10"
-               >
-                 <X size={20} className="text-gray-500 dark:text-gray-400" />
-               </button>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/60 backdrop-blur-md"
+              onClick={() => setShowProfileModal(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 50, rotateX: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 50, rotateX: -20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-sm w-full shadow-2xl relative overflow-hidden border border-slate-200 dark:border-gray-700 z-10 m-4"
+            >
+              {/* Decorative bg element */}
+              <div className="absolute -top-32 -right-32 w-64 h-64 rounded-full blur-3xl opacity-20 bg-gradient-to-br from-blue-500 to-purple-500" />
 
-               <div className="flex flex-col items-center relative z-10">
-                 <motion.div 
-                   initial={{ scale: 0 }}
-                   animate={{ scale: 1 }}
-                   transition={{ type: "spring", delay: 0.1 }}
-                   className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-4xl font-black text-white shadow-xl mb-4"
-                 >
-                   {userName?.charAt(0).toUpperCase()}
-                 </motion.div>
-                 
-                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1 text-center">{userName}</h2>
-                 
-                 <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-xs font-bold uppercase tracking-widest mb-6">
-                   <Shield size={12} />
-                   <span>{role}</span>
-                 </div>
+              <button
+                onClick={() => setShowProfileModal(false)}
+                className="absolute top-4 right-4 p-2 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors z-10"
+              >
+                <X size={20} className="text-gray-500 dark:text-gray-400" />
+              </button>
 
-                 {/* TABS */}
-                 <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-1.5 rounded-xl w-full mb-4">
-                   <button 
-                     onClick={() => setActiveTab("personal")}
-                     className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-colors ${activeTab === "personal" ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm" : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"}`}
-                   >
-                     Personal
-                   </button>
-                   <button 
-                     onClick={() => setActiveTab("rank")}
-                     className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-colors ${activeTab === "rank" ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm" : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"}`}
-                   >
-                     Rank Info
-                   </button>
-                 </div>
+              <div className="flex flex-col items-center relative z-10">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", delay: 0.1 }}
+                  className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-4xl font-black text-white shadow-xl mb-4"
+                >
+                  {userName?.charAt(0).toUpperCase()}
+                </motion.div>
 
-                  {activeTab === "personal" && (
-                    <div className="w-full flex justify-end mb-2">
-                      <button
-                        onClick={openEditModal}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors border border-blue-200 dark:border-blue-700/40"
-                      >
-                        <Pencil size={12} /> Edit Profile
-                      </button>
-                    </div>
-                  )}
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1 text-center">{userName}</h2>
 
-                  {loadingProfile ? (
-                   <div className="flex items-center justify-center gap-2 text-gray-500 py-8 w-full">
-                     <Loader2 size={20} className="animate-spin" />
-                     <span className="text-sm font-medium">Loading details...</span>
-                   </div>
-                 ) : (
-                   <div className="w-full" style={{ minHeight: "310px" }}>
-                     <AnimatePresence mode="wait">
-                       {activeTab === "personal" ? (
-                         <motion.div 
-                           key="personal"
-                           initial={{ opacity: 0, x: -20 }}
-                           animate={{ opacity: 1, x: 0 }}
-                           exit={{ opacity: 0, x: 20 }}
-                           transition={{ duration: 0.2 }}
-                           className="w-full space-y-3"
-                         >
-                           <div className="bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 p-4 rounded-2xl border-2 border-purple-200 dark:border-purple-700/50 shadow-sm">
-                             <div className="flex items-center gap-2 mb-1.5">
-                               <div className="p-1.5 bg-white dark:bg-gray-800 rounded-lg shadow-sm"><User size={13} className="text-purple-500" /></div>
-                               <span className="text-xs font-bold text-purple-500 dark:text-purple-400 uppercase tracking-wider">Name</span>
-                             </div>
-                             <p className="text-xl font-black text-gray-900 dark:text-white pl-1">{profileData?.Name || "—"}</p>
-                           </div>
-                           <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-transparent dark:border-gray-600/30">
-                             <div className="flex items-center gap-3">
-                               <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><Mail size={16} className="text-gray-400" /></div>
-                               <span className="text-sm font-bold text-gray-900 dark:text-white">Email</span>
-                             </div>
-                             <span className="text-xs font-medium text-gray-500 truncate max-w-[130px]">{profileData?.Email || "Not available"}</span>
-                           </div>
-                           {/* Age */}
-                           <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-transparent dark:border-gray-600/30">
-                             <div className="flex items-center gap-3">
-                               <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><User size={16} className="text-orange-400" /></div>
-                               <span className="text-sm font-bold text-gray-900 dark:text-white">Age</span>
-                             </div>
-                             <span className="text-xs font-medium text-gray-500">{profileData?.age ?? "—"}</span>
-                           </div>
-                           {/* Joined */}
-                           <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-transparent dark:border-gray-600/30">
-                             <div className="flex items-center gap-3">
-                               <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><Calendar size={16} className="text-green-500" /></div>
-                               <span className="text-sm font-bold text-gray-900 dark:text-white">Joined</span>
-                             </div>
-                             <span className="text-xs font-medium text-gray-500">
-                               {profileData?.date_joined ? new Date(profileData.date_joined).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) : "—"}
-                             </span>
-                           </div>
-                         </motion.div>
-                       ) : (
-                         <motion.div 
-                           key="rank"
-                           initial={{ opacity: 0, x: 20 }}
-                           animate={{ opacity: 1, x: 0 }}
-                           exit={{ opacity: 0, x: -20 }}
-                           transition={{ duration: 0.2 }}
-                           className="w-full space-y-3"
-                         >
-                           {/* Total Score */}
-                           <div className="bg-amber-50 dark:bg-amber-500/10 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-amber-100 dark:border-amber-500/20">
-                             <div className="flex items-center gap-3">
-                               <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><Star size={16} className="text-amber-500" fill="currentColor" /></div>
-                               <span className="text-sm font-bold text-gray-900 dark:text-white">Total Score</span>
-                             </div>
-                             <span className="text-sm text-amber-600 dark:text-amber-400 font-black">{profileData?.dashboard?.total_score || "0"}%</span>
-                           </div>
+                <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-xs font-bold uppercase tracking-widest mb-6">
+                  <Shield size={12} />
+                  <span>{role}</span>
+                </div>
 
-                           {/* Global Rank */}
-                           <div className="bg-blue-50 dark:bg-blue-500/10 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-blue-100 dark:border-blue-500/20">
-                             <div className="flex items-center gap-3">
-                               <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><Trophy size={16} className="text-blue-500" /></div>
-                               <span className="text-sm font-bold text-gray-900 dark:text-white">Global Rank</span>
-                             </div>
-                             <span className="text-sm text-blue-600 dark:text-blue-400 font-bold">#{profileData?.dashboard?.global_rank || "—"}</span>
-                           </div>
+                {/* TABS */}
+                <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-1.5 rounded-xl w-full mb-4">
+                  <button
+                    onClick={() => setActiveTab("personal")}
+                    className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-colors ${activeTab === "personal" ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm" : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"}`}
+                  >
+                    Personal
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("rank")}
+                    className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-colors ${activeTab === "rank" ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm" : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"}`}
+                  >
+                    Rank Info
+                  </button>
+                </div>
 
-                           {/* Play Time */}
-                           <div className="bg-purple-50 dark:bg-purple-500/10 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-purple-100 dark:border-purple-500/20">
-                             <div className="flex items-center gap-3">
-                               <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><Clock size={16} className="text-purple-500" /></div>
-                               <span className="text-sm font-bold text-gray-900 dark:text-white">Play Time</span>
-                             </div>
-                             <span className="text-sm text-purple-600 dark:text-purple-400 font-bold">{profileData?.dashboard?.total_time || "0m"}</span>
-                           </div>
+                {activeTab === "personal" && (
+                  <div className="w-full flex justify-end mb-2">
+                    <button
+                      onClick={openEditModal}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors border border-blue-200 dark:border-blue-700/40"
+                    >
+                      <Pencil size={12} /> Edit Profile
+                    </button>
+                  </div>
+                )}
 
-                           {/* Status */}
-                           <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-transparent dark:border-gray-600/30">
-                             <div className="flex items-center gap-3">
-                               <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><Activity size={16} className="text-green-500" /></div>
-                               <span className="text-sm font-bold text-gray-900 dark:text-white">Status</span>
-                             </div>
-                             <span className="text-[10px] px-2.5 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-full font-black uppercase tracking-wider">
-                               {profileData?.active !== false && profileData?.active !== "Inactive" ? "Active" : "Inactive"}
-                             </span>
-                           </div>
-                         </motion.div>
-                       )}
-                     </AnimatePresence>
-                   </div>
-                 )}
-               </div>
-             </motion.div>
+                {loadingProfile ? (
+                  <div className="flex items-center justify-center gap-2 text-gray-500 py-8 w-full">
+                    <Loader2 size={20} className="animate-spin" />
+                    <span className="text-sm font-medium">Loading details...</span>
+                  </div>
+                ) : (
+                  <div className="w-full" style={{ minHeight: "310px" }}>
+                    <AnimatePresence mode="wait">
+                      {activeTab === "personal" ? (
+                        <motion.div
+                          key="personal"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 20 }}
+                          transition={{ duration: 0.2 }}
+                          className="w-full space-y-3"
+                        >
+                          <div className="bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 p-4 rounded-2xl border-2 border-purple-200 dark:border-purple-700/50 shadow-sm">
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <div className="p-1.5 bg-white dark:bg-gray-800 rounded-lg shadow-sm"><User size={13} className="text-purple-500" /></div>
+                              <span className="text-xs font-bold text-purple-500 dark:text-purple-400 uppercase tracking-wider">Name</span>
+                            </div>
+                            <p className="text-xl font-black text-gray-900 dark:text-white pl-1">{profileData?.Name || "—"}</p>
+                          </div>
+                          <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-transparent dark:border-gray-600/30">
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><Mail size={16} className="text-gray-400" /></div>
+                              <span className="text-sm font-bold text-gray-900 dark:text-white">Email</span>
+                            </div>
+                            <span className="text-xs font-medium text-gray-500 truncate max-w-[130px]">{profileData?.Email || "Not available"}</span>
+                          </div>
+                          {/* Age */}
+                          <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-transparent dark:border-gray-600/30">
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><User size={16} className="text-orange-400" /></div>
+                              <span className="text-sm font-bold text-gray-900 dark:text-white">Age</span>
+                            </div>
+                            <span className="text-xs font-medium text-gray-500">{profileData?.age ?? "—"}</span>
+                          </div>
+                          {/* Joined */}
+                          <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-transparent dark:border-gray-600/30">
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><Calendar size={16} className="text-green-500" /></div>
+                              <span className="text-sm font-bold text-gray-900 dark:text-white">Joined</span>
+                            </div>
+                            <span className="text-xs font-medium text-gray-500">
+                              {profileData?.date_joined ? new Date(profileData.date_joined).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) : "—"}
+                            </span>
+                          </div>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="rank"
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          transition={{ duration: 0.2 }}
+                          className="w-full space-y-3"
+                        >
+                          {/* Total Score */}
+                          <div className="bg-amber-50 dark:bg-amber-500/10 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-amber-100 dark:border-amber-500/20">
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><Star size={16} className="text-amber-500" fill="currentColor" /></div>
+                              <span className="text-sm font-bold text-gray-900 dark:text-white">Total Score</span>
+                            </div>
+                            <span className="text-sm text-amber-600 dark:text-amber-400 font-black">{profileData?.dashboard?.total_score || "0"}%</span>
+                          </div>
+
+                          {/* Global Rank */}
+                          <div className="bg-blue-50 dark:bg-blue-500/10 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-blue-100 dark:border-blue-500/20">
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><Trophy size={16} className="text-blue-500" /></div>
+                              <span className="text-sm font-bold text-gray-900 dark:text-white">Global Rank</span>
+                            </div>
+                            <span className="text-sm text-blue-600 dark:text-blue-400 font-bold">#{profileData?.dashboard?.global_rank || "—"}</span>
+                          </div>
+
+                          {/* Play Time */}
+                          <div className="bg-purple-50 dark:bg-purple-500/10 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-purple-100 dark:border-purple-500/20">
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><Clock size={16} className="text-purple-500" /></div>
+                              <span className="text-sm font-bold text-gray-900 dark:text-white">Play Time</span>
+                            </div>
+                            <span className="text-sm text-purple-600 dark:text-purple-400 font-bold">{profileData?.dashboard?.total_time || "0m"}</span>
+                          </div>
+
+                          {/* Status */}
+                          <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-2xl flex items-center justify-between shadow-sm border border-transparent dark:border-gray-600/30">
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm"><Activity size={16} className="text-green-500" /></div>
+                              <span className="text-sm font-bold text-gray-900 dark:text-white">Status</span>
+                            </div>
+                            <span className="text-[10px] px-2.5 py-1 bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-full font-black uppercase tracking-wider">
+                              {profileData?.active !== false && profileData?.active !== "Inactive" ? "Active" : "Inactive"}
+                            </span>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )}
+              </div>
+            </motion.div>
           </div>
         )}
       </AnimatePresence>
