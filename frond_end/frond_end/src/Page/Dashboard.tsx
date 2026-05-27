@@ -133,7 +133,7 @@ function Dashboard() {
   }, [])
 
   return (
-    <div className="h-screen bg-slate-900 dark:bg-black p-5 pb-28 lg:pb-5 overflow-hidden relative">
+    <div className="h-screen bg-slate-50 dark:bg-black p-5 pb-28 lg:pb-5 overflow-hidden relative transition-colors duration-500">
       <div className="absolute inset-0 pointer-events-none transition-opacity duration-1000 overflow-hidden">
         <div className="stars-container w-full h-full">
           <div className="nebula absolute inset-0 z-0 opacity-50 dark:opacity-100" />
@@ -141,7 +141,7 @@ function Dashboard() {
             <div key={`shooting-${i}`} className="shooting-star" style={{ top: Math.random() * 100 + '%', left: Math.random() * 100 + '%', animationDelay: `${Math.random() * 5}s`, animationDuration: `${2 + Math.random() * 3}s` }} />
           ))}
           {[...Array(60)].map((_, i) => (
-            <div key={i} className="star absolute bg-white rounded-full z-1" style={{ width: Math.random() * 2 + 1 + 'px', height: Math.random() * 2 + 1 + 'px', top: Math.random() * 100 + '%', left: Math.random() * 100 + '%', opacity: 0.2 + Math.random() * 0.8, boxShadow: i % 5 === 0 ? '0 0 10px #fff' : 'none', animation: `twinkle ${3 + Math.random() * 4}s infinite alternate ${Math.random() * 3}s` }} />
+            <div key={i} className="star absolute bg-indigo-500/60 dark:bg-white rounded-full z-1" style={{ width: Math.random() * 2 + 1 + 'px', height: Math.random() * 2 + 1 + 'px', top: Math.random() * 100 + '%', left: Math.random() * 100 + '%', opacity: 0.2 + Math.random() * 0.8, boxShadow: i % 5 === 0 ? 'var(--star-shadow)' : 'none', animation: `twinkle ${3 + Math.random() * 4}s infinite alternate ${Math.random() * 3}s` }} />
           ))}
         </div>
       </div>
@@ -162,8 +162,8 @@ function Dashboard() {
               />
             </svg>
 
-            <h3 className="text-3xl font-black text-white mb-10 tracking-tight italic drop-shadow-md">
-              COSMIC <span className="text-blue-400">JOURNEY</span>
+            <h3 className="text-3xl font-black text-slate-800 dark:text-white mb-10 tracking-tight italic drop-shadow-md">
+              COSMIC <span className="text-blue-600 dark:text-blue-400">JOURNEY</span>
             </h3>
 
             {isLoading ? (
@@ -233,9 +233,9 @@ function Dashboard() {
                       )}
                     </div>
 
-                    <div className={`mt-6 text-center bg-black/40 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/10 shadow-xl ${isCompleted ? '' : 'group-hover:-translate-y-1'} transition-transform duration-300`}>
-                      <p className={`font-black text-base uppercase tracking-wider ${isCompleted ? 'text-gray-500' : 'text-white'}`}>{level.title}</p>
-                      <p className={`text-xs font-bold ${isCompleted ? 'text-gray-600' : 'text-blue-400'}`}>{level.subtitle}</p>
+                    <div className={`mt-6 text-center bg-white/75 dark:bg-black/40 backdrop-blur-md px-6 py-3 rounded-2xl border border-slate-200/80 dark:border-white/10 shadow-xl ${isCompleted ? '' : 'group-hover:-translate-y-1'} transition-all duration-300`}>
+                      <p className={`font-black text-base uppercase tracking-wider ${isCompleted ? 'text-gray-400 dark:text-gray-500' : 'text-slate-800 dark:text-white'}`}>{level.title}</p>
+                      <p className={`text-xs font-bold ${isCompleted ? 'text-gray-500 dark:text-gray-600' : 'text-blue-600 dark:text-blue-400'}`}>{level.subtitle}</p>
                       <div className="mt-1 h-1 w-full bg-gray-200 dark:bg-zinc-800 rounded-full overflow-hidden">
                         <div className={`h-full bg-gradient-to-r ${isCompleted ? 'from-gray-400 to-gray-600' : color.bg}`} style={{ width: `${level.progress}%` }} />
                       </div>
@@ -266,23 +266,37 @@ function Dashboard() {
 
         <div className="hidden lg:block w-full lg:w-1/4 bg-transparent rounded-2xl p-5 h-fit lg:sticky lg:top-5 self-start transition-all duration-500 order-1 lg:order-2">
           <div className="space-y-4">
-            <div className="border border-white/10 bg-black/40 backdrop-blur-sm hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:-translate-y-1 transition-all duration-500 hover:scale-105 rounded-xl p-1 shadow-xl cursor-pointer">
+            <div className="border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-black/40 backdrop-blur-sm hover:shadow-[0_8px_30px_rgba(59,130,246,0.15)] dark:hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:-translate-y-1 transition-all duration-500 hover:scale-105 rounded-xl p-1 shadow-xl cursor-pointer">
               <ReusableCard title="Global Ranking" value={cards?.global_rank} color="#ef4444" Icon={Globe} />
             </div>
-            <div className="border border-white/10 bg-black/40 backdrop-blur-sm hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:-translate-y-1 transition-all duration-500 hover:scale-105 rounded-xl p-1 shadow-xl cursor-pointer">
+            <div className="border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-black/40 backdrop-blur-sm hover:shadow-[0_8px_30px_rgba(245,158,11,0.15)] dark:hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:-translate-y-1 transition-all duration-500 hover:scale-105 rounded-xl p-1 shadow-xl cursor-pointer">
               <ReusableCard title="Total Courses" value={cards?.total_courses} color="#f59e0b" Icon={GraduationCap} />
             </div>
           </div>
-          <div className="mt-8 border border-white/10 bg-black/40 backdrop-blur-sm hover:shadow-[0_0_20px_rgba(109,40,217,0.4)] hover:-translate-y-1 transition-all duration-500 hover:scale-105 rounded-xl p-2 shadow-xl cursor-pointer">
+          <div className="mt-8 border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-black/40 backdrop-blur-sm hover:shadow-[0_8px_30px_rgba(109,40,217,0.15)] dark:hover:shadow-[0_0_20px_rgba(109,40,217,0.4)] hover:-translate-y-1 transition-all duration-500 hover:scale-105 rounded-xl p-2 shadow-xl cursor-pointer">
             <ScoreBar score={cards?.total_score || 0} maxScore={100} hearts={5} title="Score" />
           </div>
         </div>
 
-        <div className="fixed bottom-0 left-0 right-0 z-40 bg-black/80 backdrop-blur-md border-t border-white/10 p-3 lg:hidden transition-all duration-500">
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/90 dark:bg-black/80 backdrop-blur-md border-t border-slate-200 dark:border-white/10 p-3 lg:hidden transition-all duration-500">
           <div className="flex items-center justify-around gap-3">
-            <div className="flex items-center gap-2"><Globe size={18} className="text-red-500" /><div><p className="text-[10px] text-gray-400">Rank</p><p className="text-sm font-bold text-white">{cards?.global_rank || 0}</p></div></div>
-            <div className="flex items-center gap-2"><GraduationCap size={18} className="text-amber-500" /><div><p className="text-[10px] text-gray-400">Courses</p><p className="text-sm font-bold text-white">{cards?.total_courses || 0}</p></div></div>
-            <div className="flex-1 max-w-[200px]"><ScoreBar score={cards?.total_score || 0} maxScore={100} hearts={5} title="" /></div>
+            <div className="flex items-center gap-2">
+              <Globe size={18} className="text-red-500" />
+              <div>
+                <p className="text-[10px] text-gray-500 dark:text-gray-400">Rank</p>
+                <p className="text-sm font-bold text-slate-800 dark:text-white">{cards?.global_rank || 0}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <GraduationCap size={18} className="text-amber-500" />
+              <div>
+                <p className="text-[10px] text-gray-500 dark:text-gray-400">Courses</p>
+                <p className="text-sm font-bold text-slate-800 dark:text-white">{cards?.total_courses || 0}</p>
+              </div>
+            </div>
+            <div className="flex-1 max-w-[200px]">
+              <ScoreBar score={cards?.total_score || 0} maxScore={100} hearts={5} title="" />
+            </div>
           </div>
         </div>
 

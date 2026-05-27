@@ -59,7 +59,7 @@ export default function ScoreBar({
               boxShadow: "0 0 10px rgba(235,47,248,0.5)",
             }}
           />
-          <span className="absolute inset-0 flex items-center justify-center text-white text-[10px] font-semibold drop-shadow-md">
+          <span className="absolute inset-0 flex items-center justify-center text-black dark:text-white text-[10px] font-semibold drop-shadow-md">
             {barPct > 8 ? `${barPct.toFixed(0)}%` : ""}
           </span>
         </div>
