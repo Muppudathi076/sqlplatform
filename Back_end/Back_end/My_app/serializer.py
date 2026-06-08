@@ -41,7 +41,12 @@ class LoginSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Invalid Credential")
         return user
         
+class QuestionProgressSerializer(serializers.Serializer):
+        questionId = serializers.IntegerField()
+        isCorrect = serializers.BooleanField()
+        
 class UserdetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Login
         fields = "__all__"
+        

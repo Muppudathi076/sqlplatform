@@ -304,7 +304,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate("/login")}
-              className="px-5 py-2.5 text-sm font-semibold text-white/80 hover:text-white border border-white/10 rounded-xl hover:border-white/30 hover:bg-white/5 transition-all duration-300"
+              className="px-5 py-2.5 text-sm font-semibold text-white bg-gray-500  border border-white/10 rounded-xl hover:border-white/30 hover:bg-white/5 transition-all duration-300"
             >
               Sign In
             </button>
@@ -367,7 +367,7 @@ export default function LandingPage() {
             </button>
             <button
               onClick={() => document.getElementById("sessions")?.scrollIntoView({ behavior: "smooth" })}
-              className="px-8 py-4 border border-white/10 rounded-2xl text-lg font-semibold text-white/70 hover:text-white hover:bg-white/5 hover:border-white/20 transition-all duration-300"
+              className="px-8 py-4 border border-white/10 rounded-2xl text-lg font-semibold text-white/70 bg-gray-900 hover:text-white hover:bg-white/5 hover:border-white/20 transition-all duration-300"
             >
               Explore Sessions
             </button>

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react"
-import { Validation } from "../utils/validation"
+import Validation from "../utils/validation"
 import { useNavigate } from "react-router-dom"
 import { loginApi } from "../auth/authapi"
 import toast from "react-hot-toast"
@@ -159,7 +159,7 @@ function Login() {
   const handlesubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError({})
-    const validationErrors = Validation(email, password)
+    const validationErrors = Validation(email, password,"","login")
 
     if (Object.keys(validationErrors).length > 0) {
       Object.values(validationErrors).forEach((msg) => {

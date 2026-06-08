@@ -16,4 +16,5 @@ urlpatterns = [
     path("sql-dictionary/", views.get_sql_dictionary),
     path("sql-academy/", views.get_sql_academy),
     path("update-sql-academy/", views.update_sql_academy),
+    path( "model/question-progress/",views.question_progress),
 ]

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SQLQuestion
+from .models import SQLQuestion, SqlDictionary, SqlAcademy
 from My_app.utils import validate_question_answer_match
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -23,4 +23,16 @@ class QuestionSerializer(serializers.ModelSerializer):
 class QuestionallSerializer(serializers.ModelSerializer):
     class Meta:
         model = SQLQuestion
-        fields = ['id','question', 'difficulty', 'model_no', 'answer'] 
+        fields = ['id','question', 'difficulty', 'model_no', 'answer','methods','option','sample_data']
+
+
+class SqlDictionarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SqlDictionary
+        fields = '__all__'
+
+
+class SqlAcademySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SqlAcademy
+        fields = '__all__'

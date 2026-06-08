@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { NavLink } from "react-router-dom"
-import { Users, User, LogOut, GraduationCap, Code, BookOpen, Rocket } from "lucide-react"
+import { User, LogOut, GraduationCap, Code, BookOpen, Rocket } from "lucide-react"
 import { Menu, X } from "lucide-react"
 import { RxDashboard } from "react-icons/rx"
 
@@ -27,9 +27,11 @@ function Sidebar({ isOpen, openLogout, isCollapsed, setIsCollapsed }: sidebar) {
     setOpenIndex(openIndex === index ? null : index)
   }
   const adminMenu = [
-    { name: "Dashboard", path: "/api/dashboard", icon: <RxDashboard size={20} /> },
-    { name: "Student Management", path: "/api/students", icon: <GraduationCap size={20} /> },
-    { name: "Staff Management", path: "/api/staff", icon: <Users size={20} /> },
+    { name: "Dashboard", path: "/api/admin/dashboard", icon: <RxDashboard size={20} /> },
+    { name: "Student Management", path: "/api/admin/userlist", icon: <GraduationCap size={20} /> },
+    { name: "SQL Questions", path: "/api/admin/modalpage", icon: <BookOpen size={20} /> },
+    { name: "SQL Dictionary", path: "/api/admin/dictionary", icon: <BookOpen size={20} /> },
+    { name: "SQL Academy", path: "/api/admin/academy", icon: <GraduationCap size={20} /> },
   ]
 
   const userMenu = [

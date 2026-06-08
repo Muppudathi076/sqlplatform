@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view,permission_classes,authentication
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .serializer import LoginSerializer,RegisterSerializer,UserdetailsSerializer
+from .serializer import LoginSerializer,RegisterSerializer,UserdetailsSerializer,QuestionProgressSerializer
 from My_admin.serializers import QuestionallSerializer, QuestionSerializer
 from .utils import generate_custom_access_token,CustomJWTAuthentication,validate_query
 from .models import Login,UserProgress,DailyUsage
@@ -107,142 +107,27 @@ def get_user_details(request):
 
     return Response(serializer.data)
     
-# @api_view(['GET'])
-# @authentication_classes([CustomJWTAuthentication])
-# @permission_classes([IsAuthenticated])
-# def get_questions(request, model_id):
-#     user = request.user
-
-#     if model_id > 1:
-#         previous_model = model_id - 1
-
-#         total_prev_questions = SQLQuestion.objects.filter(
-#             model_no=previous_model
-#         ).count()
-
-#         completed_prev_questions = UserProgress.objects.filter(
-#             user=user,
-#             question__model_no=previous_model,
-#             is_completed=True
-#         ).count()
-
-#         if completed_prev_questions < total_prev_questions:
-#             return Response({
-#                 "status": "locked",
-#                 "message": f"First complete Level {previous_model}"
-#             })
-
-#     completed_questions = UserProgress.objects.filter(
-#         user=user,
-#         is_completed=True
-#     ).values_list('question_id', flat=True)
-
-#     remaining_questions = SQLQuestion.objects.filter(
-#         model_no=model_id
-#     ).exclude(id__in=completed_questions)
-
-#     if remaining_questions.exists():
-#         return Response({
-#             "status": "questions",
-#             "questions": list(
-#                 remaining_questions.values("id", "question", "model_no","methods","answer","option","sample_data")
-#             )
-#         })
-
-#     next_model = model_id + 1
-
-#     next_questions = SQLQuestion.objects.filter(
-#         model_no=next_model
-#     ).exclude(id__in=completed_questions)
-
-#     if next_questions.exists():
-#         return Response({
-#             "status": "redirect",
-#             "next_model": next_model
-#         })
-
-#     return Response({
-#         "status": "completed"
-#     })
 @api_view(['GET'])
 @authentication_classes([CustomJWTAuthentication])
 @permission_classes([IsAuthenticated])
 def get_questions(request, model_id):
 
-    questions = SQLQuestion.objects.filter(model_no=model_id)
+    completed_question_ids = UserProgress.objects.filter(
+        user=request.user,
+        is_completed=True
+    ).values_list("question_id", flat=True)
 
+    questions = SQLQuestion.objects.filter(
+        model_no=model_id
+    ).exclude(
+        id__in=completed_question_ids
+    )
+
+    serializer = QuestionallSerializer(questions, many=True)
     return Response({
         "status": "success",
-        "questions": list(
-            questions.values(
-                "id",
-                "question",
-                "model_no",
-                "methods",
-                "answer",
-                "option",
-                "sample_data"
-            )
-        )
+        "questions": serializer.data
     })
-# @api_view(['GET'])
-# @authentication_classes([CustomJWTAuthentication])
-# @permission_classes([IsAuthenticated])
-# def get_questions(request, model_id):
-#     user = request.user
-
-#     # ✅ Check previous level completion
-#     if model_id > 1:
-#         previous_model = model_id - 1
-
-#         total_prev_questions = SQLQuestion.objects.filter(
-#             model_no=previous_model
-#         ).count()
-
-#         completed_prev_questions = UserProgress.objects.filter(
-#             user=user,
-#             question__model_no=previous_model,
-#             is_completed=True
-#         ).count()
-
-#         if completed_prev_questions < total_prev_questions:
-#             return Response({
-#                 "status": "locked",
-#                 "message": f"First complete Level {previous_model}"
-#             })
-
-#     completed_questions = UserProgress.objects.filter(
-#         user=user,
-#         is_completed=True
-#     ).values_list('question_id', flat=True)
-
-#     remaining_questions = SQLQuestion.objects.filter(
-#         model_no=model_id
-#     ).exclude(id__in=completed_questions)
-
-#     if remaining_questions.exists():
-#         return Response({
-#             "status": "questions",
-#             "questions": list(
-#                 remaining_questions.values("id", "question", "model_no")
-#             )
-#         })
-
-#     next_model = model_id + 1
-
-#     next_questions = SQLQuestion.objects.filter(
-#         model_no=next_model
-#     ).exclude(id__in=completed_questions)
-
-#     if next_questions.exists():
-#         return Response({
-#             "status": "redirect",
-#             "next_model": next_model
-#         })
-
-#     return Response({
-#         "status": "completed"
-#     })
 
 def get_table_name(schema):
     match = re.search(r'create table (\w+)', schema.lower())
@@ -673,6 +558,55 @@ def questionAdd(request):
 @api_view(['POST'])
 @authentication_classes([CustomJWTAuthentication])
 @permission_classes([IsAuthenticated])
+def question_progress(request):
+    serializer = QuestionProgressSerializer(data=request.data)
+
+    if not serializer.is_valid():
+        return Response(
+            {
+                "success": False,
+                "errors": serializer.errors
+            },status=400)
+
+    question_id = serializer.validated_data["questionId"]
+    is_correct = serializer.validated_data["isCorrect"]
+
+    try:
+        question = SQLQuestion.objects.get(id=question_id)
+
+        UserProgress.objects.update_or_create(
+            user=request.user,
+            question=question,
+            defaults={
+                "is_completed": is_correct
+            }
+        )
+
+        return Response(
+            {
+                "success": True,
+                "message": "Question progress saved successfully",
+                "questionId": question_id,
+                "isCorrect": is_correct
+            },status=200)
+
+    except SQLQuestion.DoesNotExist:
+        return Response(
+            {
+                "success": False,
+                "message": "Question not found"
+            },status=404)
+
+    except Exception as e:
+        return Response(
+            {
+                "success": False,
+                "message": str(e)
+            },status=500)
+
+@api_view(['POST'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
 def model_complete(request, model_id):
     results = request.data.get("results", [])
     
@@ -701,6 +635,18 @@ def model_complete(request, model_id):
 @permission_classes([IsAuthenticated])
 def get_sql_dictionary(request):
     try:
+        from My_admin.models import SqlDictionary
+        entries = SqlDictionary.objects.all().order_by('id')
+        if entries.exists():
+            data = list(entries.values(
+                'id', 'keyword', 'meaning', 'analogy', 'syntax',
+                'example_query', 'icon', 'color', 'questions'
+            ))
+            return Response({
+                "success": True,
+                "data": data
+            }, status=200)
+        # Fallback to JSON file if DB is empty
         file_path = os.path.join(os.path.dirname(__file__), 'sql_dictionary.json')
         with open(file_path, 'r') as f:
             data = json.load(f)
@@ -711,7 +657,7 @@ def get_sql_dictionary(request):
     except Exception as e:
         return Response({
             "success": False,
-            "message": "Dictionary file not found or could not be read.",
+            "message": "Dictionary could not be loaded.",
             "error": str(e)
         }, status=500)
 
@@ -721,9 +667,23 @@ def get_sql_dictionary(request):
 def get_sql_academy(request):
     try:
         user = request.user
-        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'academy_questions.json')
-        with open(file_path, 'r') as f:
-            data = json.load(f)
+        
+        # Try DB first
+        from My_admin.models import SqlAcademy
+        entries = SqlAcademy.objects.all().order_by('id')
+        if entries.exists():
+            data = list(entries.values(
+                'id', 'title', 'instruction', 'expectedQuery', 'columns',
+                'tableData', 'successMsg', 'hint'
+            ))
+        else:
+            # Fallback
+            file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'academy_questions.json')
+            if not os.path.exists(file_path):
+                file_path = os.path.join(os.path.dirname(__file__), 'academy_questions.json')
+            with open(file_path, 'r') as f:
+                data = json.load(f)
+
         return Response({
             "success": True,
             "data": data,
@@ -732,7 +692,7 @@ def get_sql_academy(request):
     except Exception as e:
         return Response({
             "success": False,
-            "message": "Academy file not found or could not be read.",
+            "message": "Academy data could not be loaded.",
             "error": str(e)
         }, status=500)
 

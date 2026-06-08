@@ -23,7 +23,7 @@ export default function DragAndDropPage() {
   const [checkingState, setCheckingState] = useState<CheckState>("idle");
 
   const isAnswered = checkingState !== "idle";
-
+  console.log("Passing score:", totalScore);
   if (!questionData) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0a1a]">
@@ -86,8 +86,8 @@ export default function DragAndDropPage() {
     setCheckingState(userAnswer === correctAnswer ? "correct" : "wrong");
   };
 
-  const handleNext = () => {
-    markComplete(droppedItems.join(" "));
+  const handleNext = async() => {
+    await markComplete(droppedItems.join(" "));
     setCheckingState("idle");
     setDroppedItems([]);
     navigateToNextQuestion();
@@ -174,7 +174,7 @@ export default function DragAndDropPage() {
             {droppedItems.length > 0 && !isAnswered && (
               <button
                 onClick={handleClearAll}
-                className="flex items-center gap-1 px-3 py-1 rounded-lg text-[10px] font-bold text-red-400/70 hover:text-red-400 hover:bg-red-500/10 transition-all uppercase tracking-wider"
+                className="flex items-center gap-1 px-3 py-1 rounded-lg text-[10px] font-bold text-red-400/70 hover:text-red-400 hover:bg-red-500/10 transition-all uppercase tracking-wider bg-transparent"
               >
                 <Trash2 size={11} /> Clear All
               </button>
@@ -298,7 +298,7 @@ export default function DragAndDropPage() {
             }
             <div className="flex flex-col gap-0.5">
               <p className="font-bold text-sm" style={{ color: checkingState === "correct" ? "#22c55e" : "#ef4444" }}>
-                {checkingState === "correct" ? "Excellent! Perfect order! 🎉" : "Oops! Wrong order."}
+                {checkingState === "correct" ? "Excellent! Perfect order! " : "Oops! Wrong order."}
               </p>
               {checkingState === "wrong" && (
                 <p className="text-sm text-white/60">
@@ -315,7 +315,7 @@ export default function DragAndDropPage() {
             <button
               onClick={handleSkip}
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-white/10
-                text-white/40 hover:text-white/60 hover:bg-white/5 transition-all"
+                text-white/40 hover:text-white/60 hover:bg-white/5 transition-all bg-transparent"
             >
               <SkipForward size={15} /> Skip
             </button>
@@ -324,7 +324,7 @@ export default function DragAndDropPage() {
               onClick={handleClearAll}
               disabled
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-white/10
-                text-white/20 opacity-30 cursor-not-allowed"
+                text-white/20 opacity-30 cursor-not-allowed bg-transparent"
             >
               <Undo2 size={14} /> Reset
             </button>

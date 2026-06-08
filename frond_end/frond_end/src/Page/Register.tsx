@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react"
-import { Validation } from "../utils/validation"
+import Validation from "../utils/validation"
 import { useNavigate } from "react-router-dom"
 import { registerApi } from "../auth/authapi"
 import toast from "react-hot-toast"
-import { Database, Mail, Lock, User, UserPlus, Sparkles } from "lucide-react"
+import { Database, Mail, Lock, User, UserPlus, Sparkles, Eye, EyeOff } from "lucide-react"
 
 interface ErrorType {
   fullname?: string
@@ -11,7 +11,6 @@ interface ErrorType {
   password?: string
 }
 
-/* ─── Animated Background Canvas ─── */
 function AnimatedBg() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const mouseRef = useRef({ x: -1, y: -1 })
@@ -156,7 +155,7 @@ function Register() {
   const [message, setMessage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [mounted, setMounted] = useState(false)
-
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -167,7 +166,7 @@ function Register() {
     e.preventDefault()
     setError({})
     setMessage("")
-    const validationErrors = Validation(email, password, fullname)
+    const validationErrors = Validation(email, password, fullname, "register");
 
     if (Object.keys(validationErrors).length > 0) {
       Object.values(validationErrors).forEach((msg) => {
@@ -202,14 +201,11 @@ function Register() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#060618] relative overflow-hidden">
-      {/* Animated Canvas Background */}
       <AnimatedBg />
 
-      {/* Form Card */}
       <div
-        className={`relative z-10 w-full max-w-[420px] mx-4 transition-all duration-1000 ${
-          mounted ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
-        }`}
+        className={`relative z-10 w-full max-w-[420px] mx-4 transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
+          }`}
       >
         <div
           className="relative rounded-[2rem] p-8 sm:p-10 overflow-hidden"
@@ -262,6 +258,8 @@ function Register() {
                   style={{
                     background: "rgba(255,255,255,0.04)",
                     border: "1px solid rgba(255,255,255,0.08)",
+                    WebkitTextFillColor: "white",
+                    WebkitBoxShadow: "0 0 0px 1000px rgba(255,255,255,0.04) inset",
                   }}
                 />
               </div>
@@ -270,7 +268,7 @@ function Register() {
 
             {/* Email Field */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-white/50 uppercase tracking-wider pl-1">Email</label>
+              <label className="text-xs font-bold  text-white/50 uppercase tracking-wider pl-1">Email</label>
               <div className="relative group">
                 <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-emerald-400 transition-colors duration-300" />
                 <input
@@ -282,6 +280,8 @@ function Register() {
                   style={{
                     background: "rgba(255,255,255,0.04)",
                     border: "1px solid rgba(255,255,255,0.08)",
+                    WebkitTextFillColor: "white",
+                    WebkitBoxShadow: "0 0 0px 1000px rgba(255,255,255,0.04) inset",
                   }}
                 />
               </div>
@@ -294,16 +294,30 @@ function Register() {
               <div className="relative group">
                 <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-emerald-400 transition-colors duration-300" />
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Create a password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 rounded-xl text-white text-sm font-medium placeholder:text-white/20 outline-none transition-all duration-300 focus:ring-2 focus:ring-emerald-500/50"
+                  className="w-full pl-11 pr-11 py-3.5 rounded-xl text-white text-sm font-medium placeholder:text-white/20 outline-none transition-all duration-300 focus:ring-2 focus:ring-emerald-500/50"
                   style={{
                     background: "rgba(255,255,255,0.04)",
                     border: "1px solid rgba(255,255,255,0.08)",
+                    WebkitTextFillColor: "white",
+                    WebkitBoxShadow: "0 0 0px 1000px rgba(255,255,255,0.04) inset",
                   }}
                 />
+<button
+  type="button"
+  style={{
+    background: "transparent",
+    border: "none",
+    boxShadow: "none",
+  }}
+  onClick={() => setShowPassword((prev) => !prev)}
+  className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-400"
+>
+  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+</button>
               </div>
               {error.password && <p className="text-red-400 text-xs pl-1">{error.password}</p>}
             </div>

@@ -12,6 +12,8 @@ import ModelsPage from "./Page/ModelsPage"
 import AdminDashboard from "./components/AdminComponents/Admindashboard"
 import UserList from "./components/AdminComponents/UserList"
 import QuestionPage from "./components/AdminComponents/QuestionPage"
+import AdminSqlDictionary from "./components/AdminComponents/AdminSqlDictionary"
+import AdminSqlAcademy from "./components/AdminComponents/AdminSqlAcademy"
 import RankPage from "./components/AdminComponents/RankPage"
 import FillInTheBlanksPage from "./components/QuestionModel/FillInTheBlanksPage"
 import ChooseBestAnswer from "./components/QuestionModel/ChooseBestAnswer"
@@ -46,6 +48,8 @@ function App() {
           <Route path='admin/dashboard' element={<AdminDashboard/>}/>
           <Route path='admin/userlist' element={<UserList/>}/>
           <Route path='admin/modalpage' element={<QuestionPage/>}/>
+          <Route path='admin/dictionary' element={<AdminSqlDictionary/>}/>
+          <Route path='admin/academy' element={<AdminSqlAcademy/>}/>
           <Route path='admin/rank' element={<RankPage/>}/>
           <Route path='modal/fling/blangs' element={<FillInTheBlanksPage/>}/>
           <Route path='modal/choose/answer' element={<ChooseBestAnswer/>}/>

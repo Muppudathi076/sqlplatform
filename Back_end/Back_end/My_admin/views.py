@@ -3,12 +3,16 @@ from django.db.models import Count, Max, Q
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
 from My_app.utils import CustomJWTAuthentication
 from My_app.models import Login, UserProgress
-from .models import SQLQuestion
-from .serializers import QuestionSerializer, QuestionallSerializer
-from My_app.ai_question_generator import generate_question_metadata, generate_bulk_questions
+from .models import SQLQuestion, SqlDictionary, SqlAcademy
+from .serializers import QuestionSerializer, QuestionallSerializer, SqlDictionarySerializer, SqlAcademySerializer
+from My_app.ai_question_generator import (
+    generate_question_metadata, 
+    generate_bulk_questions, 
+    generate_ai_dictionary_entries, 
+    generate_ai_academy_entries
+)
 
 def sanitize_options(option_str: str) -> str:
     if not option_str:
@@ -276,3 +280,356 @@ def ai_bulk_generate(request):
         "created": created,
         "skipped": skipped
     }, status=200)
+
+
+# ═══════════════════════  SQL DICTIONARY CRUD  ═══════════════════════
+
+@api_view(['GET'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def get_all_dictionary(request):
+    entries = SqlDictionary.objects.all().order_by('id')
+    serializer = SqlDictionarySerializer(entries, many=True)
+    return Response({
+        "success": True,
+        "data": serializer.data
+    })
+
+@api_view(['POST'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def create_dictionary(request):
+    serializer = SqlDictionarySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({
+            "success": True,
+            "message": "Dictionary entry added successfully",
+            "data": serializer.data
+        }, status=200)
+    return Response({
+        "success": False,
+        "errors": serializer.errors
+    }, status=400)
+
+@api_view(['PATCH'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def update_dictionary(request, entryId):
+    try:
+        entry = SqlDictionary.objects.get(id=entryId)
+        serializer = SqlDictionarySerializer(entry, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "success": True,
+                "message": "Dictionary entry updated successfully"
+            }, status=200)
+        return Response({
+            "success": False,
+            "errors": serializer.errors
+        }, status=400)
+    except SqlDictionary.DoesNotExist:
+        return Response({
+            "success": False,
+            "message": "Entry not found"
+        }, status=404)
+
+@api_view(['DELETE'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def delete_dictionary(request, entryId):
+    try:
+        entry = SqlDictionary.objects.filter(id=entryId)
+        if not entry.exists():
+            return Response({"success": False, "message": "Entry not found"}, status=404)
+        entry.delete()
+        return Response({
+            "success": True,
+            "message": "Dictionary entry deleted successfully"
+        }, status=200)
+    except Exception as e:
+        return Response({"success": False, "message": str(e)}, status=500)
+
+@api_view(['DELETE'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def bulk_delete_dictionary(request):
+    ids = request.data.get("ids", [])
+    if not ids or not isinstance(ids, list):
+        return Response({"error": "No IDs provided"}, status=400)
+    deleted_count, _ = SqlDictionary.objects.filter(id__in=ids).delete()
+    return Response({
+        "success": True,
+        "deleted": deleted_count,
+        "message": f"{deleted_count} entry(ies) deleted successfully."
+    }, status=200)
+
+@api_view(['POST'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def seed_dictionary_from_json(request):
+    """Import dictionary entries from the existing JSON file into the DB."""
+    import os
+    try:
+        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'My_app', 'sql_dictionary.json')
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+        
+        created = 0
+        skipped = 0
+        for item in data:
+            keyword = item.get("keyword", "")
+            if SqlDictionary.objects.filter(keyword=keyword).exists():
+                skipped += 1
+                continue
+            SqlDictionary.objects.create(
+                keyword=keyword,
+                meaning=item.get("meaning", ""),
+                analogy=item.get("analogy", ""),
+                syntax=item.get("syntax", ""),
+                example_query=item.get("example_query", ""),
+                icon=item.get("icon", "BookOpen"),
+                color=item.get("color", "from-blue-400 to-indigo-600"),
+                questions=item.get("questions", [])
+            )
+            created += 1
+        return Response({
+            "success": True,
+            "message": f"Seeded {created} entries ({skipped} duplicates skipped)",
+            "created": created,
+            "skipped": skipped
+        }, status=200)
+    except Exception as e:
+        return Response({"success": False, "error": str(e)}, status=500)
+
+
+# ═══════════════════════  SQL ACADEMY CRUD  ═══════════════════════
+
+@api_view(['GET'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def get_all_academy(request):
+    entries = SqlAcademy.objects.all().order_by('id')
+    serializer = SqlAcademySerializer(entries, many=True)
+    return Response({
+        "success": True,
+        "data": serializer.data
+    })
+
+@api_view(['POST'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def create_academy(request):
+    serializer = SqlAcademySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({
+            "success": True,
+            "message": "Academy entry added successfully",
+            "data": serializer.data
+        }, status=200)
+    return Response({
+        "success": False,
+        "errors": serializer.errors
+    }, status=400)
+
+@api_view(['PATCH'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def update_academy(request, entryId):
+    try:
+        entry = SqlAcademy.objects.get(id=entryId)
+        serializer = SqlAcademySerializer(entry, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "success": True,
+                "message": "Academy entry updated successfully"
+            }, status=200)
+        return Response({
+            "success": False,
+            "errors": serializer.errors
+        }, status=400)
+    except SqlAcademy.DoesNotExist:
+        return Response({
+            "success": False,
+            "message": "Entry not found"
+        }, status=404)
+
+@api_view(['DELETE'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def delete_academy(request, entryId):
+    try:
+        entry = SqlAcademy.objects.filter(id=entryId)
+        if not entry.exists():
+            return Response({"success": False, "message": "Entry not found"}, status=404)
+        entry.delete()
+        return Response({
+            "success": True,
+            "message": "Academy entry deleted successfully"
+        }, status=200)
+    except Exception as e:
+        return Response({"success": False, "message": str(e)}, status=500)
+
+@api_view(['DELETE'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def bulk_delete_academy(request):
+    ids = request.data.get("ids", [])
+    if not ids or not isinstance(ids, list):
+        return Response({"error": "No IDs provided"}, status=400)
+    deleted_count, _ = SqlAcademy.objects.filter(id__in=ids).delete()
+    return Response({
+        "success": True,
+        "deleted": deleted_count,
+        "message": f"{deleted_count} entry(ies) deleted successfully."
+    }, status=200)
+
+@api_view(['POST'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def seed_academy_from_json(request):
+    """Import academy entries from the existing JSON file into the DB."""
+    import os
+    try:
+        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'My_app', 'academy_questions.json')
+        # fallback path in case it was at root
+        if not os.path.exists(file_path):
+            file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'academy_questions.json')
+            
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+        
+        created = 0
+        skipped = 0
+        for item in data:
+            title = item.get("title", "")
+            if SqlAcademy.objects.filter(title=title).exists():
+                skipped += 1
+                continue
+            SqlAcademy.objects.create(
+                id=item.get("id"),
+                title=title,
+                instruction=item.get("instruction", ""),
+                expectedQuery=item.get("expectedQuery", ""),
+                columns=item.get("columns", []),
+                tableData=item.get("tableData", []),
+                successMsg=item.get("successMsg", ""),
+                hint=item.get("hint", "")
+            )
+            created += 1
+        return Response({
+            "success": True,
+            "message": f"Seeded {created} entries ({skipped} duplicates skipped)",
+            "created": created,
+            "skipped": skipped
+        }, status=200)
+    except Exception as e:
+        return Response({"success": False, "error": str(e)}, status=500)
+
+
+# ═══════════════════════  AI GENERATION ENDPOINTS  ═══════════════════════
+
+@api_view(['POST'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def ai_bulk_generate_dictionary(request):
+    try:
+        count = request.data.get("count", 5)
+        try:
+            count = int(count)
+        except ValueError:
+            count = 5
+            
+        # Generate the entries via Gemini
+        generated_data = generate_ai_dictionary_entries(count=count)
+        
+        if not generated_data:
+            return Response({"success": False, "message": "AI failed to generate data"}, status=500)
+            
+        created = 0
+        skipped = 0
+        max_id = SqlDictionary.objects.aggregate(Max('id'))['id__max'] or 0
+
+        for item in generated_data:
+            keyword = item.get("keyword", "")
+            if SqlDictionary.objects.filter(keyword=keyword).exists():
+                skipped += 1
+                continue
+                
+            max_id += 1
+            SqlDictionary.objects.create(
+                id=max_id,
+                keyword=keyword,
+                meaning=item.get("meaning", ""),
+                analogy=item.get("analogy", ""),
+                syntax=item.get("syntax", ""),
+                example_query=item.get("example_query", ""),
+                icon=item.get("icon", "BookOpen"),
+                color=item.get("color", "from-blue-400 to-indigo-600"),
+                questions=item.get("questions", [])
+            )
+            created += 1
+            
+        return Response({
+            "success": True,
+            "message": f"Successfully generated and added {created} dictionary entries (skipped {skipped} duplicates).",
+            "created": created,
+            "skipped": skipped
+        }, status=200)
+
+    except Exception as e:
+        return Response({"success": False, "error": str(e)}, status=500)
+
+
+@api_view(['POST'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def ai_bulk_generate_academy(request):
+    try:
+        count = request.data.get("count", 5)
+        try:
+            count = int(count)
+        except ValueError:
+            count = 5
+            
+        # Generate the entries via Gemini
+        generated_data = generate_ai_academy_entries(count=count)
+        
+        if not generated_data:
+            return Response({"success": False, "message": "AI failed to generate data"}, status=500)
+            
+        created = 0
+        skipped = 0
+        max_id = SqlAcademy.objects.aggregate(Max('id'))['id__max'] or 0
+
+        for item in generated_data:
+            title = item.get("title", "")
+            if SqlAcademy.objects.filter(title=title).exists():
+                skipped += 1
+                continue
+                
+            max_id += 1
+            SqlAcademy.objects.create(
+                id=max_id,
+                title=title,
+                instruction=item.get("instruction", ""),
+                expectedQuery=item.get("expectedQuery", ""),
+                columns=item.get("columns", []),
+                tableData=item.get("tableData", []),
+                successMsg=item.get("successMsg", ""),
+                hint=item.get("hint", "")
+            )
+            created += 1
+            
+        return Response({
+            "success": True,
+            "message": f"Successfully generated and added {created} academy missions (skipped {skipped} duplicates).",
+            "created": created,
+            "skipped": skipped
+        }, status=200)
+
+    except Exception as e:
+        return Response({"success": False, "error": str(e)}, status=500)

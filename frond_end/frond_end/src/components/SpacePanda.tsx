@@ -10,9 +10,9 @@ export const SpacePanda: React.FC<SpacePandaProps> = ({ action }) => {
   const isJumping = action === 'jump';
   const isHello = action === 'hello';
 
-  const walkTransition = { repeat: Infinity, duration: 1.2, ease: "easeInOut" };
+  const walkTransition = { repeat: Infinity, duration: 1.2, ease: "linear" };
 
-  const bodyVariant = {
+  const bodyVariant: any = {
     idle: { y: [0, -3, 0], transition: { repeat: Infinity, duration: 3, ease: "easeInOut" } },
     jump: { y: [0, -25, 0], transition: { repeat: Infinity, duration: 0.5, ease: "easeOut" } },
     sleep: { y: 2, scaleY: [1, 0.96, 1], transition: { repeat: Infinity, duration: 4, ease: "easeInOut" } },
@@ -21,7 +21,7 @@ export const SpacePanda: React.FC<SpacePandaProps> = ({ action }) => {
     right: { y: [0, -4, 0, -4, 0], rotate: [2, 4, 2, 4, 2], transition: walkTransition },
   };
 
-  const leftArmVariant = {
+  const leftArmVariant: any = {
     idle: { rotate: [0, 5, 0], transition: { repeat: Infinity, duration: 4, ease: "easeInOut" } },
     jump: { rotate: -150, y: -5 },
     sleep: { rotate: 20 },
@@ -30,7 +30,7 @@ export const SpacePanda: React.FC<SpacePandaProps> = ({ action }) => {
     right: { rotate: [-25, 0, 25, 0, -25], transition: walkTransition },
   };
 
-  const rightArmVariant = {
+  const rightArmVariant: any = {
     idle: { rotate: [0, -5, 0], transition: { repeat: Infinity, duration: 4, ease: "easeInOut" } },
     jump: { rotate: 150, y: -5 },
     sleep: { rotate: -20 },
@@ -39,7 +39,7 @@ export const SpacePanda: React.FC<SpacePandaProps> = ({ action }) => {
     right: { rotate: [25, 0, -25, 0, 25], transition: walkTransition },
   };
 
-  const leftLegVariant = {
+  const leftLegVariant: any = {
     idle: { rotate: 0 },
     jump: { rotate: -20 },
     sleep: { rotate: 0 },
@@ -49,7 +49,7 @@ export const SpacePanda: React.FC<SpacePandaProps> = ({ action }) => {
     right: { rotate: [25, 0, -25, 0, 25], y: [0, 0, 0, -6, 0], transition: walkTransition },
   };
 
-  const rightLegVariant = {
+  const rightLegVariant: any = {
     idle: { rotate: 0 },
     jump: { rotate: 20 },
     sleep: { rotate: 0 },
@@ -59,7 +59,7 @@ export const SpacePanda: React.FC<SpacePandaProps> = ({ action }) => {
     right: { rotate: [-25, 0, 25, 0, -25], y: [0, -6, 0, 0, 0], transition: walkTransition },
   };
 
-  const headVariant = {
+  const headVariant: any = {
     idle: { rotate: [0, -2, 0, 2, 0], transition: { repeat: Infinity, duration: 6, ease: "easeInOut" } },
     jump: { rotate: 0 },
     sleep: { rotate: 15, y: 3 },
@@ -68,7 +68,7 @@ export const SpacePanda: React.FC<SpacePandaProps> = ({ action }) => {
     right: { rotate: [0, 2, 0, 2, 0], y: [0, 1, 0, 1, 0], transition: walkTransition },
   };
 
-  const eyeVariant = {
+  const eyeVariant: any = {
     sleep: { scaleY: 0.1 },
     idle: { scaleY: 1 },
     hello: { scaleY: 1 },

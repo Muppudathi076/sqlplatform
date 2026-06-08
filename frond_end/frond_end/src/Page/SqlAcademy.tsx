@@ -53,7 +53,7 @@ export default function SqlAcademy() {
   const explainQuery = (query: string) => {
     const explanations: any[] = [];
     const q = query.toUpperCase();
-    
+
     if (q.includes("SELECT")) explanations.push({ keyword: "SELECT", desc: "Gets the data you want to view." });
     if (q.includes("*")) explanations.push({ keyword: "*", desc: "Means 'Everything' (all columns)." });
     if (q.includes("FROM")) explanations.push({ keyword: "FROM", desc: "Specifies which table to get the data from." });
@@ -65,7 +65,7 @@ export default function SqlAcademy() {
     if (q.includes("COUNT")) explanations.push({ keyword: "COUNT", desc: "Counts the total number of items." });
     if (q.includes("JOIN")) explanations.push({ keyword: "JOIN", desc: "Combines data from multiple tables." });
     if (q.includes("GROUP BY")) explanations.push({ keyword: "GROUP BY", desc: "Groups rows that have the same values." });
-    
+
     if (explanations.length === 0) explanations.push({ keyword: "QUERY", desc: "Executes the SQL command." });
     return explanations;
   };
@@ -111,7 +111,7 @@ export default function SqlAcademy() {
   };
 
   return (
-    <div className="h-[90vh] flex flex-col md:flex-row bg-slate-50 dark:bg-black p-4 gap-6 overflow-hidden relative">
+    <div className="min-h-[90vh] h-auto md:h-[90vh] flex flex-col md:flex-row bg-slate-50 dark:bg-black p-4 gap-6 overflow-y-auto md:overflow-hidden relative">
       {showConfetti && <Confetti recycle={false} numberOfPieces={300} />}
 
       {/* Left Panel: Story & Instructions */}
@@ -123,8 +123,8 @@ export default function SqlAcademy() {
           </h2>
           <p className="text-purple-100 text-sm mt-1 opacity-90">Start your SQL journey here</p>
         </div>
-        
-        <div className="flex-1 overflow-y-auto p-6 flex flex-col justify-between scrollbar-hide">
+
+        <div className="flex-1 overflow-y-auto p-6 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-4">
               <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-xs font-bold rounded-full uppercase tracking-wider">
@@ -135,7 +135,7 @@ export default function SqlAcademy() {
             <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line leading-relaxed text-lg font-medium">
               {mission.instruction}
             </p>
-            
+
             {showResult ? (
               <div className="mt-8 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/50 rounded-xl animate-fade-in-up">
                 <p className="text-sm font-bold text-green-700 dark:text-green-500 mb-3 flex items-center gap-2">
@@ -165,10 +165,10 @@ export default function SqlAcademy() {
               </div>
             )}
           </div>
-          
+
           <div className="mt-6">
             <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2">
-              <div 
+              <div
                 className="bg-purple-600 h-2 rounded-full transition-all duration-500"
                 style={{ width: `${((currentLevel) / missions.length) * 100}%` }}
               ></div>
@@ -179,14 +179,14 @@ export default function SqlAcademy() {
 
       {/* Right Panel: Data & Terminal */}
       <div className="flex-1 flex flex-col gap-6 min-h-0">
-        
+
         {/* Top Right: Visual Table */}
-        <div className="h-1/2 rounded-2xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-black shadow-sm overflow-hidden flex flex-col relative">
+        <div className="order-2 md:order-1 min-h-[280px] md:min-h-0 md:h-1/2 rounded-2xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-black shadow-sm overflow-hidden flex flex-col relative">
           <div className="p-4 border-b border-slate-100 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-900/30 flex items-center gap-2">
             <Database size={20} className="text-blue-500" />
             <h3 className="font-bold text-gray-700 dark:text-gray-300">Database View</h3>
           </div>
-          
+
           <div className="flex-1 overflow-auto p-4 bg-white dark:bg-black/50">
             {showResult ? (
               <div className="animate-fade-in-up">
@@ -223,7 +223,7 @@ export default function SqlAcademy() {
         </div>
 
         {/* Bottom Right: Code Editor */}
-        <div className="flex-1 rounded-2xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-gray-900 shadow-sm overflow-hidden flex flex-col">
+        <div className="order-1 md:order-2 flex-1 min-h-[350px] md:min-h-0 rounded-2xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-gray-900 shadow-sm overflow-hidden flex flex-col">
           <div className="p-3 border-b border-slate-200 dark:border-gray-800 bg-slate-100 dark:bg-black flex items-center justify-between">
             <div className="flex gap-2">
               <div className="w-3 h-3 rounded-full bg-red-500"></div>
@@ -232,16 +232,16 @@ export default function SqlAcademy() {
             </div>
             <span className="text-gray-500 text-sm font-mono">SQL Terminal</span>
           </div>
-          
+
           <div className="flex-1 p-4 flex flex-col relative">
-            <textarea 
+            <textarea
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="w-full flex-1 bg-transparent text-green-700 dark:text-green-400 font-mono text-xl md:text-2xl outline-none resize-none placeholder-slate-300 dark:placeholder-gray-700 p-2"
               placeholder="Type your SQL spell here..."
               spellCheck="false"
             />
-            
+
             {errorMsg && (
               <div className="absolute bottom-20 left-4 right-4 bg-red-500/10 border border-red-500/30 text-red-400 p-3 rounded-lg text-sm font-medium animate-pulse">
                 {errorMsg}
@@ -259,13 +259,13 @@ export default function SqlAcademy() {
                     Next Mission <ArrowRight size={18} />
                   </button>
                 ) : (
-                  <span className="px-4 py-2 bg-purple-600 text-white rounded-lg font-bold">Academy Completed! 🎉</span>
+                  <span className="px-4 py-2 bg-purple-600 text-white rounded-lg font-bold">Academy Completed! </span>
                 )}
               </div>
             )}
 
             <div className="mt-4 flex justify-end">
-              <button 
+              <button
                 onClick={handleRunQuery}
                 disabled={showResult && currentLevel === missions.length - 1}
                 className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50"
@@ -277,7 +277,7 @@ export default function SqlAcademy() {
         </div>
 
       </div>
-      
+
       <style>{`
         @keyframes fade-in-up {
           0% { opacity: 0; transform: translateY(10px); }

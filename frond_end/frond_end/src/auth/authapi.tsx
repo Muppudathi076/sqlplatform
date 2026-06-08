@@ -48,7 +48,6 @@ export const UserGetApi = async(token:string)=>{
     return response.data
 }
 
-
 export const questionapiApi = async (id:number,token:string) => {
   const response = await axiosInstance.get(`/questions/${id}/`, {
         headers:{
@@ -84,6 +83,21 @@ export const submitModelResultsApi = async (modelId: number, results: any[], tok
   })
   return response.data
 }
+
+export const singleQuestionProgressApi = async (questionId: number,isCorrect: boolean,token: string) => {
+  const response = await axiosInstance.post(`/model/question-progress/`,
+    {
+      questionId,
+      isCorrect,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
 
 export const updateProfileApi = async (
   data: { name?: string; email?: string; password?: string; age?: number },

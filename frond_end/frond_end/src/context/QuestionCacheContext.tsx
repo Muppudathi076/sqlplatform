@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useCallback, useRef, useEffect, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { submitModelResultsApi } from "../auth/authapi";
+import { submitModelResultsApi,singleQuestionProgressApi } from "../auth/authapi";
 
 const routeMap: Record<string, string> = {
   "choose the best answer": "/api/modal/choose/answer",
@@ -76,14 +76,27 @@ export function QuestionCacheProvider({ children }: { children: ReactNode }) {
     stateRef.current = { questions, currentIndex, completedQuestions, score, totalScore, modelId };
   }, [questions, currentIndex, completedQuestions, score, totalScore, modelId]);
 
-  const setAllQuestions = useCallback((qs: Question[], mId: string) => {
-    setQuestions(qs);
-    setModelId(mId);
-    setCurrentIndex(0);
-    setCompletedQuestions([]);
-    setScore(0);
-    setHearts(5);
-  }, []);
+const setAllQuestions = (
+  questions: Question[],
+  modelId: string
+) => {
+  setQuestions(questions);
+  setCurrentIndex(0);
+  setCompletedQuestions([]);
+
+  setScore(0);
+  setTotalScore(0);
+  setHearts(5);
+
+  stateRef.current = {
+    questions,
+    currentIndex: 0,
+    completedQuestions: [],
+    score: 0,
+    totalScore: 0,
+    modelId,
+  };
+};
 
   const getCurrentQuestion = useCallback((): Question | null => {
     if (currentIndex < questions.length) {
@@ -96,46 +109,90 @@ export function QuestionCacheProvider({ children }: { children: ReactNode }) {
     return currentIndex >= questions.length && questions.length > 0;
   }, [currentIndex, questions.length]);
 
-  const markComplete = useCallback((userAnswer: string) => {
-    const currentQ = stateRef.current.questions[stateRef.current.currentIndex];
-    if (!currentQ) return;
+const markComplete = useCallback(async (userAnswer: string) => {
+  const currentQ =
+    stateRef.current.questions[stateRef.current.currentIndex];
 
-    const isCorrect =
-      userAnswer.trim().toLowerCase() === currentQ.answer.trim().toLowerCase();
+  if (!currentQ) return;
 
-    const newIndex = stateRef.current.currentIndex + 1;
-    const newCompleted = [
-      ...stateRef.current.completedQuestions,
-      { questionId: currentQ.id, userAnswer, isCorrect, questionDetail: currentQ },
-    ];
+  const isCorrect =
+    userAnswer.trim().toLowerCase() ===
+    currentQ.answer.trim().toLowerCase();
 
-    if (isCorrect) {
-      const scorePerQuestion = Math.round(100 / stateRef.current.questions.length);
-      const newScore = Math.min(stateRef.current.score + scorePerQuestion, 100);
-      const newTotalScore = stateRef.current.totalScore + scorePerQuestion;
-      setScore(newScore);
-      setTotalScore(newTotalScore);
-      stateRef.current = {
-        ...stateRef.current,
-        score: newScore,
-        totalScore: newTotalScore,
-        completedQuestions: newCompleted,
-        currentIndex: newIndex,
-      };
-    } else {
-      const newHearts = Math.max(hearts - 1, 0);
-      setHearts(newHearts);
-      stateRef.current = {
-        ...stateRef.current,
-        completedQuestions: newCompleted,
-        currentIndex: newIndex,
-      };
+  if (isCorrect) {
+    try {
+      const token = localStorage.getItem("access_token") || "";
+
+      await singleQuestionProgressApi(
+        currentQ.id,
+        true,
+        token
+      );
+    } catch (err) {
+      console.error("Question save failed", err);
+
+      toast.error(
+        "Failed to save question progress."
+      );
     }
+  }
 
-    // Always advance index and record answer
-    setCompletedQuestions(newCompleted);
-    setCurrentIndex(newIndex);
-  }, [hearts]);
+  const newIndex = stateRef.current.currentIndex + 1;
+
+  const newCompleted = [
+    ...stateRef.current.completedQuestions,
+    {
+      questionId: currentQ.id,
+      userAnswer,
+      isCorrect,
+      questionDetail: currentQ,
+    },
+  ];
+
+if (isCorrect) {
+  const correctCount = newCompleted.filter(
+    (q) => q.isCorrect
+  ).length;
+
+  const newScore = Math.round(
+    (correctCount / stateRef.current.questions.length) * 100
+  );
+
+  const newTotalScore = newScore;
+
+  setScore(newScore);
+  setTotalScore(newTotalScore);
+
+  stateRef.current = {
+    ...stateRef.current,
+    score: newScore,
+    totalScore: newTotalScore,
+    completedQuestions: newCompleted,
+    currentIndex: newIndex,
+  };
+} else {
+  const newHearts = Math.max(hearts - 1, 0);
+
+  setHearts(newHearts);
+
+  stateRef.current = {
+    ...stateRef.current,
+    completedQuestions: newCompleted,
+    currentIndex: newIndex,
+  };
+}
+
+  // 4. UPDATE CACHE
+  setCompletedQuestions(newCompleted);
+  setCurrentIndex(newIndex);
+  console.log({
+    currentIndex: stateRef.current.currentIndex,
+    // scorePerQuestion,
+    oldTotalScore: stateRef.current.totalScore,
+    // newTotalScore,
+  });
+  console.log("ScoreBar score =", score);
+}, [hearts]);
 
   const navigateToNextQuestion = useCallback(async () => {
     const { questions, currentIndex, completedQuestions, score, modelId } = stateRef.current;

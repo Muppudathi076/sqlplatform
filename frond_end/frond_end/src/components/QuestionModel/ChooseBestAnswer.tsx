@@ -2,7 +2,7 @@ import { useState } from "react";
 import { X, Brain, CheckCircle2, XCircle, SkipForward, ArrowRight } from "lucide-react";
 import ScoreBar from "../ReusableComponents/ScoreBar";
 import { useQuestionCache } from "../../context/QuestionCacheContext";
-
+// import { FaArrowLeft } from "react-icons/fa";
 const OPTION_LABELS = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
 const OPTION_ACCENTS = [
@@ -38,12 +38,12 @@ function ChooseBestAnswer() {
     questions,
     saveAndExit,
   } = useQuestionCache();
-
+  console.log("totalScore from context =", totalScore);
+  console.log("Passing score:", totalScore);
   const questionData = getCurrentQuestion();
   const [selectedOption, setSelectedOption] = useState("");
   const [checkState, setCheckState] = useState<CheckState>("idle");
 
-  // ─── Loading ───────────────────────────────────────────────────────────────
   if (!questionData) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-[#0d0d1a]">
@@ -61,34 +61,51 @@ function ChooseBestAnswer() {
     );
   }
 
-  // ─── Parse options ─────────────────────────────────────────────────────────
-  let parsedOptions: string[] = [];
-  if (Array.isArray(questionData.option)) {
-    parsedOptions = questionData.option.map((o: string) => String(o).trim());
-  } else if (typeof questionData.option === "string") {
-    try {
-      const parsed = JSON.parse(questionData.option);
-      parsedOptions = Array.isArray(parsed)
-        ? parsed.map((o: string) => String(o).trim())
-        : questionData.option.split(",").map((o: string) => o.trim());
-    } catch {
-      parsedOptions = questionData.option
-        .split(",")
-        .map((opt: string) => opt.replace(/^\[\"?|\"?\]$/g, "").replace(/(^\"|\"$)/g, "").trim());
+let parsedOptions: string[] = [];
+
+if (Array.isArray(questionData.option)) {
+  parsedOptions = questionData.option.map((o: string) =>
+    String(o).trim()
+  );
+} else if (typeof questionData.option === "string") {
+  try {
+    const parsed = JSON.parse(questionData.option);
+
+    if (Array.isArray(parsed)) {
+      parsedOptions = parsed.map((o: string) =>
+        String(o).trim()
+      );
     }
+} catch {
+  if (questionData.option.includes("|||")) {
+    parsedOptions = questionData.option
+      .split("|||")
+      .map((o: string) => o.trim())
+      .filter(Boolean);
+  } else if (questionData.option.includes("SELECT")) {
+    parsedOptions = questionData.option
+      .split(/,(?=SELECT)/g)
+      .map((o: string) => o.trim())
+      .filter(Boolean);
+  } else {
+    parsedOptions = questionData.option
+      .split(",")
+      .map((o: string) => o.trim())
+      .filter(Boolean);
   }
+}
+}
   const options = deduplicateOptions(parsedOptions);
   const correctAnswer = questionData.answer.trim().toLowerCase();
 
-  // ─── Handlers ─────────────────────────────────────────────────────────────
   const handleCheck = () => {
     if (!selectedOption) return;
     const isCorrect = selectedOption.trim().toLowerCase() === correctAnswer;
     setCheckState(isCorrect ? "correct" : "wrong");
   };
 
-  const handleNext = () => {
-    markComplete(selectedOption);
+  const handleNext = async () => {
+    await markComplete(selectedOption);
     setCheckState("idle");
     setSelectedOption("");
     navigateToNextQuestion();
@@ -103,13 +120,11 @@ function ChooseBestAnswer() {
 
   const isAnswered = checkState !== "idle";
 
-  // ─── Option styling ────────────────────────────────────────────────────────
   const getOptionStyle = (opt: string, index: number) => {
     const isSelected = selectedOption === opt;
     const isCorrectOpt = opt.trim().toLowerCase() === correctAnswer;
     const accent = OPTION_ACCENTS[index % OPTION_ACCENTS.length];
 
-    // After checking
     if (checkState === "correct" && isSelected) {
       return {
         border: "1.5px solid #22c55e",
@@ -131,7 +146,6 @@ function ChooseBestAnswer() {
       };
     }
     if (checkState === "wrong" && !isSelected && isCorrectOpt) {
-      // Highlight correct answer when user was wrong
       return {
         border: "1.5px solid #22c55e",
         background: "rgba(34,197,94,0.10)",
@@ -141,7 +155,6 @@ function ChooseBestAnswer() {
         icon: <CheckCircle2 size={22} color="#22c55e" />,
       };
     }
-    // Default / selected idle
     if (isSelected) {
       return {
         border: `1.5px solid ${accent.border}`,
@@ -166,10 +179,8 @@ function ChooseBestAnswer() {
     };
   };
 
-  // ─── Render ────────────────────────────────────────────────────────────────
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-gray-50 dark:bg-[#0d0d1a] transition-colors duration-300">
-      {/* Ambient glows */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute top-[-100px] left-[-100px] w-[350px] h-[350px] rounded-full opacity-0 dark:opacity-[0.06]"
@@ -182,33 +193,20 @@ function ChooseBestAnswer() {
       </div>
 
       <div className="relative min-h-screen flex flex-col max-w-2xl mx-auto px-4 py-6 gap-6">
-
-        {/* ── Header ── */}
         <div className="flex items-center gap-3">
-          <button
-            onClick={saveAndExit}
-            title="Exit"
-            aria-label="Exit quiz"
-            className="flex-shrink-0 flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-200 hover:scale-110 active:scale-95"
-            style={{
-              background: "linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.08))",
-              border: "1.5px solid rgba(239,68,68,0.45)",
-              boxShadow: "0 2px 8px rgba(239,68,68,0.2)",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background =
-                "linear-gradient(135deg, rgba(239,68,68,0.35), rgba(239,68,68,0.2))";
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 16px rgba(239,68,68,0.4)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background =
-                "linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.08))";
-              (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 2px 8px rgba(239,68,68,0.2)";
-            }}
-          >
-            <X size={18} style={{ color: "#f87171", strokeWidth: 2.5 }} />
-          </button>
-
+<button
+  onClick={saveAndExit}
+  title="Exit"
+  aria-label="Exit quiz"
+  className="flex-shrink-0 flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-200 hover:scale-110 active:scale-95"  // ← removed "text-red"
+  style={{
+    background: "linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.08))",
+    border: "1.5px solid rgba(239,68,68,0.45)",
+    boxShadow: "0 2px 8px rgba(239,68,68,0.2)",
+  }}
+>
+  <X size={18} color="#f87171" strokeWidth={4.5} />
+</button>
           <div className="flex-1 min-w-0">
             <ScoreBar
                 score={totalScore}
@@ -231,7 +229,6 @@ function ChooseBestAnswer() {
           </div>
         </div>
 
-        {/* ── Question card ── */}
         <div
           className="rounded-2xl p-5 sm:p-7"
           style={{
@@ -252,7 +249,6 @@ function ChooseBestAnswer() {
           </h2>
         </div>
 
-        {/* ── Options ── */}
         <div className="flex flex-col gap-3">
           {options.map((opt: string, index: number) => {
             const style = getOptionStyle(opt, index);
@@ -271,13 +267,11 @@ function ChooseBestAnswer() {
                   backdropFilter: "blur(10px)",
                 }}
               >
-                {/* Left accent strip */}
                 <div
                   className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full transition-all duration-300"
                   style={{ background: style.accentLine }}
                 />
 
-                {/* Letter label */}
                 <span
                   className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white transition-all duration-300"
                   style={{
@@ -289,19 +283,16 @@ function ChooseBestAnswer() {
                   {OPTION_LABELS[index] ?? index + 1}
                 </span>
 
-                {/* Option text */}
                 <span className="flex-1 text-sm sm:text-base font-medium text-gray-700 dark:text-white/85 leading-snug">
                   {opt}
                 </span>
 
-                {/* Right icon */}
                 <span className="flex-shrink-0">{style.icon}</span>
               </button>
             );
           })}
         </div>
 
-        {/* ── Feedback Banner ── */}
         {isAnswered && (
           <div
             className="rounded-2xl px-5 py-4 flex items-start gap-3 transition-all duration-300"
@@ -329,7 +320,7 @@ function ChooseBestAnswer() {
                 className="font-bold text-sm"
                 style={{ color: checkState === "correct" ? "#22c55e" : "#ef4444" }}
               >
-                {checkState === "correct" ? "Excellent! That's correct! 🎉" : "Oops! That's wrong."}
+                {checkState === "correct" ? "Excellent! That's correct! " : "Oops! That's wrong."}
               </p>
               {checkState === "wrong" && (
                 <p className="text-sm text-gray-400 dark:text-white/60">
@@ -341,10 +332,7 @@ function ChooseBestAnswer() {
           </div>
         )}
 
-        {/* ── Bottom actions ── */}
         <div className="flex items-center justify-between gap-4 pt-1 pb-6">
-
-          {/* Skip — only visible before answering */}
           {!isAnswered ? (
             <button
               onClick={handleSkip}
@@ -359,10 +347,9 @@ function ChooseBestAnswer() {
               Skip
             </button>
           ) : (
-            <div /> /* spacer */
+            <div /> 
           )}
 
-          {/* Check / Next */}
           {!isAnswered ? (
             <button
               id="check-answer-btn"

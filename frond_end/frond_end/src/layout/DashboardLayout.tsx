@@ -48,12 +48,12 @@ useEffect(() => {
       | "write"
       | "jump" = "idle";
 
-    let newX = pandaXRef.current;
+    let updatedX = pandaXRef.current;
     const r = Math.random();
 
     if (prevState === "hide") {
       nextAction = "jump";
-      newX = (Math.random() > 0.5 ? 1 : -1) * Math.floor(Math.random() * 60);
+      updatedX = (Math.random() > 0.5 ? 1 : -1) * Math.floor(Math.random() * 60);
     } else {
       if (r < 0.25) nextAction = "left";
       else if (r < 0.5) nextAction = "right";
@@ -82,22 +82,24 @@ useEffect(() => {
 
     if (nextAction === "left" || nextAction === "right") {
       const speed = 40;
-      let newX = pandaXRef.current + (nextAction === "right" ? speed : -speed);
+      updatedX = pandaXRef.current + (nextAction === "right" ? speed : -speed);
 
-      if (newX > 90) {
+      if (updatedX > 90) {
         nextAction = "left";
-        newX = 90 - speed;
+        updatedX = 90 - speed;
         setPandaDirection(-1);
-      } else if (newX < -90) {
+      } else if (updatedX < -90) {
         nextAction = "right";
-        newX = -90 + speed;
+        updatedX = -90 + speed;
         setPandaDirection(1);
       } else {
         setPandaDirection(nextAction === "right" ? 1 : -1);
       }
+    }
 
-      pandaXRef.current = newX;
-      setPandaX(newX);
+    if (updatedX !== pandaXRef.current) {
+      pandaXRef.current = updatedX;
+      setPandaX(updatedX);
     }
 
     setCartoonState(nextAction);
@@ -226,6 +228,8 @@ useEffect(() => {
     { name: "Dashboard", path: "admin/dashboard", icon: LayoutDashboard },
     { name: "User List", path: "admin/userlist", icon: Users },
     { name: "Models", path: "admin/modalpage", icon: Boxes },
+    { name: "SQL Dictionary", path: "admin/dictionary", icon: BookOpen },
+    { name: "SQL Academy", path: "admin/academy", icon: Rocket },
     { name: "Rank", path: "admin/rank", icon: Trophy },
   ]
   const userMenu = [

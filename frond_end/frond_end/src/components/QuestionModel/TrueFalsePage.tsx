@@ -17,7 +17,7 @@ export default function TrueFalsePage() {
     questions,
     saveAndExit,
   } = useQuestionCache();
-
+console.log("Passing score:", totalScore);
   const questionData = getCurrentQuestion();
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [checkingState, setCheckingState] = useState<CheckState>("idle");
@@ -55,8 +55,8 @@ export default function TrueFalsePage() {
     setCheckingState(isCorrect ? "correct" : "wrong");
   };
 
-  const handleNext = () => {
-    markComplete(selectedOption);
+  const handleNext = async () => {
+    await markComplete(selectedOption);
     setCheckingState("idle");
     setSelectedOption("");
     navigateToNextQuestion();
@@ -324,7 +324,7 @@ export default function TrueFalsePage() {
             }
             <div className="flex flex-col gap-0.5">
               <p className="font-bold text-sm" style={{ color: checkingState === "correct" ? "#22c55e" : "#ef4444" }}>
-                {checkingState === "correct" ? "Excellent! That's correct! 🎉" : "Oops! That's wrong."}
+                {checkingState === "correct" ? "Excellent! That's correct! " : "Oops! That's wrong."}
               </p>
               {checkingState === "wrong" && (
                 <p className="text-sm text-white/60">
@@ -341,7 +341,7 @@ export default function TrueFalsePage() {
             <button
               onClick={handleSkip}
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-white/10
-                text-white/40 hover:text-white/60 hover:bg-white/5 transition-all"
+                text-white/40 hover:text-white/60 hover:bg-white/5 transition-all bg-transparent"
             >
               <SkipForward size={15} /> Skip
             </button>

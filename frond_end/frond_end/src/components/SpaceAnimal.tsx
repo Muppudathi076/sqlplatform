@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, type Transition, type Variants } from 'framer-motion';
 
 interface SpaceAnimalProps {
   action: 'idle' | 'sleep' | 'hello' | 'left' | 'right' | 'jump' | 'hide' | 'read' | 'write';
@@ -19,9 +19,9 @@ export const SpaceAnimal: React.FC<SpaceAnimalProps> = ({ action, animal = 'pand
     rabbit: '🐰'
   };
 
-  const walkTransition = { repeat: Infinity, duration: 1.2, ease: "easeInOut" };
+  const walkTransition: Transition = { repeat: Infinity, duration: 1.2, ease: "easeInOut" };
 
-  const bodyVariant = {
+  const bodyVariant: Variants = {
     idle: { y: [0, -3, 0], transition: { repeat: Infinity, duration: 3, ease: "easeInOut" } },
     jump: { y: [0, -25, 0], transition: { repeat: Infinity, duration: 0.5, ease: "easeOut" } },
     sleep: { rotate: -90, x: -10, y: 15, scaleY: [1, 0.96, 1], transition: { repeat: Infinity, duration: 4, ease: "easeInOut" } },
@@ -32,7 +32,7 @@ export const SpaceAnimal: React.FC<SpaceAnimalProps> = ({ action, animal = 'pand
     write: { y: [0, -1, 0], transition: { repeat: Infinity, duration: 3, ease: "easeInOut" } },
   };
 
-  const leftArmVariant = {
+  const leftArmVariant: Variants = {
     idle: { rotate: [0, 5, 0], transition: { repeat: Infinity, duration: 4, ease: "easeInOut" } },
     jump: { rotate: -150, y: -5 },
     sleep: { rotate: 20 },
@@ -43,7 +43,7 @@ export const SpaceAnimal: React.FC<SpaceAnimalProps> = ({ action, animal = 'pand
     write: { rotate: -20, y: -2, transition: { duration: 0.5 } },
   };
 
-  const rightArmVariant = {
+  const rightArmVariant: Variants = {
     idle: { rotate: [0, -5, 0], transition: { repeat: Infinity, duration: 4, ease: "easeInOut" } },
     jump: { rotate: 150, y: -5 },
     sleep: { rotate: -20 },
@@ -54,7 +54,7 @@ export const SpaceAnimal: React.FC<SpaceAnimalProps> = ({ action, animal = 'pand
     write: { rotate: [25, 45, 25, 50, 25], transition: { repeat: Infinity, duration: 1.5, ease: "easeInOut" } },
   };
 
-  const leftLegVariant = {
+  const leftLegVariant: Variants = {
     idle: { rotate: 0 },
     jump: { rotate: -20 },
     sleep: { rotate: 0 },
@@ -64,7 +64,7 @@ export const SpaceAnimal: React.FC<SpaceAnimalProps> = ({ action, animal = 'pand
     right: { rotate: [25, 0, -25, 0, 25], y: [0, 0, 0, -6, 0], transition: walkTransition },
   };
 
-  const rightLegVariant = {
+  const rightLegVariant: Variants = {
     idle: { rotate: 0 },
     jump: { rotate: 20 },
     sleep: { rotate: 0 },
@@ -74,7 +74,7 @@ export const SpaceAnimal: React.FC<SpaceAnimalProps> = ({ action, animal = 'pand
     right: { rotate: [-25, 0, 25, 0, -25], y: [0, -6, 0, 0, 0], transition: walkTransition },
   };
 
-  const headVariant = {
+  const headVariant: Variants = {
     idle: { rotate: [0, -2, 0, 2, 0], transition: { repeat: Infinity, duration: 6, ease: "easeInOut" } },
     jump: { rotate: 0 },
     sleep: { rotate: 15, y: 3 },

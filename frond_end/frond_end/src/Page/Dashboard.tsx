@@ -54,8 +54,6 @@ function LoadingOrbs() {
   );
 }
 
-
-
 function Dashboard() {
   const navigate = useNavigate()
   const [cards, setCards] = useState<any>(null)
@@ -223,12 +221,12 @@ function Dashboard() {
 
                       {isNext && (
                         <div className="absolute -top-4 -right-4 bg-yellow-400 text-black text-[10px] font-black px-2 py-1 rounded-full shadow-lg z-30 animate-bounce">
-                          🔓 NEXT
+                           NEXT
                         </div>
                       )}
                       {isCompleted && (
                         <div className="absolute -top-2 -right-2 bg-gray-500 text-white text-[10px] font-black px-2 py-1 rounded-full shadow-lg z-30">
-                          ✓ DONE
+                           DONE
                         </div>
                       )}
                     </div>

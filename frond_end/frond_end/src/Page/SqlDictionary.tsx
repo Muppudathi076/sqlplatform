@@ -36,7 +36,7 @@ export default function SqlDictionary() {
   const handleAnswer = (selectedOption: string) => {
     const currentQ = activeItem.questions[currentQuestionIndex]
     if (selectedOption === currentQ.answer) {
-      toast.success("Correct Answer! 🎉", { duration: 1500 })
+      toast.success("Correct Answer!", { duration: 1500 })
       setScore(s => s + 1)
     } else {
       toast.error(`Wrong! Correct answer: ${currentQ.answer}`, { duration: 2500 })
@@ -94,7 +94,7 @@ export default function SqlDictionary() {
           <p className="text-blue-100 text-sm mt-1 opacity-90 hidden md:block">Master the magic spells of Data</p>
         </div>
         
-        <div className="flex flex-row overflow-x-auto md:flex-col md:overflow-y-auto p-3 gap-3 md:gap-0 md:space-y-2 scrollbar-hide">
+        <div className="flex flex-row overflow-x-auto md:flex-col md:overflow-y-auto p-3 gap-3 md:gap-0 md:space-y-2 pb-4">
           {dictionary.map((item, idx) => {
             const ItemIcon = item.icon && IconMap[item.icon] ? IconMap[item.icon] : BookOpen
             const isActive = activeItem?.keyword === item.keyword
@@ -102,7 +102,7 @@ export default function SqlDictionary() {
               <button
                 key={idx}
                 onClick={() => setActiveItem(item)}
-                className={`w-[240px] md:w-full shrink-0 text-left flex items-center gap-3 p-3 rounded-xl transition-all duration-300 ${isActive ? 'bg-blue-100 dark:bg-blue-900/40 border border-blue-500 shadow-md scale-[1.02] md:scale-[1.02]' : 'bg-white dark:bg-black border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-500 md:hover:-translate-y-1'}`}
+                className={`w-fit min-w-[200px] max-w-[280px] md:w-full md:max-w-none shrink-0 text-left flex items-center gap-3 p-3 rounded-xl transition-all duration-300 ${isActive ? 'bg-blue-100 dark:bg-blue-900/40 border border-blue-500 shadow-md scale-[1.02] md:scale-[1.02]' : 'bg-white dark:bg-black border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-500 md:hover:-translate-y-1'}`}
               >
                 <div className={`p-2 rounded-lg bg-gradient-to-br ${item.color || 'from-gray-400 to-gray-600'} text-white`}>
                   <ItemIcon size={18} />
@@ -118,7 +118,7 @@ export default function SqlDictionary() {
       </div>
 
       {/* Right Content Area */}
-      <div className="flex-1 min-h-0 overflow-y-auto rounded-2xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-zinc-900/30 p-6 md:p-10 relative shadow-sm scrollbar-hide">
+      <div className="flex-1 min-h-0 overflow-y-auto rounded-2xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-zinc-900/30 p-6 md:p-10 relative shadow-sm">
         <div key={activeItem?.keyword} className="animate-fade-in-up pb-10">
           
           <div className="flex items-start gap-6 mb-8">

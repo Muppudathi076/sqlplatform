@@ -117,7 +117,7 @@ function ModelsPage() {
 
   const handlePlay = (levelId: number, isCompleted: boolean) => {
     if (isCompleted) {
-      toast.success("You've already conquered this level! 🎉", { icon: "✅" })
+      toast.success("You've already conquered this level! ", { icon: "" })
       return
     }
     navigate(`/api/modal/${levelId}`)
