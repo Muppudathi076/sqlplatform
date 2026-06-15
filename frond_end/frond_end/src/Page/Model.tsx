@@ -73,7 +73,7 @@ function ErrorPage({ errorMessage, onRetry }: { errorMessage: string; onRetry: (
 
         {/* Friendly Message */}
         <p className="text-gray-400 text-sm mb-8 leading-relaxed">
-          We couldn't load the questions for this level. This might be a server issue or network problem. Please try again! 🔄
+          We couldn't load the questions for this level. This might be a server issue or network problem. Please try again!
         </p>
 
         {/* Action Buttons */}

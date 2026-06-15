@@ -1,5 +1,5 @@
 import { useState,useEffect } from "react"
-import { Pencil } from "lucide-react"
+import { Pencil, User } from "lucide-react"
 import { UpdatedPasswordApi, UserGetApi } from "../auth/authapi"
 import toast from "react-hot-toast"
 
@@ -80,11 +80,9 @@ useEffect(()=>{
     </div>
 
     <div className="flex justify-center mb-5">
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-        alt="profile"
-        className="w-24 h-24 rounded-full border-4 border-white dark:border-gray-700 shadow-lg hover:shadow-blue-400"
-      />
+      <div className="w-24 h-24 rounded-full border-4 border-white dark:border-gray-700 shadow-lg hover:shadow-blue-400 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+        <User size={48} className="text-gray-400 dark:text-gray-500" />
+      </div>
     </div>
 
     <h2 className="text-2xl font-bold text-center mb-4 text-black dark:text-white">

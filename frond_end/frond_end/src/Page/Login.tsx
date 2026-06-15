@@ -172,16 +172,26 @@ function Login() {
     setIsLoading(true)
     try {
       const response = await loginApi(email, password)
-      console.log("role:", response.role)
-      if (response.role === "admin") {
-        navigate("/api/admin/dashboard")
-      } else if (response.role === "user") {
-        navigate("/api/dashboard")
-      }
+      console.log("role:", response)
+      console.log("access_token", response.access)
       localStorage.setItem("access_token", response.access)
       localStorage.setItem("user", response.name)
-      localStorage.setItem("email", response.admin_name)
+      localStorage.setItem("email", response.email)
       localStorage.setItem("role", response.role)
+      if (response.role === "admin") {
+        console.log(localStorage.getItem("access_token"))
+        navigate("/api/admin/dashboard")
+        console.log("role:", "/api/admin/dashboard")
+      } else if (response.role === "user") {
+        console.log(localStorage.getItem("access_token"))
+        // Check if the user needs to take the assessment
+        if (response.assessment_completed === false) {
+          navigate("/api/assessment")
+        } else {
+          navigate("/api/dashboard")
+        }
+        console.log("role:", "user")
+      }
       toast.success("login success", { duration: 2000 })
     } catch (e) {
       console.log("erorrs :", e)

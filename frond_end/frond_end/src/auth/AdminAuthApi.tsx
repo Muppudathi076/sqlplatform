@@ -196,3 +196,10 @@ export const generateAiAcademyApi = async (token: string, count: number) => {
   })
   return response.data
 }
+
+export const getAdminAiInsightsApi = async (token: string) => {
+  const response = await axiosInstance.get("admins/ai/insights/", {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+  return response.data
+}

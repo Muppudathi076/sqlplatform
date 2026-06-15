@@ -2,19 +2,21 @@ import re
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 from .models import Login
+from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import AccessToken,RefreshToken
 from datetime import timedelta
 import jwt
 from datetime import datetime, timedelta
 
-SECRET_KEY = "5467365"
+SECRET_KEY = "5467365_sql_platform_admin_secret_key_32bytes"
 
 def generate_custom_access_token(user):
+    
     payload = {
         "user_id": user.id,
-        "email": user.Email,
-        "role": user.role,
-        "name": user.Name,
+        "email": getattr(user, "Email", None) or getattr(user, "email", ""),
+        "role": getattr(user, "role", "admin"),
+        "name": getattr(user, "Name", None) or getattr(user, "username", ""),
         "exp": datetime.utcnow() + timedelta(hours=2),
         "iat": datetime.utcnow(),
     }
@@ -53,6 +55,19 @@ class CustomJWTAuthentication(BaseAuthentication):
         except jwt.InvalidTokenError:
             raise AuthenticationFailed("Invalid token")
 
+        role = payload.get('role', 'user')
+
+        # Admin users are stored in Django's built-in User table
+        if role == 'admin':
+            try:
+                user = User.objects.get(id=payload['user_id'])
+                # Attach role & is_authenticated for permission checks
+                user.role = 'admin'
+                return (user, None)
+            except User.DoesNotExist:
+                raise AuthenticationFailed("Admin user not found")
+
+        # Normal users are stored in the custom Login table
         try:
             user = Login.objects.get(id=payload['user_id'])
         except Login.DoesNotExist:

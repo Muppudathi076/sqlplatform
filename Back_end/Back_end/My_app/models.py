@@ -12,6 +12,14 @@ class Login(models.Model): ## for register
     date_joined = models.DateTimeField(default=timezone_now)
     age = models.IntegerField(null=True, blank=True)
     sql_academy_level = models.IntegerField(default=0)
+    # Assessment fields
+    assessment_completed = models.BooleanField(default=False)
+    assessment_level = models.CharField(
+        max_length=20,
+        choices=[('beginner','Beginner'),('intermediate','Intermediate'),('expert','Expert')],
+        null=True, blank=True
+    )
+    assessment_score = models.IntegerField(default=0)
     @property
     def is_authenticated(self):
         return True

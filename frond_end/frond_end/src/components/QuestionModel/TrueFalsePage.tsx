@@ -204,9 +204,10 @@ console.log("Passing score:", totalScore);
                 transform: selectedOption === "True" ? "scale(1.1)" : "scale(1)",
               }}
             >
-              {trueShowCorrect ? <CheckCircle2 size={32} className="text-green-400" />
+                            {trueShowCorrect ? <CheckCircle2 size={32} className="text-green-400" />
                 : trueShowWrong ? <XCircle size={32} className="text-red-400" />
-                : <span className="text-3xl">✅</span>
+                : <CheckCircle2 size={32} className="text-gray-400" />
+              }
               }
             </div>
 
@@ -273,9 +274,10 @@ console.log("Passing score:", totalScore);
                 transform: selectedOption === "False" ? "scale(1.1)" : "scale(1)",
               }}
             >
-              {falseShowCorrect ? <CheckCircle2 size={32} className="text-green-400" />
+                            {falseShowCorrect ? <CheckCircle2 size={32} className="text-green-400" />
                 : falseShowWrong ? <XCircle size={32} className="text-red-400" />
-                : <span className="text-3xl">❌</span>
+                : <XCircle size={32} className="text-gray-400" />
+              }
               }
             </div>
 

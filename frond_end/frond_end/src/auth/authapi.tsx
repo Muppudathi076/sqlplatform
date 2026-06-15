@@ -137,3 +137,19 @@ export const updateSqlAcademyApi = async (level: number, token: string) => {
   })
   return response.data
 }
+
+export const getAssessmentQuestionsApi = async (token: string) => {
+  const response = await axiosInstance.get("/assessment/questions/", {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return response.data;
+};
+
+export const submitAssessmentApi = async (token: string, answers: Record<string, string>) => {
+  const response = await axiosInstance.post(
+    "/assessment/submit/",
+    { answers },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response.data;
+};

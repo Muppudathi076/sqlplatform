@@ -10,6 +10,24 @@ const axiosInstance = axios.create({
   },
 })
 
+// Attach token to every request automatically (skip public routes)
+const PUBLIC_ROUTES = ["/login/", "/register/"]
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const url = config.url || ""
+    const isPublic = PUBLIC_ROUTES.some((route) => url.includes(route))
+    if (!isPublic) {
+      const token = localStorage.getItem("access_token")
+      if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`
+      }
+    }
+    return config
+  },
+  (error) => Promise.reject(error)
+)
+
 // Global response interceptor
 axiosInstance.interceptors.response.use(
   (response) => {

@@ -64,7 +64,7 @@ function Dashboard() {
   const [isLoading, setIsLoading] = useState(true)
 
   const token = localStorage.getItem("access_token") || ""
-
+  console.log("Dashboard token:")
   const fetching = async () => {
     setIsLoading(true)
     try {
@@ -77,7 +77,9 @@ function Dashboard() {
       setIsLoading(false)
     }
   }
-
+useEffect(() => {
+  console.log("Dashboard Mounted");
+}, []);
   const fallbackTitles = [
     { title: "Pre-A1", subtitle: "Starter" },
     { title: "A1", subtitle: "Beginner" },

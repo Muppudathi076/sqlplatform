@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { X, CheckCircle2, XCircle, MousePointerClick, Undo2, ArrowRight, Trash2, SkipForward } from "lucide-react";
+import { X, CheckCircle2, XCircle, MousePointerClick, Undo2, ArrowRight, Trash2, SkipForward, GripVertical } from "lucide-react";
+import { Reorder, motion } from "framer-motion";
 import ScoreBar from "../ReusableComponents/ScoreBar";
 import { useQuestionCache } from "../../context/QuestionCacheContext";
 
@@ -182,7 +183,18 @@ export default function DragAndDropPage() {
           </div>
 
           <div
-            className="min-h-[80px] rounded-2xl p-4 flex flex-wrap gap-2 items-center transition-all duration-300"
+            onDragOver={(e) => {
+              if (!isAnswered) e.preventDefault();
+            }}
+            onDrop={(e) => {
+              if (isAnswered) return;
+              e.preventDefault();
+              const item = e.dataTransfer.getData("text/plain");
+              if (item && !droppedItems.includes(item)) {
+                handleAddItem(item);
+              }
+            }}
+            className="min-h-[100px] rounded-2xl p-4 transition-all duration-300"
             style={{
               background: droppedItems.length > 0
                 ? checkingState === "correct" ? "rgba(34,197,94,0.08)" : checkingState === "wrong" ? "rgba(239,68,68,0.08)" : "rgba(139,92,246,0.06)"
@@ -194,46 +206,64 @@ export default function DragAndDropPage() {
             }}
           >
             {droppedItems.length === 0 ? (
-              <p className="text-white/20 text-sm w-full text-center py-2">
-                Tap the options below to arrange them in correct order
-              </p>
+              <div className="h-full w-full flex items-center justify-center min-h-[60px]">
+                <p className="text-white/20 text-sm text-center">
+                  Drag and drop options here to arrange them in order
+                </p>
+              </div>
             ) : (
-              droppedItems.map((item, i) => (
-                <button
-                  key={`${item}-${i}`}
-                  onClick={() => handleRemoveItem(item)}
-                  disabled={isAnswered}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 disabled:cursor-default group"
-                  style={{
-                    background:
-                      checkingState === "correct" ? "rgba(34,197,94,0.15)"
-                        : checkingState === "wrong" ? "rgba(239,68,68,0.15)"
-                        : "linear-gradient(135deg, rgba(139,92,246,0.2), rgba(168,85,247,0.15))",
-                    border:
-                      checkingState === "correct" ? "1px solid rgba(34,197,94,0.5)"
-                        : checkingState === "wrong" ? "1px solid rgba(239,68,68,0.5)"
-                        : "1px solid rgba(139,92,246,0.35)",
-                    color:
-                      checkingState === "correct" ? "#4ade80"
-                        : checkingState === "wrong" ? "#f87171"
-                        : "#c4b5fd",
-                  }}
-                >
-                  <span className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black"
-                    style={{
-                      background: checkingState === "correct" ? "rgba(34,197,94,0.3)" : checkingState === "wrong" ? "rgba(239,68,68,0.3)" : "rgba(139,92,246,0.3)",
-                    }}
-                  >
-                    {i + 1}
-                  </span>
-                  {item}
-                  {!isAnswered && (
-                    <X size={12} className="opacity-0 group-hover:opacity-70 transition-opacity text-white/50" />
-                  )}
-                  {checkingState === "correct" && <CheckCircle2 size={14} className="text-green-400" />}
-                  {checkingState === "wrong" && i === droppedItems.length - 1 && <XCircle size={14} className="text-red-400" />}
-                </button>
-              ))
+              <Reorder.Group
+                axis="y"
+                values={droppedItems}
+                onReorder={setDroppedItems}
+                className="flex flex-col gap-2 w-full"
+              > {droppedItems.map((item, i) => (
+                    <Reorder.Item
+                      key={item}
+                      value={item}
+                      // Disable dragging when answer is shown
+                      style={{
+                        pointerEvents: isAnswered ? "none" : "auto",
+                        background:
+                          checkingState === "correct" ? "rgba(34,197,94,0.15)"
+                            : checkingState === "wrong" ? "rgba(239,68,68,0.15)"
+                            : "linear-gradient(135deg, rgba(139,92,246,0.2), rgba(168,85,247,0.15))",
+                        border:
+                          checkingState === "correct" ? "1px solid rgba(34,197,94,0.5)"
+                            : checkingState === "wrong" ? "1px solid rgba(239,68,68,0.5)"
+                            : "1px solid rgba(139,92,246,0.35)",
+                        color:
+                          checkingState === "correct" ? "#4ade80"
+                            : checkingState === "wrong" ? "#f87171"
+                            : "#c4b5fd",
+                      }}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-200 group ${!isAnswered ? 'cursor-grab active:cursor-grabbing' : ''}`}
+>                  
+                    {!isAnswered && (
+                      <GripVertical size={16} className="text-white/30 cursor-grab" />
+                    )}
+                    <span className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-black shrink-0"
+                      style={{
+                        background: checkingState === "correct" ? "rgba(34,197,94,0.3)" : checkingState === "wrong" ? "rgba(239,68,68,0.3)" : "rgba(139,92,246,0.3)",
+                      }}
+                    >
+                      {i + 1}
+                    </span>
+                    <span className="flex-1 break-words">{item}</span>
+                    
+                    {!isAnswered && (
+                      <button
+                        onClick={() => handleRemoveItem(item)}
+                        className="p-1 rounded hover:bg-white/10 text-white/50 hover:text-red-400 transition-colors"
+                      >
+                        <X size={16} />
+                      </button>
+                    )}
+                    {checkingState === "correct" && <CheckCircle2 size={18} className="text-green-400 shrink-0" />}
+                    {checkingState === "wrong" && i === droppedItems.length - 1 && <XCircle size={18} className="text-red-400 shrink-0" />}
+                  </Reorder.Item>
+                ))}
+              </Reorder.Group>
             )}
           </div>
         </div>
@@ -256,27 +286,31 @@ export default function DragAndDropPage() {
             {draggableOptions.map((opt, i) => {
               const isUsed = droppedItems.includes(opt);
               return (
-                <button
+                <motion.div
                   key={i}
-                  onClick={() => handleAddItem(opt)}
-                  disabled={isUsed || isAnswered}
-                  className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-all duration-300 transform disabled:cursor-not-allowed"
+                  draggable={!isUsed && !isAnswered}
+                  onDragStart={(e: any) => {
+                    e.dataTransfer.setData("text/plain", opt);
+                    e.dataTransfer.effectAllowed = "copy";
+                  }}
+                  onClick={() => {
+                    if (!isUsed && !isAnswered) handleAddItem(opt);
+                  }}
+                  className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-all duration-300 transform ${isUsed || isAnswered ? 'cursor-not-allowed opacity-30 scale-95' : 'cursor-grab active:cursor-grabbing hover:-translate-y-1'}`}
                   style={{
                     background: isUsed ? "rgba(255,255,255,0.02)" : "linear-gradient(135deg, #8b5cf6, #c084fc)",
                     border: isUsed ? "1px dashed rgba(255,255,255,0.08)" : "1px solid rgba(255,255,255,0.1)",
                     color: isUsed ? "rgba(255,255,255,0.15)" : "#fff",
                     boxShadow: isUsed ? "none" : "0 4px 15px rgba(139,92,246,0.3)",
-                    opacity: isUsed ? 0.3 : 1,
-                    transform: isUsed ? "scale(0.95)" : "scale(1)",
                   }}
                 >
                   {isUsed ? (
                     <CheckCircle2 size={14} className="opacity-30" />
                   ) : (
-                    <span className="w-2 h-2 rounded-full bg-white/40" />
+                    <GripVertical size={14} className="text-white/60" />
                   )}
                   {opt}
-                </button>
+                </motion.div>
               );
             })}
           </div>

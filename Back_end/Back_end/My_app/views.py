@@ -7,7 +7,7 @@ import re
 from rest_framework.decorators import api_view,permission_classes,authentication_classes
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializer import LoginSerializer,RegisterSerializer,UserdetailsSerializer,QuestionProgressSerializer
 from My_admin.serializers import QuestionallSerializer, QuestionSerializer
 from .utils import generate_custom_access_token,CustomJWTAuthentication,validate_query
@@ -17,9 +17,25 @@ from django.db import connection
 from django.utils.timezone import now
 from django.db.models import Count, Sum,Q
 from datetime import datetime, timedelta
-from .ai_question_generator import generate_question_metadata
+from .ai_question_generator import generate_question_metadata, evaluate_assessment_answers, explain_sql_error, chat_with_sql_ai
+
+# ── Static Assessment Questions (10 questions, mixed difficulty) ──
+ASSESSMENT_QUESTIONS = [
+    {"id": 1, "question": "What SQL command is used to retrieve data from a database?", "options": ["SELECT", "GET", "FETCH", "RETRIEVE"], "correct": "SELECT", "difficulty": "beginner", "type": "mcq"},
+    {"id": 2, "question": "Which clause filters rows in a SELECT statement?", "options": ["HAVING", "WHERE", "FILTER", "LIMIT"], "correct": "WHERE", "difficulty": "beginner", "type": "mcq"},
+    {"id": 3, "question": "Which SQL function counts the number of rows?", "options": ["SUM()", "AVG()", "COUNT()", "MAX()"], "correct": "COUNT()", "difficulty": "beginner", "type": "mcq"},
+    {"id": 4, "question": "Write a SQL query to select all columns from a table named 'employees'.", "correct": "SELECT * FROM employees;", "difficulty": "beginner", "type": "query"},
+    {"id": 5, "question": "What does JOIN do in SQL?", "options": ["Combines rows from two or more tables", "Splits a table into parts", "Deletes duplicate rows", "Sorts data alphabetically"], "correct": "Combines rows from two or more tables", "difficulty": "intermediate", "type": "mcq"},
+    {"id": 6, "question": "Which JOIN returns only matching rows from both tables?", "options": ["LEFT JOIN", "RIGHT JOIN", "INNER JOIN", "FULL OUTER JOIN"], "correct": "INNER JOIN", "difficulty": "intermediate", "type": "mcq"},
+    {"id": 7, "question": "Which clause is used with aggregate functions to filter groups?", "options": ["WHERE", "HAVING", "GROUP BY", "ORDER BY"], "correct": "HAVING", "difficulty": "intermediate", "type": "mcq"},
+    {"id": 8, "question": "Write a SQL query to get the average salary grouped by department from table 'employees' (columns: department, salary).", "correct": "SELECT department, AVG(salary) FROM employees GROUP BY department;", "difficulty": "intermediate", "type": "query"},
+    {"id": 9, "question": "What is a subquery in SQL?", "options": ["A query nested inside another query", "A backup of the main query", "A stored procedure call", "A database view"], "correct": "A query nested inside another query", "difficulty": "expert", "type": "mcq"},
+    {"id": 10, "question": "Write a SQL query to find the top 3 highest paid employees from table 'employees' (columns: name, salary).", "correct": "SELECT name, salary FROM employees ORDER BY salary DESC LIMIT 3;", "difficulty": "expert", "type": "query"},
+]
 
 @api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def register_view (requst):
     serizlizer = RegisterSerializer(data = requst.data)
     
@@ -32,24 +48,44 @@ def register_view (requst):
     return Response(serizlizer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def login_view(request):
     serializer = LoginSerializer(data=request.data)
-    # print( SQLQuestion.objects.all())
-    # # print(SQLQuestion.objects.count())
+
     if serializer.is_valid():
-        user = serializer.validated_data
-        user.last_login_time = now()
-        user.save()
-        tokens = generate_custom_access_token(user)
 
-        return Response({
-            "message": "Login success",
-            "access": tokens,
-            "name": user.Name,
-            "admin_name": user.Email,
-            "role": user.role,
-        }, status=200)
+        data = serializer.validated_data
+        user = data["user"]
+        user_type = data["user_type"]
 
+        if user_type == "normal":
+            user.last_login_time = now()
+            user.save()
+            tokens = generate_custom_access_token(user)
+            print("aceesss token valles ",tokens)
+            return Response({
+                "message": "User Login Success",
+                "role": user.role,
+                "name": user.Name,
+                "email": user.Email,
+                "access": tokens,
+                "assessment_completed": getattr(user, 'assessment_completed', False)
+            })
+
+        if user_type == "admin":
+            user.last_login_time = now()
+            user.save()
+            tokens = generate_custom_access_token(user)
+            print("aceesss token valles ",tokens)
+            return Response({
+                "message": "Admin Login Success",
+                "role": "admin",
+                "name": user.username,
+                "email": user.email,
+                "access": tokens,
+            })
+    print(serializer.errors) 
     return Response(serializer.errors, status=400)
 
 @api_view(['POST'])
@@ -59,6 +95,10 @@ def logout_view(request):
     user = request.user
 
     try:
+        # Admin users (Django User model) don't have last_login_time or spend_time
+        if not hasattr(user, 'last_login_time'):
+            return Response({"message": "Admin Logout success"})
+
         if user.last_login_time:
             logout_time = now()
             session_time = logout_time - user.last_login_time
@@ -208,9 +248,12 @@ def answer_checking(request, questionId):
             })
 
     except Exception as e:
+        error_str = str(e)
+        ai_hint = explain_sql_error(query, error_str)
         return Response({
             "success": False,
-            "message": str(e)
+            "message": error_str,
+            "ai_hint": ai_hint
         })
                 
 @api_view(['POST'])
@@ -234,9 +277,12 @@ def run_query(request):
                 })
 
     except Exception as e:
+        error_str = str(e)
+        ai_hint = explain_sql_error(user_query, error_str)
         return Response({
             "status": "error",
-            "message": str(e)
+            "message": error_str,
+            "ai_hint": ai_hint
         })
 
 @api_view(['GET'])
@@ -369,7 +415,12 @@ def user_dashboard(request):
         "weekly_chart": weekly_data,
         "monthly_chart": monthly_data,
         "table": table_data,
-        "pie_chart": pie_chart
+        "pie_chart": pie_chart,
+        "assessment": {
+            "completed": getattr(user, 'assessment_completed', False),
+            "level": getattr(user, 'assessment_level', None),
+            "score": getattr(user, 'assessment_score', 0)
+        }
     })
     
 @api_view(['GET'])
@@ -730,3 +781,86 @@ def update_profile(request):
         return Response({"success": True, "message": "Profile updated successfully"}, status=200)
     except Exception as e:
         return Response({"success": False, "error": str(e)}, status=500)
+
+
+# ═══════════════════════  ASSESSMENT VIEWS  ═══════════════════════
+
+@api_view(['GET'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def get_assessment_questions(request):
+    """Returns assessment questions (without correct answers) for the frontend."""
+    questions_for_frontend = []
+    for q in ASSESSMENT_QUESTIONS:
+        item = {
+            "id": q["id"],
+            "question": q["question"],
+            "difficulty": q["difficulty"],
+            "type": q["type"],
+        }
+        if q["type"] == "mcq":
+            item["options"] = q["options"]
+        questions_for_frontend.append(item)
+    return Response({"success": True, "questions": questions_for_frontend})
+
+
+@api_view(['POST'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def submit_assessment(request):
+    """
+    Accepts user's answers, evaluates via AI, saves level to user profile.
+    Body: { answers: { "1": "SELECT", "2": "WHERE", ... } }
+    """
+    user = request.user
+
+    # Admin users don't need assessment
+    if not hasattr(user, 'assessment_completed'):
+        return Response({"success": False, "message": "Admins do not take assessment"}, status=400)
+
+    answers = request.data.get("answers", {})
+    if not answers:
+        return Response({"success": False, "message": "No answers provided"}, status=400)
+
+    # Build Q&A pairs for AI evaluation
+    qa_pairs = []
+    for q in ASSESSMENT_QUESTIONS:
+        user_ans = str(answers.get(str(q["id"]), "")).strip()
+        qa_pairs.append({
+            "question": q["question"],
+            "user_answer": user_ans,
+            "correct_answer": q["correct"],
+            "difficulty": q["difficulty"],
+        })
+
+    # Call AI evaluator
+    result = evaluate_assessment_answers(qa_pairs)
+    level = result.get("level", "beginner")
+    score = result.get("score", 0)
+    feedback = result.get("feedback", "Assessment complete!")
+
+    # Save to user profile
+    Login.objects.filter(id=user.id).update(
+        assessment_completed=True,
+        assessment_level=level,
+        assessment_score=score
+    )
+
+    return Response({
+        "success": True,
+        "level": level,
+        "score": score,
+        "total": len(ASSESSMENT_QUESTIONS),
+        "feedback": feedback,
+    })
+
+@api_view(['POST'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def ai_chat_view(request):
+    message = request.data.get("message", "")
+    if not message:
+        return Response({"error": "Message is required"}, status=400)
+    
+    reply = chat_with_sql_ai(message)
+    return Response({"reply": reply})

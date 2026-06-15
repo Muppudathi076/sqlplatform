@@ -1,5 +1,5 @@
 import json
-from django.db.models import Count, Max, Q
+from django.db.models import Count, Max, Q, Avg
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -11,7 +11,8 @@ from My_app.ai_question_generator import (
     generate_question_metadata, 
     generate_bulk_questions, 
     generate_ai_dictionary_entries, 
-    generate_ai_academy_entries
+    generate_ai_academy_entries,
+    generate_admin_insights
 )
 
 def sanitize_options(option_str: str) -> str:
@@ -64,7 +65,10 @@ def all_user_details(request):
             "score": score,
             "model": level,
             "total_time": time,
-            "sql_academy_level": getattr(user, 'sql_academy_level', 0)
+            "sql_academy_level": getattr(user, 'sql_academy_level', 0),
+            "assessment_completed": getattr(user, 'assessment_completed', False),
+            "assessment_level": getattr(user, 'assessment_level', None),
+            "assessment_score": getattr(user, 'assessment_score', 0)
         })
     return Response({
         "success": True,
@@ -631,5 +635,34 @@ def ai_bulk_generate_academy(request):
             "skipped": skipped
         }, status=200)
 
+    except Exception as e:
+        return Response({"success": False, "error": str(e)}, status=500)
+
+@api_view(['GET'])
+@authentication_classes([CustomJWTAuthentication])
+@permission_classes([IsAuthenticated])
+def get_admin_ai_insights(request):
+    try:
+        users = Login.objects.filter(role="user")
+        
+        total_count = users.count()
+        
+        beginner_count = users.filter(assessment_level="beginner").count()
+        intermediate_count = users.filter(assessment_level="intermediate").count()
+        expert_count = users.filter(assessment_level="expert").count()
+        
+        avg_res = users.aggregate(avg=Avg('sql_academy_level'))
+        avg_academy_level = avg_res['avg'] if avg_res['avg'] else 0
+        
+        student_data = f"""
+        Total Students: {total_count}
+        Beginners: {beginner_count}
+        Intermediates: {intermediate_count}
+        Experts: {expert_count}
+        Average SQL Academy Level Progress: {avg_academy_level:.1f}
+        """
+        
+        insights = generate_admin_insights(student_data)
+        return Response({"success": True, "insights": insights})
     except Exception as e:
         return Response({"success": False, "error": str(e)}, status=500)

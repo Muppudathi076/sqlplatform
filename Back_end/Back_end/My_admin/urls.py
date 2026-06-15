@@ -28,4 +28,5 @@ urlpatterns = [
     # AI Generation
     path("admins/ai/generate/dictionary/", views.ai_bulk_generate_dictionary),
     path("admins/ai/generate/academy/", views.ai_bulk_generate_academy),
+    path("admins/ai/insights/", views.get_admin_ai_insights),
 ]

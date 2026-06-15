@@ -298,3 +298,161 @@ Rules:
         print(f"Gemini AI Academy Error: {e}")
         return []
 
+
+def evaluate_assessment_answers(questions_and_answers: list) -> dict:
+    """
+    Takes a list of {question, user_answer, correct_answer, difficulty} dicts
+    and uses Gemini AI to evaluate and determine skill level.
+    Returns: {level: 'beginner'|'intermediate'|'expert', score: int, feedback: str}
+    """
+    client = get_gemini_client()
+    if not client:
+        correct = sum(1 for q in questions_and_answers
+                      if str(q.get('user_answer', '')).strip().lower() ==
+                         str(q.get('correct_answer', '')).strip().lower())
+        total = len(questions_and_answers)
+        pct = correct / total if total else 0
+        level = 'expert' if pct >= 0.8 else ('intermediate' if pct >= 0.5 else 'beginner')
+        return {"level": level, "score": correct, "feedback": "Assessment complete."}
+
+    qa_text = "\n".join([
+        f"Q{i+1} [{q.get('difficulty','').upper()}]: {q.get('question','')}\n"
+        f"  User Answer: {q.get('user_answer', '(no answer)')}\n"
+        f"  Correct Answer: {q.get('correct_answer', '')}"
+        for i, q in enumerate(questions_and_answers)
+    ])
+
+    prompt = f"""You are an expert SQL skill evaluator. Evaluate these {len(questions_and_answers)} SQL assessment answers.
+
+{qa_text}
+
+Based on correctness and quality of answers, determine:
+1. Score (number of correct/acceptable answers out of {len(questions_and_answers)})
+2. Skill level: "beginner" (0-4 correct), "intermediate" (5-7 correct), "expert" (8-10 correct)
+3. Brief encouraging feedback (1-2 sentences)
+
+For query answers, be lenient — accept semantically equivalent SQL even if formatting differs.
+
+Return ONLY valid JSON in this exact format:
+{{
+  "score": 7,
+  "level": "intermediate",
+  "feedback": "Great SQL foundation! You handle SELECT and WHERE well but JOINs need more practice."
+}}"""
+
+    try:
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+            config={"response_mime_type": "application/json"}
+        )
+        ai_text = response.text.strip()
+        if ai_text.startswith("```json"):
+            ai_text = ai_text[7:]
+        if ai_text.startswith("```"):
+            ai_text = ai_text[3:]
+        if ai_text.endswith("```"):
+            ai_text = ai_text[:-3]
+        result = json.loads(ai_text.strip())
+        if result.get("level") not in ["beginner", "intermediate", "expert"]:
+            result["level"] = "beginner"
+        return result
+    except Exception as e:
+        print(f"Gemini Assessment Evaluation Error: {e}")
+        correct = sum(1 for q in questions_and_answers
+                      if str(q.get('user_answer', '')).strip().lower() ==
+                         str(q.get('correct_answer', '')).strip().lower())
+        total = len(questions_and_answers)
+        pct = correct / total if total else 0
+        level = 'expert' if pct >= 0.8 else ('intermediate' if pct >= 0.5 else 'beginner')
+        return {"level": level, "score": correct, "feedback": "Assessment complete. Keep practicing!"}
+
+
+def explain_sql_error(query: str, error_msg: str) -> str:
+    """
+    Takes a failed SQL query and the database error message,
+    and returns a beginner-friendly explanation of what went wrong and how to fix it.
+    """
+    client = get_gemini_client()
+    if not client:
+        return "Syntax error or invalid table/column. Check your spelling."
+        
+    prompt = f"""
+You are an expert SQL teacher. A student executed the following query and got an error:
+
+Query:
+{query}
+
+Error Message:
+{error_msg}
+
+Explain in 2-3 short, friendly sentences what went wrong and give a hint on how to fix it. Do NOT give the exact corrected query, just guide them.
+"""
+
+    try:
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+            config={"response_mime_type": "text/plain"}
+        )
+        return response.text.strip()
+    except Exception as e:
+        print(f"Gemini SQL Error Explainer failed: {e}")
+        return "There was an error in your SQL syntax or a missing column/table. Please double check your code."
+
+def generate_admin_insights(student_data: list) -> str:
+    """
+    Takes an overview of student progress/scores and returns AI insights for the admin.
+    """
+    client = get_gemini_client()
+    if not client:
+        return "AI Insights are currently unavailable. Check your API key."
+
+    prompt = f"""
+You are an expert Educational Data Analyst. Review the following brief summary of students' SQL learning progress:
+
+{student_data}
+
+Provide a very short, punchy 1-2 line summary of how the students are doing overall. Write it in simple English so an admin can read it in 2 seconds. Mention one quick observation (e.g. "Most are beginners") and one actionable tip. Keep it extremely brief and do not use markdown.
+"""
+    try:
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+            config={"response_mime_type": "text/plain"}
+        )
+        return response.text.strip()
+    except Exception as e:
+        print(f"Gemini Admin Insights Error: {e}")
+        return "Students are actively practicing. Monitor their assessment levels to provide targeted support."
+
+def chat_with_sql_ai(user_message: str, chat_history: list = None) -> str:
+    """
+    A simple SQL AI assistant that answers SQL-related queries.
+    """
+    client = get_gemini_client()
+    if not client:
+        return "Chatbot is currently offline."
+        
+    prompt = f"""
+You are an expert, friendly SQL tutor assisting a student with a question.
+CRITICAL RULES:
+1. DO NOT provide the correct answer directly under any circumstances.
+2. If the user explicitly asks for the correct answer, you MUST reply exactly with: "I don't have access to provide the correct answer."
+3. Explain the question step by step so the user fully understands what is being asked.
+4. Explain each of the options step by step and guide the user on how to think about them, but let the user figure out the final answer themselves.
+5. If their question is NOT about SQL or databases, kindly steer them back to SQL topics.
+
+Student: {user_message}
+"""
+    try:
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+            config={"response_mime_type": "text/plain"}
+        )
+        return response.text.strip()
+    except Exception as e:
+        print(f"Gemini Chat Error: {e}")
+        return "I'm having trouble thinking right now. Please try again later!"
+

@@ -60,6 +60,8 @@ function UserList() {
     { header: "Score", accessor: "score" },
     { header: "Current Model", accessor: "model" },
     { header: "Time", accessor: "total_time" },
+    { header: "Assessment Level", accessor: "assessment_level", cell: (row: any) => row.assessment_level ? row.assessment_level.charAt(0).toUpperCase() + row.assessment_level.slice(1) : "Pending" },
+    { header: "Assessment Score", accessor: "assessment_score" },
   ]
   const token = localStorage.getItem("access_token") || ""
   const fetching_data = async()=>{

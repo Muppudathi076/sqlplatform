@@ -231,7 +231,7 @@ export default function RankPage() {
               animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
               exit={{ opacity: 0, scale: 0.5, y: 100, rotateX: -45 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
               className="bg-white dark:bg-gray-800 rounded-[2rem] p-8 max-w-sm w-full shadow-[0_0_80px_rgba(0,0,0,0.5)] relative overflow-hidden border border-gray-100 dark:border-gray-700"
             >
               {/* Dynamic decorative bg element based on rank */}

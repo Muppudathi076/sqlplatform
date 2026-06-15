@@ -1,19 +1,20 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { Outlet, useNavigate, NavLink, useLocation } from "react-router-dom"
 import toast from "react-hot-toast"
 import { logoutApi, UserGetApi, updateProfileApi, userdashboardApi } from "../auth/authapi"
-import { Sun, Moon, LayoutDashboard, Boxes, Users, LogOut, Menu, X, Trophy, Shield, Mail, Loader2, Star, Clock, Activity, Pencil, User, Calendar, Lock, Check, BookOpen, Rocket } from "lucide-react"
+import {  LayoutDashboard, Boxes, Users, LogOut, Menu, X, Trophy, Shield, Mail, Loader2, Star, Clock, Activity, Pencil, User, Calendar, Lock, Check, BookOpen, Rocket } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import { SpaceAnimal } from "../components/SpaceAnimal"
+import FloatingChatbot from "../components/ReusableComponents/FloatingChatbot"
 
 function DashboardLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const [showLogoutModal, setShowLogoutModal] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("theme") === "dark"
-  })
+  useEffect(() => {
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  }, []);
 
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [profileData, setProfileData] = useState<any>(null)
@@ -22,91 +23,6 @@ function DashboardLayout() {
   const [showEditModal, setShowEditModal] = useState(false)
   const [editForm, setEditForm] = useState({ name: "", email: "", password: "", age: "" })
   const [saving, setSaving] = useState(false)
-
-  const [cartoonState, setCartoonState] = useState<"idle" | "hello" | "sleep" | "left" | "right" | "read" | "write" |"hide"| "jump">("idle")
-  const [pandaDirection, setPandaDirection] = useState<1 | -1>(1)
-  const [pandaX, setPandaX] = useState(0)
-  const pandaXRef = useRef(0)
-  const stateRef = useRef(cartoonState)
-
-  useEffect(() => {
-    stateRef.current = cartoonState;
-  }, [cartoonState]);
-
-useEffect(() => {
-  const interval = setInterval(() => {
-    const prevState = stateRef.current;
-
-    let nextAction:
-      | "idle"
-      | "hello"
-      | "sleep"
-      | "left"
-      | "right"
-      | "read"
-      | "hide"
-      | "write"
-      | "jump" = "idle";
-
-    let updatedX = pandaXRef.current;
-    const r = Math.random();
-
-    if (prevState === "hide") {
-      nextAction = "jump";
-      updatedX = (Math.random() > 0.5 ? 1 : -1) * Math.floor(Math.random() * 60);
-    } else {
-      if (r < 0.25) nextAction = "left";
-      else if (r < 0.5) nextAction = "right";
-      else if (r < 0.65) nextAction = "hide";
-      else if (r < 0.8) nextAction = "sleep";
-      else if (r < 0.9) nextAction = "hello";
-      else nextAction = "idle";
-    }
-
-    const random = Math.random();
-
-    if (prevState === "left" || prevState === "right") {
-      if (random > 0.5) nextAction = "idle";
-      else if (random > 0.3) nextAction = "read";
-      else if (random > 0.1) nextAction = "write";
-      else nextAction = prevState;
-    } else {
-      if (random > 0.7) {
-        nextAction = pandaDirection === 1 ? "right" : "left";
-      } else if (random > 0.55) nextAction = "hello";
-      else if (random > 0.4) nextAction = "sleep";
-      else if (random > 0.2) nextAction = "read";
-      else if (random > 0.1) nextAction = "write";
-      else nextAction = "idle";
-    }
-
-    if (nextAction === "left" || nextAction === "right") {
-      const speed = 40;
-      updatedX = pandaXRef.current + (nextAction === "right" ? speed : -speed);
-
-      if (updatedX > 90) {
-        nextAction = "left";
-        updatedX = 90 - speed;
-        setPandaDirection(-1);
-      } else if (updatedX < -90) {
-        nextAction = "right";
-        updatedX = -90 + speed;
-        setPandaDirection(1);
-      } else {
-        setPandaDirection(nextAction === "right" ? 1 : -1);
-      }
-    }
-
-    if (updatedX !== pandaXRef.current) {
-      pandaXRef.current = updatedX;
-      setPandaX(updatedX);
-    }
-
-    setCartoonState(nextAction);
-  }, 4000);
-
-  return () => clearInterval(interval);
-}, [pandaDirection]);
 
   const role = localStorage.getItem("role") || ""
   const userName = localStorage.getItem("user") || ""
@@ -174,55 +90,7 @@ useEffect(() => {
     }
   }
 
-  const toggleDarkMode = (event?: React.MouseEvent) => {
-    const doc = document as any;
-    const isAppearanceTransition =
-      doc.startViewTransition &&
-      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (!isAppearanceTransition || !event) {
-      setDarkMode(prev => !prev);
-      return;
-    }
-
-    const x = event.clientX;
-    const y = event.clientY;
-    const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
-    );
-
-    const transition = doc.startViewTransition(() => {
-      setDarkMode(prev => !prev);
-    });
-
-    transition.ready.then(() => {
-      const clipPath = [
-        `circle(0px at ${x}px ${y}px)`,
-        `circle(${endRadius}px at ${x}px ${y}px)`,
-      ];
-      document.documentElement.animate(
-        {
-          clipPath: clipPath,
-        },
-        {
-          duration: 400,
-          easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
-          pseudoElement: '::view-transition-new(root)',
-        }
-      );
-    });
-  }
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark")
-      localStorage.setItem("theme", "dark")
-    } else {
-      document.documentElement.classList.remove("dark")
-      localStorage.setItem("theme", "light")
-    }
-  }, [darkMode])
 
   const adminMenu = [
     { name: "Dashboard", path: "admin/dashboard", icon: LayoutDashboard },
@@ -276,52 +144,8 @@ useEffect(() => {
 
           <div className="p-4 border-t border-gray-200 dark:border-zinc-800 relative z-10 space-y-4">
 
-            {/* Live Cartoon Character & User Profile Wrapper */}
+            {/* User Profile Wrapper */}
             <div className="relative w-full">
-
-              {/* Panda Container - Sits exactly at 0px space above the button. overflow-hidden hides it completely when it drops down */}
-              <div className="absolute bottom-full left-0 w-full h-32 pointer-events-none z-0 overflow-hidden">
-                <motion.div
-                  animate={{ x: pandaX }}
-                  transition={{
-                    duration: 4,
-                    ease: "easeInOut"
-                  }}
-                  className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center justify-end"
-                >
-                  {cartoonState === 'sleep' && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 0 }}
-                      animate={{ opacity: [0, 1, 0], y: -20 }}
-                      transition={{ repeat: Infinity, duration: 2 }}
-                      className="absolute -top-4 right-0 text-xs font-bold text-blue-500 z-10"
-                    >
-                      Zzz...
-                    </motion.div>
-                  )}
-
-                  {cartoonState === 'hello' && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.5, y: 0 }}
-                      animate={{ opacity: 1, scale: 1, y: -5 }}
-                      exit={{ opacity: 0, scale: 0.5 }}
-                      className="absolute -top-6 bg-white dark:bg-zinc-800 px-3 py-1 rounded-full shadow-md border border-gray-200 dark:border-zinc-700 text-[10px] font-bold text-blue-500 z-10 whitespace-nowrap"
-                    >
-                      Hi there! 👋
-                    </motion.div>
-                  )}
-
-                  <motion.div
-                    animate={{ scaleX: pandaDirection }}
-                    transition={{ duration: 0.3 }}
-                    className="w-24 h-24 filter drop-shadow-xl"
-                    style={{ originY: 1 }}
-                  >
-                    <SpaceAnimal action={cartoonState} animal="panda" />
-                  </motion.div>
-                </motion.div>
-              </div>
-
               {/* User Profile Button */}
               <button
                 onClick={openProfile}
@@ -397,17 +221,7 @@ useEffect(() => {
         </div>
       </main>
 
-      <button
-        onClick={toggleDarkMode}
-        className={`fixed ${isQuestionPage ? 'bottom-32' : 'bottom-6'} right-6 z-[70] w-14 h-14 rounded-full shadow-lg hover:scale-110 active:scale-90 transition-all duration-500 flex items-center justify-center ${darkMode
-            ? "bg-gradient-to-r from-indigo-600 to-blue-700 shadow-[0_4px_20px_rgba(99,102,241,0.5)]"
-            : "bg-gradient-to-r from-amber-400 to-orange-500 shadow-[0_4px_20px_rgba(251,191,36,0.5)]"
-          }`}
-      >
-        <div className={`transition-transform duration-500 ${darkMode ? "rotate-[360deg]" : "rotate-0"}`}>
-          {darkMode ? <Moon size={24} className="text-white" /> : <Sun size={24} className="text-white" />}
-        </div>
-      </button>
+
 
       {showLogoutModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-[100]">
@@ -703,6 +517,7 @@ useEffect(() => {
         )}
       </AnimatePresence>
 
+      <FloatingChatbot />
     </div>
   )
 }

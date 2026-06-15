@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Confetti from "react-confetti";
-import { Rocket, CheckCircle, ArrowRight, Play, Database, Loader2 } from "lucide-react";
+import { Rocket, CheckCircle, ArrowRight, Play, Database, Loader2, Lightbulb } from "lucide-react";
 import { getSqlAcademyApi, updateSqlAcademyApi } from "../auth/authapi";
 
 export default function SqlAcademy() {
@@ -155,7 +155,7 @@ export default function SqlAcademy() {
             ) : (
               <div className="mt-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800/50 rounded-xl">
                 <p className="text-sm font-bold text-yellow-700 dark:text-yellow-500 mb-1 flex items-center gap-2">
-                  <span>💡</span> Hint
+                  <Lightbulb size={16} /> Hint
                 </p>
                 <p className="text-sm text-yellow-600 dark:text-yellow-400 mb-4">{mission.hint}</p>
                 <div className="inline-flex items-center bg-yellow-100 dark:bg-yellow-900/40 px-3 py-2 rounded-lg border border-yellow-300 dark:border-yellow-700/50">

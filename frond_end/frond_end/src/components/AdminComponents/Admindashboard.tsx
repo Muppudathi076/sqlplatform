@@ -2,13 +2,14 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import {
   Users, BookOpen, Clock, Trophy,
-  TrendingUp, ArrowRight,
+  ArrowRight, Sparkles,
   XCircle, BarChart3, Loader2
 } from "lucide-react"
 import UsageChart from "../ReusableComponents/Usagechart"
-import { UserGetAllApi, QuestionGetAllApi } from "../../auth/AdminAuthApi"
+import { UserGetAllApi, QuestionGetAllApi, getAdminAiInsightsApi } from "../../auth/AdminAuthApi"
 import { motion, AnimatePresence } from "framer-motion"
 import toast from "react-hot-toast"
+import { FaTrophy } from "react-icons/fa";
 
 function useCounter(target: number, duration = 1200, delay = 0) {
   const [count, setCount] = useState(0)
@@ -66,19 +67,18 @@ function StatCard({
         >
           <Icon size={20} style={{ color }} />
         </motion.div>
-        <span className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-400">
-          <TrendingUp size={11} /> Live
-        </span>
+<span className="text-xs bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-1 rounded-full border border-amber-200 dark:border-amber-500/20 font-medium inline-flex items-center gap-1.5">
+  <FaTrophy className="text-sm" />
+  <span>Live</span>
+</span>
       </div>
 
       <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{title}</p>
 
-      {/* Animated counter */}
       <h2 className="text-4xl font-black mt-1 tabular-nums" style={{ color }}>
         {count}
       </h2>
 
-      {/* Thin accent bar at bottom */}
       <motion.div
         className="absolute bottom-0 left-0 h-1 rounded-b-2xl"
         style={{ background: `linear-gradient(90deg, ${color}, ${color}66)` }}
@@ -90,26 +90,31 @@ function StatCard({
   )
 }
 
-/* ═══════════════════════════════ MAIN ═══════════════════════════════ */
 function AdminDashboard() {
   const token = localStorage.getItem("access_token") || ""
   const navigate = useNavigate()
-
+  console.log("AdminDashboard token:", token) 
   const [users, setUsers] = useState<any[]>([])
   const [questions, setQuestions] = useState<any[]>([])
+  const [aiInsights, setAiInsights] = useState<string>("Generating insights...")
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchAll = async () => {
+      const token = localStorage.getItem("access_token") || ""
       try {
-        const [usersRes, questionsRes] = await Promise.all([
+        const [usersRes, questionsRes, insightsRes] = await Promise.all([
           UserGetAllApi(token),
           QuestionGetAllApi(token),
+          getAdminAiInsightsApi(token).catch(() => ({ insights: "Insights unavailable" }))
         ])
         const userData = Array.isArray(usersRes) ? usersRes : (usersRes?.data ?? [])
         const questionData = Array.isArray(questionsRes) ? questionsRes : (questionsRes?.data ?? [])
         setUsers(userData)
         setQuestions(questionData)
+        if (insightsRes && insightsRes.insights) {
+          setAiInsights(insightsRes.insights)
+        }
       } catch (e) {
         console.error(e)
         toast.error("Failed to load dashboard data", { duration: 2000 })
@@ -243,6 +248,17 @@ function AdminDashboard() {
           ))}
         </motion.div>
 
+        {/* ── AI Insights ── */}
+        <motion.div variants={itemVariants} className="mb-10 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 rounded-2xl p-6 shadow-sm">
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles size={20} className="text-indigo-500" />
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Gemini AI Student Insights</h3>
+          </div>
+          <p className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium">
+            {aiInsights}
+          </p>
+        </motion.div>
+
         {/* ── Middle Row: Top Scorers + Difficulty Bars ── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
 
@@ -250,8 +266,12 @@ function AdminDashboard() {
           <motion.div variants={itemVariants} className="lg:col-span-1 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-5 transition-colors duration-500">
             <div className="flex items-center justify-between mb-5">
               <h3 className="text-base font-bold text-gray-900 dark:text-white">Top Scorers</h3>
-              <span className="text-xs bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-1 rounded-full border border-amber-200 dark:border-amber-500/20 font-medium">🏆 Live</span>
-            </div>
+<span className="text-xs bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-1 rounded-full border border-amber-200 dark:border-amber-500/20 font-medium inline-flex items-center gap-1">
+  <div className="flex items-center justify-center w-4 h-4">
+    <FaTrophy className="text-xs" />
+  </div>
+  <span>Live</span>
+</span>            </div>
             <div className="space-y-3">
               {topUsers.length === 0 ? (
                 <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-8">No users yet</p>

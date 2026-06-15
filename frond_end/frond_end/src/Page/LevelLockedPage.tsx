@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, LockKeyhole } from "lucide-react";
+import { ArrowLeft, LockKeyhole, Rocket } from "lucide-react";
 
 type LevelLockedPageProps = {
   message: string;
@@ -50,8 +50,8 @@ export default function LevelLockedPage({ message }: LevelLockedPageProps) {
           </p>
         </div>
 
-        <p className="text-gray-400 text-sm mb-8 leading-relaxed">
-          You must complete the previous level to unlock this one. Keep learning! 🚀
+        <p className="text-gray-400 text-sm mb-8 leading-relaxed flex items-center justify-center gap-2">
+          You must complete the previous level to unlock this one. Keep learning! <Rocket size={16} className="text-blue-400" />
         </p>
 
         <button

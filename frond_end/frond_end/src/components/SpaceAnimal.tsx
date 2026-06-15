@@ -14,9 +14,9 @@ export const SpaceAnimal: React.FC<SpaceAnimalProps> = ({ action, animal = 'pand
   const isWriting = action === 'write';
 
   const emojis = {
-    panda: '🐼',
-    cat: '🐱',
-    rabbit: '🐰'
+    panda: 'Panda',
+    cat: 'Cat',
+    rabbit: 'Rabbit'
   };
 
   const walkTransition: Transition = { repeat: Infinity, duration: 1.2, ease: "easeInOut" };
@@ -214,7 +214,7 @@ export const SpaceAnimal: React.FC<SpaceAnimalProps> = ({ action, animal = 'pand
             textAnchor="middle"
             style={{ filter: isSleeping ? 'grayscale(100%) opacity(0.8)' : 'none' }}
           >
-            {isSleeping ? '😴' : emojis[animal]}
+            {isSleeping ? 'Zzz' : emojis[animal]}
           </text>
         )}
 

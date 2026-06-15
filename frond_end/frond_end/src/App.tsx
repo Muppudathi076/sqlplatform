@@ -23,16 +23,24 @@ import DragAndDropPage from "./components/QuestionModel/DragAndDropPage"
 import { QuestionCacheProvider } from "./context/QuestionCacheContext"
 import SqlDictionary from "./Page/SqlDictionary"
 import SqlAcademy from "./Page/SqlAcademy"
+import AssessmentPage from "./Page/AssessmentPage"
+// import { SpidermanShimeji } from "./components/SpidermanShimeji"
 
 function App() {
   return (
     <>
+    {/* <SpidermanShimeji /> */}
     <Toaster position="top-center" reverseOrder={false} />
     <Routes>
       <Route path='/' element={<LandingPage/>}/>
       <Route path='/login' element={<Login/>}/>
       <Route path='/register' element={<Register/>}/>
       <Route path='/fling/blangs' element={<FillInTheBlanksPage/>}/>
+      <Route path='/api/assessment' element={
+        <ProtectedRoute>
+          <AssessmentPage />
+        </ProtectedRoute>
+      }/>
       <Route path='/api' element={
         <ProtectedRoute>
           <QuestionCacheProvider>

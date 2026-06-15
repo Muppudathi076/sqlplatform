@@ -282,8 +282,8 @@ console.log("Passing score:", totalScore);
 
           {/* Show correct answer when wrong */}
           {checkingState === "wrong" && (
-            <p className="text-xs font-semibold pl-1 text-green-400">
-              ✅ Correct answer: <span className="font-bold">{questionData.answer}</span>
+            <p className="text-xs font-semibold pl-1 text-green-400 flex items-center gap-1">
+              <CheckCircle2 size={12} /> Correct answer: <span className="font-bold">{questionData.answer}</span>
             </p>
           )}
         </div>

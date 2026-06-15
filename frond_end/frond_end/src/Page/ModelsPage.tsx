@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 import {
   Star, BookOpen, Trophy, Zap, Award, Target, Crown,
   Lock, CheckCircle, PlayCircle, ChevronRight, Layers,
-  Clock, BarChart2, Flame
+  Clock, BarChart2, Flame, Rocket
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { userdashboardApi } from "../auth/authapi"
@@ -295,7 +295,7 @@ function ModelsPage() {
                   <button
                     onClick={() => {
                       if (isLocked) {
-                        toast.error("Complete the previous level to unlock this! 🔒")
+                        toast.error("Complete the previous level to unlock this!")
                         return
                       }
                       handlePlay(level.id, isCompleted)
@@ -329,8 +329,8 @@ function ModelsPage() {
       )}
 
         {/* ── Footer note ── */}
-        <p className="text-center text-xs text-gray-400 mt-10">
-          Complete each level in order to unlock the next one. Keep going! 🚀
+        <p className="text-center text-xs text-gray-400 mt-10 flex items-center justify-center gap-1">
+          Complete each level in order to unlock the next one. Keep going! <Rocket size={14} className="text-blue-400" />
         </p>
       </div>
     </div>
